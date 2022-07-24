@@ -2,20 +2,17 @@ import mongoose from 'mongoose';
 import { Ingredient, IngredientModel } from './ingredient';
 
 interface Recipe extends mongoose.Document {
-    uuid: string;
     title: string;
     description: string;
-    // ingredients: Ingredient[];
-    imagePath: string;
+    ingredients: Ingredient[];
+    instructions: string[];
+    imageUrl: string;
+    favorite: boolean;
+    id: string;
 }
 
 
 const RecipeSchema = new mongoose.Schema<Recipe>({
-    uuid: {
-        type: String,
-        required: true,
-        trim: true
-    },
     title: {
         type: String,
         required: true,
@@ -26,14 +23,27 @@ const RecipeSchema = new mongoose.Schema<Recipe>({
         required: true,
         trim: true
     },
-    // ingredients: {
-    //     type: [IngredientModel],
-    //     required: true,
-    //     trim: true
-    // },
-    imagePath: {
+    ingredients: {
+        type: [{name: String, amount: String}],
+        required: true,
+    },
+    instructions: {
+        type: [String],
+        required: true,
+    },
+    imageUrl: {
         type: String
+    },
+    favorite: {
+        type: Boolean,
+        default: false
+    },
+    id: {
+        type: String,
+        default: mongoose.Types.ObjectId.toString(),
+        trim: true
     }
+
 });
 
 export const Recipe = mongoose.model("Recipe", RecipeSchema);

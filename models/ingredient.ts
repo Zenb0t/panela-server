@@ -10,11 +10,6 @@ export interface Ingredient {
 
 const IngredientSchema = new mongoose.Schema<Ingredient>(
     {
-        uuid: {
-            type: String,
-            required: true,
-            trim: true
-        },
         name: {
             type: String,
             required: true,
@@ -31,6 +26,7 @@ const IngredientSchema = new mongoose.Schema<Ingredient>(
         price: {
             type: Number,
             required: true,
+            default: 0,
         },
     });
 

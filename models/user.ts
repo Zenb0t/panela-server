@@ -8,11 +8,6 @@ interface User {
 }
 
 const UserSchema = new mongoose.Schema<User>({
-    uuid: {
-        type: String,
-        required: true,
-        trim: true,
-    },
     username: {
         type: String,
         required: true,
