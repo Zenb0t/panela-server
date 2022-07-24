@@ -4,14 +4,13 @@ import { requiresAuth } from 'express-openid-connect'; //add when required to pr
 import sanitizedConfig from './config';
 import recipeRouter from './routes/api/recipes';
 import initDB from './database';
+import cors from 'cors';
 
 const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-
-app.get('/', (req,res) => res.send('Express + TypeScript Server'));
 app.listen(sanitizedConfig.PORT, () => {
   console.log(`⚡️[server]: Server is running at localhost:${sanitizedConfig.PORT}`);
 });
@@ -30,6 +29,9 @@ initDB(sanitizedConfig.URI_MONGODB);
 
 // auth router attaches /login, /logout, and /callback routes to the baseURL
 app.use(auth(config));
+
+// allow pre-flight cors requests
+app.use(cors());
 
 // require api routes
 app.use('/api',recipeRouter);
