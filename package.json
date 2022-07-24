@@ -10,13 +10,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.0",
     "express": "^4.17.3",
-    "express-openid-connect": "^2.7.1",
+    "express-openid-connect": "^2.7.2",
     "mongodb": "^4.4.1",
     "mongoose": "^6.2.7"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",
     "nodemon": "^2.0.15",
     "ts-node": "^10.7.0",
