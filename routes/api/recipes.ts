@@ -32,7 +32,7 @@ const findAll: RequestHandler = (req, res) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send(recipes);
             console.group(`Recipes found: 200 OK`);
-            console.log(recipes);
+            // console.log(recipes);
             console.groupEnd();
         })
         .catch((err) => {
@@ -52,8 +52,8 @@ const findOne: RequestHandler = (req, res) => {
             }
             res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send(recipe);
-            console.group(`Recipe found: 200 OK ${recipe.title}`);
-            console.log(recipe);
+            console.group(`Recipe found: 200 OK ${recipe.id}`);
+            // console.log(recipe);
             console.groupEnd();
         })
         .catch((err) => {
@@ -71,8 +71,8 @@ const updateRecipe: RequestHandler = (req, res) => {
             if (!recipe) return res.status(404).send({ message: "recipe not found" });
             res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send(recipe);
-            console.group(`Recipe updated: 200 OK ${recipe.title}`);
-            console.log(recipe);
+            console.group(`Recipe updated: 200 OK ${recipe.id}`);
+            // console.log(recipe);
             console.groupEnd();
         })
         .catch((err) => {
@@ -88,8 +88,8 @@ const remove: RequestHandler = (req, res) => {
             if (!recipe) return res.status(404).send({ message: "recipe not found" });
             res.header("Access-Control-Allow-Origin", "*");
             res.send({ message: "recipe deleted successfully" });
-            console.group(`Recipe deleted: 200 OK ${recipe.title}`);
-            console.log(recipe);
+            console.group(`Recipe deleted: 200 OK ${recipe.id}`);
+            // console.log(recipe);
             console.groupEnd();
         })
         .catch((err) => {
@@ -105,7 +105,7 @@ const removeAll: RequestHandler = (req, res) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send({ message: "recipes deleted successfully" });
             console.group(`Recipes deleted: 200 OK`);
-            console.log(recipe);
+            // console.log(recipe);
             console.groupEnd();
         })
         .catch((err) => {
