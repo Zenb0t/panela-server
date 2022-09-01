@@ -14,9 +14,7 @@ const create: RequestHandler = (req, res) => {
         .then((data) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send(data).status(200);
-            console.group(`Recipe created: 200 OK ${data.title}`);
-            console.log(data);
-            console.groupEnd();
+            console.log(`Recipe created: 200 OK ${data.title}`);
         })
         .catch((err) => {
             console.error(err);
@@ -31,9 +29,7 @@ const findAll: RequestHandler = (req, res) => {
         .then((recipes) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send(recipes);
-            console.group(`Recipes found: 200 OK`);
-            console.log(recipes);
-            console.groupEnd();
+            console.log(`Recipes found: 200 OK`);
         })
         .catch((err) => {
             res.status(500).send({ message: err.message || "Error finding all recipes" })
@@ -52,9 +48,7 @@ const findOne: RequestHandler = (req, res) => {
             }
             res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send(recipe);
-            console.group(`Recipe found: 200 OK ${recipe.title}`);
-            console.log(recipe);
-            console.groupEnd();
+            console.log(`Recipe found: 200 OK ${recipe.title}`);
         })
         .catch((err) => {
             return res.status(500).send({

@@ -19,7 +19,7 @@ const config = {
   authRequired: false,
   auth0Logout: true,
   secret: sanitizedConfig.SESSION_SECRET,
-  baseURL: 'http://localhost:8000',
+  baseURL: 'http://localhost:8000', //TODO: Change baseURL to production URL using .env file
   clientID: sanitizedConfig.AUTH0_CLIENT_ID,
   issuerBaseURL: sanitizedConfig.AUTH0_DOMAIN,
 };
