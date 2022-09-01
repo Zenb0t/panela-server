@@ -4,6 +4,8 @@ import { Ingredient, IngredientModel } from './ingredient';
 interface Recipe extends mongoose.Document {
     title: string;
     description: string;
+    totalTime: string; //TODO: change to time?
+    cost: number;
     ingredients: Ingredient[];
     instructions: string[];
     imageUrl: string;
@@ -20,6 +22,16 @@ const RecipeSchema = new mongoose.Schema<Recipe>({
     },
     description: {
         type: String,
+        required: true,
+        trim: true
+    },
+    totalTime: {
+        type: String,
+        required: true,
+        trim: true
+    },
+    cost: {
+        type: Number,
         required: true,
         trim: true
     },
