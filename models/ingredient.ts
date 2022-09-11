@@ -1,14 +1,13 @@
 import mongoose from 'mongoose';
 
 export interface Ingredient {
-    uuid: string;
     name: string;
     quantity: number;
     unit: string;
-    price: number;
+    cost: number;
 }
 
-const IngredientSchema = new mongoose.Schema<Ingredient>(
+export const IngredientSchema = new mongoose.Schema<Ingredient>(
     {
         name: {
             type: String,
@@ -17,13 +16,13 @@ const IngredientSchema = new mongoose.Schema<Ingredient>(
         },
         quantity: {
             type: Number,
-            required: true,
+            // required: true,
         },
         unit: {
             type: String,
             required: true
         },
-        price: {
+        cost: {
             type: Number,
             required: true,
             default: 0,

@@ -1,17 +1,27 @@
 import mongoose from 'mongoose';
-import { Ingredient, IngredientModel } from './ingredient';
+import { Ingredient, IngredientSchema } from './ingredient';
 
 interface Recipe extends mongoose.Document {
     title: string;
     description: string;
     totalTime: string; //TODO: change to time?
     cost: number;
-    ingredients: Ingredient[];
+    ingredients: [{ ingredient: Ingredient, quantity: number, unit: string }];
     instructions: string[];
     imageUrl: string;
     favorite: boolean;
     id: string;
 }
+
+interface Time extends mongoose.Document {
+    hours: number;
+    minutes: number;
+}
+
+const TimeSchema = new mongoose.Schema({
+    hours: Number,
+    minutes: Number
+});
 
 
 const RecipeSchema = new mongoose.Schema<Recipe>({
@@ -25,19 +35,14 @@ const RecipeSchema = new mongoose.Schema<Recipe>({
         required: true,
         trim: true
     },
-    totalTime: {
-        type: String,
-        required: true,
-        trim: true
-    },
+    totalTime: TimeSchema,
     cost: {
         type: Number,
         required: true,
         trim: true
     },
     ingredients: {
-        type: [{name: String, amount: String}],
-        required: true,
+        type: [{ ingredient: IngredientSchema, quantity: Number, cost: Number }],
     },
     instructions: {
         type: [String],
