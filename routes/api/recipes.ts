@@ -29,7 +29,13 @@ const findAll: RequestHandler = (req, res) => {
         .then((recipes) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send(recipes);
+<<<<<<< HEAD
             console.log(`Recipes found: 200 OK`);
+=======
+            console.group(`Recipes found: 200 OK`);
+            // console.log(recipes);
+            console.groupEnd();
+>>>>>>> 1c0c19856557555165abffbaaba0264ae37a7b1e
         })
         .catch((err) => {
             res.status(500).send({ message: err.message || "Error finding all recipes" })
@@ -48,7 +54,13 @@ const findOne: RequestHandler = (req, res) => {
             }
             res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send(recipe);
+<<<<<<< HEAD
             console.log(`Recipe found: 200 OK ${recipe.title}`);
+=======
+            console.group(`Recipe found: 200 OK ${recipe.id}`);
+            // console.log(recipe);
+            console.groupEnd();
+>>>>>>> 1c0c19856557555165abffbaaba0264ae37a7b1e
         })
         .catch((err) => {
             return res.status(500).send({
@@ -65,8 +77,8 @@ const updateRecipe: RequestHandler = (req, res) => {
             if (!recipe) return res.status(404).send({ message: "recipe not found" });
             res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send(recipe);
-            console.group(`Recipe updated: 200 OK ${recipe.title}`);
-            console.log(recipe);
+            console.group(`Recipe updated: 200 OK ${recipe.id}`);
+            // console.log(recipe);
             console.groupEnd();
         })
         .catch((err) => {
@@ -82,8 +94,8 @@ const remove: RequestHandler = (req, res) => {
             if (!recipe) return res.status(404).send({ message: "recipe not found" });
             res.header("Access-Control-Allow-Origin", "*");
             res.send({ message: "recipe deleted successfully" });
-            console.group(`Recipe deleted: 200 OK ${recipe.title}`);
-            console.log(recipe);
+            console.group(`Recipe deleted: 200 OK ${recipe.id}`);
+            // console.log(recipe);
             console.groupEnd();
         })
         .catch((err) => {
@@ -99,7 +111,7 @@ const removeAll: RequestHandler = (req, res) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send({ message: "recipes deleted successfully" });
             console.group(`Recipes deleted: 200 OK`);
-            console.log(recipe);
+            // console.log(recipe);
             console.groupEnd();
         })
         .catch((err) => {
