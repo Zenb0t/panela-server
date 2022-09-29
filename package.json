@@ -4,8 +4,10 @@
   "description": "Backend for the Panela App",
   "main": "server.ts",
   "scripts": {
-    "start": "nodemon",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "NODE_PATH=./build node build/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc -p .",
+    "dev": "nodemon src/server.ts"
   },
   "author": "",
   "license": "ISC",
