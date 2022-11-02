@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 export interface Ingredient {
     name: string;
-    quantity: number;
+    amount: number;
     measuringUnit: string;
     cost: number;
 }
@@ -14,7 +14,7 @@ export const IngredientSchema = new mongoose.Schema<Ingredient>(
             required: true,
             trim: true
         },
-        quantity: {
+        amount: {
             type: Number,
             // required: true,
         },
