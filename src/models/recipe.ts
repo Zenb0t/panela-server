@@ -6,7 +6,7 @@ interface Recipe extends mongoose.Document {
     description: string;
     totalTime: string; //TODO: change to time?
     cost: number;
-    ingredients: [{ ingredient: Ingredient, quantity: number, unit: string }]; //TODO: check if is unit or cost here.
+    ingredients: [{ ingredient: Ingredient, quantity: number, unit: string }]; //TODO: check if is unit or cost here. or create a type for IngredientItem
     instructions: string[];
     imageUrl: string;
     favorite: boolean;
