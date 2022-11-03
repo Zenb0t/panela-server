@@ -10,6 +10,7 @@ interface ENV {
     SESSION_SECRET: string | undefined;
     AUTH0_CALLBACK_URL: string | undefined;
     MONGO_PSWD: string | undefined;
+    BASE_URL: string | undefined;
 }
 
 interface Config {
@@ -21,6 +22,7 @@ interface Config {
     SESSION_SECRET: string;
     AUTH0_CALLBACK_URL: string;
     MONGO_PSWD: string;
+    BASE_URL: string;
 }
 
 const getConfig = (): ENV => {
@@ -33,6 +35,7 @@ const getConfig = (): ENV => {
         SESSION_SECRET: process.env.SESSION_SECRET,
         AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL,
         MONGO_PSWD: process.env.MONGO_PSWD,
+        BASE_URL: process.env.BASE_URL || "http://localhost:8000",
     };
 };
 
