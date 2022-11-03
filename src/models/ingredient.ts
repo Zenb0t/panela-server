@@ -5,6 +5,7 @@ export interface Ingredient {
     amount: number;
     measuringUnit: string;
     cost: number;
+    unitCost: number;
 }
 
 export const IngredientSchema = new mongoose.Schema<Ingredient>(
@@ -27,6 +28,13 @@ export const IngredientSchema = new mongoose.Schema<Ingredient>(
             required: true,
             default: 0,
         },
+        unitCost: {
+            type: Number,
+            required: true,
+            default: function () {
+                return this.cost / this.amount;
+            }
+        }
     });
 
-export const IngredientModel = mongoose.model<Ingredient>("Ingredient", IngredientSchema);
+export const Ingredient = mongoose.model<Ingredient>("Ingredient", IngredientSchema);
