@@ -5,6 +5,7 @@ import sanitizedConfig from './config';
 import recipeRouter from './routes/api/recipes';
 import initDB from './database';
 import cors from 'cors';
+import ingredientRouter from './routes/api/ingredients';
 
 const app = express();
 
@@ -12,14 +13,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.listen(sanitizedConfig.PORT, () => {
-  console.log(`⚡️[server]: Server is running at localhost:${sanitizedConfig.PORT}`);
+  console.log(`⚡️[server]: Server is running at ${sanitizedConfig.BASE_URL}`);
 });
 
 const config = {
   authRequired: false,
   auth0Logout: true,
   secret: sanitizedConfig.SESSION_SECRET,
-  baseURL: 'http://localhost:8000', //TODO: Change baseURL to production URL using .env file
+  baseURL: sanitizedConfig.BASE_URL,
   clientID: sanitizedConfig.AUTH0_CLIENT_ID,
   issuerBaseURL: sanitizedConfig.AUTH0_DOMAIN,
 };
@@ -35,6 +36,7 @@ app.use(cors());
 
 // require api routes
 app.use('/api',recipeRouter);
+app.use('/api',ingredientRouter);
 
 // req.isAuthenticated is provided from the auth router
 app.get('/', (req, res) => {
