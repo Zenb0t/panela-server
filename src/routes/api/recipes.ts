@@ -59,7 +59,6 @@ const findOne: RequestHandler = (req, res) => {
 
 /**Update an recipe by id   */
 const updateRecipe: RequestHandler = (req, res) => {
-    //TODO Add validation of req.body
     Recipe.findByIdAndUpdate(req.params.id, req.body, { new: true })
         .then((recipe) => {
             if (!recipe) return res.status(404).send({ message: "recipe not found" });
@@ -116,6 +115,5 @@ recipeRouter.get("/recipes", findAll);
 recipeRouter.get('/recipes/:id', findOne)
 recipeRouter.delete('/recipes/:id', remove);
 recipeRouter.put('/recipes/:id', updateRecipe);
-recipeRouter.delete('/recipes', removeAll); //TODO: For testing only, remove later
 
 export default recipeRouter;

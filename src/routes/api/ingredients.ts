@@ -7,7 +7,6 @@ const ingredientRouter = Router();
 
 const createIngredient: RequestHandler = (req, res) => {
     const ingredient = new Ingredient(req.body);
-    ingredient.id = ingredient._id;
     ingredient
         .save()
         .then((data) => {
@@ -39,7 +38,7 @@ const getAll: RequestHandler = (req, res) => {
 /** Get one ingredient by id */
 
 const getOne: RequestHandler = (req, res) => {
-    Ingredient.findById(req.params.id)
+    Ingredient.findOne({ id: req.params.id })
         .then((data) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send(data).status(200);
@@ -54,7 +53,7 @@ const getOne: RequestHandler = (req, res) => {
 /** Update an ingredient by id */
 
 const update: RequestHandler = (req, res) => {
-    Ingredient.findByIdAndUpdate(req.params.id, req.body, { useFindAndModify: false })
+    Ingredient.findOneAndUpdate({ id: req.params.id }, req.body, { new: true })
         .then((data) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send(data).status(200);
@@ -69,7 +68,7 @@ const update: RequestHandler = (req, res) => {
 /** Delete an ingredient by id */
 
 const deleteOne: RequestHandler = (req, res) => {
-    Ingredient.findByIdAndRemove(req.params.id)
+    Ingredient.findOneAndDelete({ id: req.params.id })
         .then((data) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send(data).status(200);
