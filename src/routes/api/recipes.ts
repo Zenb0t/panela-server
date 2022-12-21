@@ -1,7 +1,6 @@
 import { Router, RequestHandler } from "express";
 import { Recipe } from "../../models/recipe";
 
-
 const recipeRouter = Router();
 
 /** Create a new recipe */
@@ -33,6 +32,19 @@ const findAll: RequestHandler = (req, res) => {
         })
         .catch((err) => {
             res.status(500).send({ message: err.message || "Error finding all recipes" })
+        })
+}
+
+/**Return all recipes from the userId in the db */
+const findAllByUserId: RequestHandler = (req, res) => {
+    Recipe.find({ userId: req.params.userId })
+        .then((recipes) => {
+            res.header("Access-Control-Allow-Origin", "*");
+            res.status(200).send(recipes);
+            console.log(`Recipes found: 200 OK`);
+        })
+        .catch((err) => {
+            res.status(500).send({ message: err.message || `Error finding all recipes for user ${req.params.userId}` })
         })
 }
 

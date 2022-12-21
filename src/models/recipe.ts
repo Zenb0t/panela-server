@@ -11,6 +11,7 @@ interface Recipe extends mongoose.Document {
     imageUrl: string;
     favorite: boolean;
     id: string;
+    ownerId: string;
 }
 
 interface Time extends mongoose.Document {
@@ -59,7 +60,13 @@ const RecipeSchema = new mongoose.Schema<Recipe>({
         type: String,
         default: mongoose.Types.ObjectId.toString(),
         trim: true
+    },
+    ownerId: {
+        type: String,
+        required: true,
+        trim: true
     }
+
 
 });
 
