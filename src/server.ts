@@ -5,6 +5,9 @@ import recipeRouter from './routes/api/recipes';
 import initDB from './database';
 import cors from 'cors';
 import ingredientRouter from './routes/api/ingredients';
+import userRouter from './routes/api/users';
+import { User, UserModel } from './models/user';
+import { UserManager } from './user-manager';
 
 const app = express();
 
@@ -27,6 +30,14 @@ initDB(sanitizedConfig.URI_MONGODB);
 // allow pre-flight cors requests
 app.use(cors());
 
-// api routes, with auth middleware
-app.use('/api', auth(config), recipeRouter);
-app.use('/api', auth(config), ingredientRouter);
+// Initialize the user manager
+const userManager = UserManager.getInstance();
+userManager.initializeUserMap();
+
+
+
+
+app.use('/api', auth(config), userRouter);
+
+userRouter.use('/u/:email/', recipeRouter);
+userRouter.use('/u/:email/', ingredientRouter);
