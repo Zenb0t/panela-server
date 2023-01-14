@@ -1,7 +1,7 @@
 import { Router, RequestHandler } from "express";
 import { Ingredient } from "../../models/ingredient";
 
-const ingredientRouter = Router();
+const ingredientRouter = Router({ mergeParams: true});
 
 /** Create a new ingredient */
 

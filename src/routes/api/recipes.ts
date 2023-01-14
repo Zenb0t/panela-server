@@ -1,7 +1,7 @@
 import { Router, RequestHandler } from "express";
 import { Recipe } from "../../models/recipe";
 
-const recipeRouter = Router();
+const recipeRouter = Router({mergeParams: true});
 
 /** Create a new recipe */
 
@@ -77,7 +77,6 @@ const updateRecipe: RequestHandler = (req, res) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.status(200).send(recipe);
             console.group(`Recipe updated: 200 OK ${recipe.id}`);
-            // console.log(recipe);
             console.groupEnd();
         })
         .catch((err) => {
