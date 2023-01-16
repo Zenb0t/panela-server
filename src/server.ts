@@ -7,7 +7,7 @@ import cors from 'cors';
 import ingredientRouter from './routes/api/ingredients';
 import userRouter from './routes/api/users';
 import { User, UserModel } from './models/user';
-import { UserManager } from './user-manager';
+import { UserManager } from './routes/api/user-controller';
 
 const app = express();
 

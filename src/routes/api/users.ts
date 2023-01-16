@@ -1,5 +1,5 @@
 import { Router, RequestHandler } from "express";
-import { UserManager } from "src/user-manager";
+import { UserManager } from "./user-controller";
 import { UserModel } from "../../models/user";
 
 const userRouter = Router();
@@ -10,6 +10,8 @@ const userMap = UserManager.getInstance().getUserMap();
 const create: RequestHandler = (req, res) => {
 
     const user = new UserModel(req.body);
+    
+
     if (userMap.has(user.email)) {
         res.status(400).send({ message: `User with email ${user.email} already exists` });
         return;
@@ -20,7 +22,7 @@ const create: RequestHandler = (req, res) => {
             .then((data) => {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.send(data).status(200);
-                console.log(`User created: 200 OK ${data.username}`);
+                console.log(`User created: 200 OK ${data.name}`);
             })
             .catch((err) => {
                 console.error(err);
@@ -42,7 +44,7 @@ const getById: RequestHandler = (req, res, next) => {
             } else {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.send(data).status(200);
-                console.log(`User found: 200 OK ${data.username}`);
+                console.log(`User found: 200 OK ${data.name}`);
             }
         })
         .catch((err) => {
@@ -65,7 +67,7 @@ const getByEmail: RequestHandler = (req, res, next) => {
             } else {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.send(data).status(200);
-                console.log(`User found: 200 OK ${data.username}`);
+                console.log(`User found: 200 OK ${data.name}`);
             }
         })
         .catch((err) => {
