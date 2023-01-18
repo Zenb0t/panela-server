@@ -2,27 +2,28 @@ import { Router, RequestHandler } from "express";
 import { UserManager } from "./user-controller";
 import { UserModel } from "../../models/user";
 
-const userRouter = Router();
+const userRouter = Router({ mergeParams: true});
 
 const userMap = UserManager.getInstance().getUserMap();
-/** Create a new user */
-//TODO: Add validation for email, to avoid creating users with the same email
+/** Create a new user in the database */
 const create: RequestHandler = (req, res) => {
-
     const user = new UserModel(req.body);
-    
 
     if (userMap.has(user.email)) {
-        res.status(400).send({ message: `User with email ${user.email} already exists` });
+        res.status(200).send({
+            user: userMap.get(user.email),
+            message: `User with email ${user.email} already exists`,
+        });
         return;
     } else {
         user.id = user._id;
         user
             .save()
             .then((data) => {
+                UserManager.getInstance().addUser(data);
                 res.header("Access-Control-Allow-Origin", "*");
-                res.send(data).status(200);
-                console.log(`User created: 200 OK ${data.name}`);
+                res.send({ user: data }).status(201);
+                console.log(`User created: 201 OK ${data.name}`);
             })
             .catch((err) => {
                 console.error(err);
@@ -57,7 +58,7 @@ const getById: RequestHandler = (req, res, next) => {
 /** Get user by email  */
 
 const getByEmail: RequestHandler = (req, res, next) => {
-    const email = req.params.email;
+    const email = req.query.email;
     console.log("get user by email")
     console.log(email);
     UserModel.findOne({ email: email })
