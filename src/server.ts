@@ -39,5 +39,5 @@ userManager.initializeUserMap();
 
 app.use('/api', auth(config), userRouter);
 
-userRouter.use('/u/:email/', recipeRouter);
-userRouter.use('/u/:email/', ingredientRouter);
+userRouter.use('/u/', recipeRouter);
+userRouter.use('/u/', ingredientRouter);
