@@ -1,19 +1,25 @@
 import { Router, RequestHandler } from "express";
 import { Recipe } from "../../models/recipe";
 
-const recipeRouter = Router({mergeParams: true});
+const recipeRouter = Router({ mergeParams: true });
 
 /** Create a new recipe */
 
 const create: RequestHandler = (req, res) => {
     const recipe = new Recipe(req.body);
     recipe.id = recipe._id;
+    if (!req.query.userId)
+        return res.status(400).send({ message: "Query parameter userId is required" });
+    recipe.ownerId = req.query.userId as string;
+    //TODO: Add validation
+    // recipe.validate()
+
     recipe
         .save()
         .then((data) => {
             res.header("Access-Control-Allow-Origin", "*");
-            res.send(data).status(200);
-            console.log(`Recipe created: 200 OK ${data.title}`);
+            res.send(data).status(201);
+            console.log(`Recipe created: 201 OK ${data.title}`);
         })
         .catch((err) => {
             console.error(err);
@@ -36,12 +42,14 @@ const findAll: RequestHandler = (req, res) => {
 }
 
 /**Return all recipes from the userId in the db */
-const findAllByUserId: RequestHandler = (req, res) => {
-    Recipe.find({ userId: req.params.userId })
+const findAllRecipesByUserId: RequestHandler = (req, res) => {
+    if (!req.query.userId)
+        return res.status(400).send({ message: "Query parameter userId is required" });
+    Recipe.find({ ownerId: req.query.userId })
         .then((recipes) => {
             res.header("Access-Control-Allow-Origin", "*");
-            res.status(200).send(recipes);
-            console.log(`Recipes found: 200 OK`);
+            res.status(200).send({ recipes: recipes, userId: req.params.userId });
+            console.log(`All Recipes found: 200 OK`);
         })
         .catch((err) => {
             res.status(500).send({ message: err.message || `Error finding all recipes for user ${req.params.userId}` })
@@ -123,6 +131,7 @@ const removeAll: RequestHandler = (req, res) => {
 
 recipeRouter.post('/recipes', create);
 recipeRouter.get("/recipes", findAll);
+recipeRouter.get("/recipes/all", findAllRecipesByUserId);
 recipeRouter.get('/recipes/:id', findOne)
 recipeRouter.delete('/recipes/:id', remove);
 recipeRouter.put('/recipes/:id', updateRecipe);
