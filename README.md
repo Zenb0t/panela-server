@@ -24,10 +24,10 @@ Check also the frontend here: [https://github.com/Zenb0t/frontend-recipes](https
 
 <!-- MARKDOWN LINKS & IMAGES -->
 <!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[issues-shield]: https://img.shields.io/github/issues/Zenb0t/frontend-recipes.svg?style=for-the-badge
-[issues-url]: https://github.com/Zenb0t/frontend-recipes/issues
-[license-shield]: https://img.shields.io/github/license/Zenb0t/frontend-recipes.svg?style=for-the-badge
-[license-url]: https://github.com/Zenb0t/frontend-recipes/blob/main/LICENSE.txt
+[issues-shield]: https://img.shields.io/github/issues/Zenb0t/panela-server.svg?style=for-the-badge
+[issues-url]: https://github.com/Zenb0t/panela-server/issues
+[license-shield]: https://img.shields.io/github/license/Zenb0t/panela-server.svg?style=for-the-badge
+[license-url]: https://github.com/Zenb0t/panela-server/blob/main/LICENSE.txt
 [linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
 [linkedin-url]: https://www.linkedin.com/in/felipe-ribeiro-245a37192/
 [product-screenshot]: https://feliperibeiro.ca/static/media/panela.3155b4af686073f76807.png
