@@ -5,39 +5,31 @@ import recipeRouter from './routes/api/recipes';
 import initDB from './database';
 import cors from 'cors';
 import ingredientRouter from './routes/api/ingredients';
-import userRouter from './routes/api/users';
-import { User, UserModel } from './models/user';
-import { UserManager } from './routes/api/user-controller';
+import userRouter from './users/routes';
+// import { User, UserModel } from './models/user';
+// import { UserManager } from './routes/api/user-controller';
+import globalMiddleware from './middleware';
 
 const app = express();
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(globalMiddleware);
 
 app.listen(sanitizedConfig.PORT, () => {
   console.log(`⚡️[server]: Server is running at localhost:${sanitizedConfig.PORT}`);
 });
 
-// auth middleware config
-const config = {
-  issuerBaseURL: sanitizedConfig.AUTH0_DOMAIN,
-  audience: sanitizedConfig.AUDIENCE,
-};
-
 //initialize database
 initDB(sanitizedConfig.URI_MONGODB);
 
 // allow pre-flight cors requests
-app.use(cors());
+// app.use(cors());
 
 // Initialize the user manager
-const userManager = UserManager.getInstance();
-userManager.initializeUserMap();
+// const userManager = UserManager.getInstance();
+// userManager.initializeUserMap();
 
 
-
-
-app.use('/api', auth(config), userRouter);
+// app.use('/api', auth(config), userRouter);
+app.use('/api', userRouter);
 
 userRouter.use('/u/', recipeRouter);
 userRouter.use('/u/', ingredientRouter);

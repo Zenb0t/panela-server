@@ -1,7 +1,20 @@
-import { ErrorRequestHandler } from "express";
+import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 
-
-export const handleError: ErrorRequestHandler = (err, req, res,) => {
-    console.error(err);
+/***
+ * A simple error handler middleware that returns a 500 status code and the error message.
+ */
+export const handleError = (
+  err: Error,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (err) {
+    // TODO: Add logging
+    console.error(err.name);
+    console.error(err.message);
+    console.error(err.stack);
     res.status(500).send({ message: err.message || "An error occurred" });
+  }
+  next();
 };
