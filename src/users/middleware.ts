@@ -1,46 +1,40 @@
 import { RequestHandler } from "express";
 import { UserModel } from "./model";
-// import { handleError } from "src/utils/errorHandler";
 import {
   createUser,
   getUserById,
   getUserByEmail,
   updateUserProfile,
+  deleteUser,
 } from "./dao";
-import { USER_VALID_FIELDS } from "../consts";
-
-function handleError(err: any, req: any, res: any) {
-  console.error("An error occurred");
-  console.error(err.name);
-  console.error(err.message);
-}
+import { handleError } from "../utils/errorHandler";
+import { errorMessages as e } from "../consts";
+import logger from "../utils/logger";
 
 /***
  * Validate the user data sent in the request body
  */
 export const validateUser: RequestHandler = async (req, res, next) => {
   const { email, name, role } = req.body;
-  console.info(`Validating user ${email}`);
+  logger.info(`Validating user ${email}`);
 
   // TODO: Extract all validation logic to a separate functions
   // Check if the user format is correct
   if (!email || !name) {
     res.status(400).send({
-      message: "User data is incomplete. Email and name are required.",
+      message: e.INCOMPLETE_USER_DATA_ERROR,
     });
     return;
   }
   // Validate the email format
   const emailRegex = /\S+@\S+\.\S+/;
   if (!emailRegex.test(email)) {
-    res.status(400).send({ message: "Email format is invalid." });
+    res.status(400).send({ message: e.EMAIL_FORMAT_ERROR });
     return;
   }
   // Check if the 'role' field is being updated to an unauthorized value
   if (role && role !== "user") {
-    return res
-      .status(400)
-      .send({ message: "Changing role not allowed." });
+    return res.status(400).send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
   }
 
   // If everything is OK, continue
@@ -56,13 +50,11 @@ export const checkUserDoesNotExist: RequestHandler = async (req, res, next) => {
   try {
     const user = await UserModel.findOne({ email: req.body.email });
     if (user) {
-      return res
-        .status(400)
-        .send({ message: `User with email ${user.email} already exists` });
+      return res.status(400).send({ message: e.USER_ALREADY_EXISTS_ERROR });
     }
     next();
   } catch (err: any) {
-    handleError(err, req, res);
+    handleError(err, req, res, next);
   }
 };
 
@@ -81,7 +73,7 @@ export const checkUserExists: RequestHandler = async (req, res, next) => {
   if (!email && !id) {
     return res
       .status(400)
-      .send({ message: "Parameter email or id is required" });
+      .send({ message: e.PARAM_EMAIL_OR_ID_REQUIRED_ERROR });
   }
   try {
     // Check for id first, then email
@@ -89,19 +81,19 @@ export const checkUserExists: RequestHandler = async (req, res, next) => {
 
     const user = await UserModel.findOne(filterParam);
     if (!user) {
-      return res.status(404).send({ message: `User not found` });
+      return res.status(404).send({ message: e.USER_NOT_FOUND_ERROR });
     }
     req.body.user = user; // Attach the user to the request object
     next();
   } catch (err: any) {
-    handleError(err, req, res);
+    handleError(err, req, res, next);
   }
 };
 
 /***
  * Create a new user in the database
  */
-export const createNewUser: RequestHandler = async (req, res) => {
+export const createNewUser: RequestHandler = async (req, res, next) => {
   console.info(`Creating new user ${req.body.email}`);
   try {
     const user = await createUser(req.body);
@@ -109,58 +101,72 @@ export const createNewUser: RequestHandler = async (req, res) => {
     console.debug(user);
     res.status(201).send(user);
   } catch (err: any) {
-    handleError(err, req, res);
+    handleError(err, req, res, next);
   }
 };
 
 /***
  * Get a user by id
  */
-export const serializeUserById: RequestHandler = async (req, res) => {
+export const serializeUserById: RequestHandler = async (req, res, next) => {
   console.info(`Serializing user ${req.params}`);
   try {
     const user = await getUserById(req.params.id);
     if (!user) {
-      return res
-        .status(404)
-        .send({ message: `User with id ${req.params.id} not found` });
+      return res.status(404).send({ message: e.USER_NOT_FOUND_ERROR });
     }
     res.status(200).send(user);
   } catch (err: any) {
-    handleError(err, req, res);
+    handleError(err, req, res, next);
   }
 };
 
 /***
  * Get a user by email
  */
-export const serializeUserByEmail: RequestHandler = async (req, res) => {
+export const serializeUserByEmail: RequestHandler = async (req, res, next) => {
   // check the path params for the email
   console.info(`Serializing user ${req.params.email}`);
 
   try {
     const user = await getUserByEmail(req.params.email);
     if (!user) {
-      return res.status(404).send({ message: `User not found` });
+      return res.status(404).send({ message: e.USER_NOT_FOUND_ERROR });
     }
     res.status(200).send(user);
   } catch (err: any) {
-    handleError(err, req, res);
+    handleError(err, req, res, next);
   }
 };
 
 /***
  * Update a user by id
  */
-export const updateUserById: RequestHandler = async (req, res) => {
+export const updateUserById: RequestHandler = async (req, res, next) => {
   console.info(`Updating user ${req.params.id}`);
   try {
     const user = await updateUserProfile(req.params.id, req.body);
     if (!user) {
-      return res.status(404).send({ message: `Can't update, user not found` });
+      return res.status(404).send({ message: e.USER_NOT_FOUND_ERROR });
     }
     res.status(200).send(user);
   } catch (err: any) {
-    handleError(err, req, res);
+    handleError(err, req, res, next);
+  }
+};
+
+/***
+ * Delete a user by id
+ */
+export const deleteUserById: RequestHandler = async (req, res, next) => {
+  console.info(`Deleting user ${req.params.id}`);
+  try {
+    const user = await deleteUser(req.params.id);
+    if (!user) {
+      return res.status(404).send({ message: e.USER_NOT_DELETED_ERROR });
+    }
+    res.status(200).send(user);
+  } catch (err: any) {
+    handleError(err, req, res, next);
   }
 };
