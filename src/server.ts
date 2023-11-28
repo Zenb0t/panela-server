@@ -3,30 +3,22 @@ import { auth } from 'express-oauth2-jwt-bearer';
 import sanitizedConfig from './config';
 import recipeRouter from './routes/api/recipes';
 import initDB from './database';
-import cors from 'cors';
 import ingredientRouter from './routes/api/ingredients';
 import userRouter from './users/routes';
 // import { User, UserModel } from './models/user';
 // import { UserManager } from './routes/api/user-controller';
 import globalMiddleware from './middleware';
+import logger from './utils/logger';
 
 const app = express();
 app.use(globalMiddleware);
 
 app.listen(sanitizedConfig.PORT, () => {
-  console.log(`⚡️[server]: Server is running at localhost:${sanitizedConfig.PORT}`);
+  logger.info(`⚡️[server]: Server is running at localhost:${sanitizedConfig.PORT}`);
 });
 
 //initialize database
 initDB(sanitizedConfig.URI_MONGODB);
-
-// allow pre-flight cors requests
-// app.use(cors());
-
-// Initialize the user manager
-// const userManager = UserManager.getInstance();
-// userManager.initializeUserMap();
-
 
 // app.use('/api', auth(config), userRouter);
 app.use('/api', userRouter);

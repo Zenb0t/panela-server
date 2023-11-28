@@ -46,7 +46,7 @@ export const validateUser: RequestHandler = async (req, res, next) => {
  * If the user exists, return an error.
  */
 export const checkUserDoesNotExist: RequestHandler = async (req, res, next) => {
-  console.info(`Checking if user ${req.body.email} exists`);
+  logger.info(`Checking if user ${req.body.email} exists`);
   try {
     const user = await UserModel.findOne({ email: req.body.email });
     if (user) {
@@ -65,9 +65,9 @@ export const checkUserDoesNotExist: RequestHandler = async (req, res, next) => {
 export const checkUserExists: RequestHandler = async (req, res, next) => {
   const { id, email } = req.params;
   if (id) {
-    console.info(`Checking if user with id ${id} exists`);
+    logger.info(`Checking if user with id ${id} exists`);
   } else if (email) {
-    console.info(`Checking if user with email ${email} exists`);
+    logger.info(`Checking if user with email ${email} exists`);
   }
 
   if (!email && !id) {
@@ -94,11 +94,11 @@ export const checkUserExists: RequestHandler = async (req, res, next) => {
  * Create a new user in the database
  */
 export const createNewUser: RequestHandler = async (req, res, next) => {
-  console.info(`Creating new user ${req.body.email}`);
+  logger.info(`Creating new user ${req.body.email}`);
   try {
     const user = await createUser(req.body);
-    console.info(`User ${req.body.email} created`);
-    console.debug(user);
+    logger.info(`User ${req.body.email} created`);
+    logger.debug(user);
     res.status(201).send(user);
   } catch (err: any) {
     handleError(err, req, res, next);
@@ -109,7 +109,7 @@ export const createNewUser: RequestHandler = async (req, res, next) => {
  * Get a user by id
  */
 export const serializeUserById: RequestHandler = async (req, res, next) => {
-  console.info(`Serializing user ${req.params}`);
+  logger.info(`Serializing user ${req.params}`);
   try {
     const user = await getUserById(req.params.id);
     if (!user) {
@@ -126,7 +126,7 @@ export const serializeUserById: RequestHandler = async (req, res, next) => {
  */
 export const serializeUserByEmail: RequestHandler = async (req, res, next) => {
   // check the path params for the email
-  console.info(`Serializing user ${req.params.email}`);
+  logger.info(`Serializing user ${req.params.email}`);
 
   try {
     const user = await getUserByEmail(req.params.email);
@@ -143,7 +143,7 @@ export const serializeUserByEmail: RequestHandler = async (req, res, next) => {
  * Update a user by id
  */
 export const updateUserById: RequestHandler = async (req, res, next) => {
-  console.info(`Updating user ${req.params.id}`);
+  logger.info(`Updating user ${req.params.id}`);
   try {
     const user = await updateUserProfile(req.params.id, req.body);
     if (!user) {
@@ -159,7 +159,7 @@ export const updateUserById: RequestHandler = async (req, res, next) => {
  * Delete a user by id
  */
 export const deleteUserById: RequestHandler = async (req, res, next) => {
-  console.info(`Deleting user ${req.params.id}`);
+  logger.info(`Deleting user ${req.params.id}`);
   try {
     const user = await deleteUser(req.params.id);
     if (!user) {

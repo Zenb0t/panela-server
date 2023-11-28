@@ -1,13 +1,14 @@
 import mongoose from "mongoose";
+import logger from "./utils/logger";
 
 async function initDB(uri: string) {
-    console.log("Connecting to MongoDB...");
+    logger.info("Connecting to MongoDB...");
     mongoose.connect(uri).then(
         () => {
-            console.log("Connected to MongoDB");
+            logger.info("Connected to MongoDB");
         },
         err => {
-            console.log("Error connecting to MongoDB: ", err);
+            logger.info("Error connecting to MongoDB: ", err);
         }
     );
 }

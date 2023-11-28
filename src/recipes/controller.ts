@@ -1,5 +1,5 @@
 import { Router, RequestHandler } from "express";
-import { Recipe } from "../../models/recipe";
+import { Recipe } from "./model"
 
 const recipeRouter = Router({ mergeParams: true });
 
@@ -141,14 +141,3 @@ const removeAll: RequestHandler = (req, res) => {
         .send({ message: "Could not delete recipe" + " " + err.message });
     });
 };
-
-//All routes for the recipes API
-
-recipeRouter.post("/recipes", create);
-recipeRouter.get("/recipes", findAll);
-recipeRouter.get("/recipes/all", findAllRecipesByUserId);
-recipeRouter.get("/recipes/:id", findOne);
-recipeRouter.delete("/recipes/:id", remove);
-recipeRouter.put("/recipes/:id", updateRecipe);
-
-export default recipeRouter;

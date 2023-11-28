@@ -1,4 +1,5 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
+import logger from "./logger";
 
 /***
  * A simple error handler middleware that returns a 500 status code and the error message.
@@ -10,10 +11,8 @@ export const handleError = (
   next: NextFunction
 ) => {
   if (err) {
-    // TODO: Add logging
-    console.error(err.name);
-    console.error(err.message);
-    console.error(err.stack);
+    // TODO: Improve error handling
+    logger.error(err.message);
     res.status(500).send({ message: err.message || "An error occurred" });
   }
   next();
