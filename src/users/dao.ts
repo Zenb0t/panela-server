@@ -1,6 +1,5 @@
-import { RequestHandler } from "express";
 import { User, UserModel } from "./model";
-import { handleError } from "src/utils/errorHandler";
+import { errorMessages as e } from "../consts";
 
 /**
  * Creates a new user in the database.
@@ -33,7 +32,7 @@ export const getUserById = async (id: string) => {
   try {
     const user = await UserModel.findOne({ id: id });
     if (!user) {
-      throw new Error(`User with id ${id} not found`);
+      throw new Error(e.USER_NOT_FOUND_ERROR);
     }
     return user;
   } catch (err) {
@@ -51,7 +50,7 @@ export const getUserByEmail = async (email: string) => {
   try {
     const user = await UserModel.findOne({ email: email });
     if (!user) {
-      throw new Error(`User with email ${email} not found`);
+      throw new Error(e.USER_NOT_FOUND_ERROR);
     }
     return user;
   } catch (err) {
@@ -67,13 +66,33 @@ export const getUserByEmail = async (email: string) => {
  * @throws {Error} Throws an error if the user cannot be updated.
  */
 export const updateUserProfile = async (id: string, userData: User) => {
-  try{
-    const user = await UserModel.findOneAndUpdate({ id: id }, userData, { new: true });
+  try {
+    const user = await UserModel.findOneAndUpdate({ id: id }, userData, {
+      new: true,
+    });
     if (!user) {
-      throw new Error(`User with id ${id} not found`);
+      throw new Error(e.USER_NOT_FOUND_ERROR);
     }
     return user;
   } catch (err) {
     throw err;
   }
-}
+};
+
+/**
+ * Delete a user by id.
+ * @param {string} id - The id of the user to delete.
+ * @returns {Promise<Object>} The deleted user data.
+ * @throws {Error} Throws an error if the user cannot be deleted.
+ */
+export const deleteUser = async (id: string) => {
+  try {
+    const result = await UserModel.deleteOne({ id: id });
+    if (result.deletedCount === 0) {
+      throw new Error(e.USER_NOT_FOUND_ERROR);
+    }
+    return result;
+  } catch (err) {
+    throw err;
+  }
+};

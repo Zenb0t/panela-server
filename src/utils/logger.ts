@@ -3,7 +3,7 @@ import path from 'path';
 import winston from 'winston';
 
 // Ensure that the logs directory exists
-const logsDir = path.join(__dirname, 'logs');
+const logsDir = path.join(__dirname, '..', 'logs');
 if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir);
 }
