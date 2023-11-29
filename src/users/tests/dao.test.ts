@@ -1,7 +1,7 @@
 import { createUser, deleteUser, getUserByEmail, getUserById, updateUserProfile } from "../dao"; 
 import { UserModel } from "../model"; 
 import { User } from "../model"; 
-import { errorMessages as e } from "../../consts";
+import { ErrorMessages as e } from "../../consts";
 
 jest.mock("../model");
 

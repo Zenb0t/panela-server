@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { UserModel } from "../model";
 import { checkUserDoesNotExist } from "../middleware";
 import { handleError } from "../../utils/errorHandler";
-import { errorMessages as e } from "../../consts";
+import { ErrorMessages as e } from "../../consts";
 
 jest.mock("../../utils/errorHandler");
 jest.mock("../model");

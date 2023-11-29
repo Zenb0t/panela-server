@@ -2,7 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { getUserById } from "../dao";
 import { serializeUserById } from "../middleware";
 import { handleError } from "../../utils/errorHandler";
-import { errorMessages as e } from "../../consts";
+import { ErrorMessages as e } from "../../consts";
 
 jest.mock("../dao");
 jest.mock("../../utils/errorHandler");

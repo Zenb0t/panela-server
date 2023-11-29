@@ -8,7 +8,7 @@ import {
   deleteUser,
 } from "./dao";
 import { handleError } from "../utils/errorHandler";
-import { errorMessages as e } from "../consts";
+import { ErrorMessages as e } from "../consts";
 import logger from "../utils/logger";
 
 /***

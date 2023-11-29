@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { validateUser } from "../middleware";
-import { errorMessages as e } from "../../consts";
+import { ErrorMessages as e } from "../../consts";
 
 describe("validateUser Middleware", () => {
   // Mocking Express' response and next function
