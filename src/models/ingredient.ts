@@ -1,13 +1,5 @@
 import mongoose from 'mongoose';
-
-export interface Ingredient {
-    name: string;
-    amount: number;
-    measuringUnit: string;
-    cost: number;
-    unitCost: number;
-    id: string;
-}
+import { Ingredient } from 'src/types/ingredient';
 
 export const IngredientSchema = new mongoose.Schema<Ingredient>(
     {
@@ -24,17 +16,10 @@ export const IngredientSchema = new mongoose.Schema<Ingredient>(
             type: String,
             required: true
         },
-        cost: {
+        costPerUnit: {
             type: Number,
             required: true,
-            default: 0,
-        },
-        unitCost: {
-            type: Number,
-            required: true,
-            default: function () {
-                return this.cost / this.amount;
-            }
+            trim: true
         },
         id: {
             type: String,
@@ -43,4 +28,4 @@ export const IngredientSchema = new mongoose.Schema<Ingredient>(
         }
     });
 
-export const Ingredient = mongoose.model<Ingredient>("Ingredient", IngredientSchema);
+export const IngredientModel = mongoose.model<Ingredient>("Ingredient", IngredientSchema);

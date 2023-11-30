@@ -1,12 +1,9 @@
-import { Router, RequestHandler } from "express";
-import { Ingredient } from "../../models/ingredient";
 
-const ingredientRouter = Router({ mergeParams: true});
 
 /** Create a new ingredient */
 
 const createIngredient: RequestHandler = (req, res) => {
-    const ingredient = new Ingredient(req.body);
+    const ingredient = new IngredientModel(req.body);
     ingredient
         .save()
         .then((data) => {
@@ -23,7 +20,7 @@ const createIngredient: RequestHandler = (req, res) => {
 /** Get all ingredients */
 
 const getAll: RequestHandler = (req, res) => {
-    Ingredient.find()
+    IngredientModel.find()
         .then((data) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send(data).status(200);
@@ -38,7 +35,7 @@ const getAll: RequestHandler = (req, res) => {
 /** Get one ingredient by id */
 
 const getOne: RequestHandler = (req, res) => {
-    Ingredient.findOne({ id: req.params.id })
+    IngredientModel.findOne({ id: req.params.id })
         .then((data) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send(data).status(200);
@@ -53,7 +50,7 @@ const getOne: RequestHandler = (req, res) => {
 /** Update an ingredient by id */
 
 const update: RequestHandler = (req, res) => {
-    Ingredient.findOneAndUpdate({ id: req.params.id }, req.body, { new: true })
+    IngredientModel.findOneAndUpdate({ id: req.params.id }, req.body, { new: true })
         .then((data) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send(data).status(200);
@@ -68,7 +65,7 @@ const update: RequestHandler = (req, res) => {
 /** Delete an ingredient by id */
 
 const deleteOne: RequestHandler = (req, res) => {
-    Ingredient.findOneAndDelete({ id: req.params.id })
+    IngredientModel.findOneAndDelete({ id: req.params.id })
         .then((data) => {
             res.header("Access-Control-Allow-Origin", "*");
             res.send(data).status(200);
@@ -79,11 +76,3 @@ const deleteOne: RequestHandler = (req, res) => {
             res.status(500).send({ message: err.message || "Error when deleting ingredient" })
         })
 }
-
-ingredientRouter.post("/ingredients", createIngredient);
-ingredientRouter.get("/ingredients", getAll);
-ingredientRouter.get("/ingredients/:id", getOne);
-ingredientRouter.put("/ingredients/:id", update);
-ingredientRouter.delete("/ingredients/:id", deleteOne);
-
-export default ingredientRouter;

@@ -1,73 +1,53 @@
-import mongoose from 'mongoose';
-import { Ingredient, IngredientSchema } from '../models/ingredient';
+import mongoose from "mongoose";
+import { IngredientSchema } from "../models/ingredient";
+import { Recipe } from "../types/recipe";
 
-interface Recipe extends mongoose.Document {
-    title: string;
-    description: string;
-    totalTime: string; //TODO: change to time?
-    cost: number;
-    ingredients: [{ ingredient: Ingredient, quantity: number, unit: string }]; //TODO: check if is unit or cost here. or create a type for IngredientItem
-    instructions: string[];
-    imageUrl: string;
-    favorite: boolean;
-    id: string;
-    ownerId: string;
-}
-
-interface Time extends mongoose.Document {
-    hours: number;
-    minutes: number;
-}
-
-const TimeSchema = new mongoose.Schema({
-    hours: Number,
-    minutes: Number
+const IngredientItemSchema = new mongoose.Schema({
+  ingredient: IngredientSchema,
+  quantity: {
+    type: Number,
+    required: true,
+  },
+  unit: {
+    type: String,
+    required: true,
+  },
 });
-
 
 const RecipeSchema = new mongoose.Schema<Recipe>({
-    title: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    description: {
-        type: String,
-        required: true,
-        trim: true
-    },
-    totalTime: TimeSchema,
-    cost: {
-        type: Number,
-        required: true,
-        trim: true
-    },
-    ingredients: {
-        type: [{ ingredient: IngredientSchema, quantity: Number, cost: Number }],
-    },
-    instructions: {
-        type: [String],
-        required: true,
-    },
-    imageUrl: {
-        type: String
-    },
-    favorite: {
-        type: Boolean,
-        default: false
-    },
-    id: {
-        type: String,
-        default: mongoose.Types.ObjectId.toString(),
-        trim: true
-    },
-    ownerId: {
-        type: String,
-        required: true,
-        trim: true
-    }
-
-
+  title: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  description: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  totalTimeInMinutes: {
+    type: Number,
+    required: true,
+  },
+  cost: {
+    type: Number,
+  },
+  ingredients: [IngredientItemSchema],
+  instructions: {
+    type: [String],
+    required: true,
+  },
+  imageUrl: {
+    type: String,
+  },
+  ownerId: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  sourceUrl: {
+    type: String,
+  },
 });
 
-export const Recipe = mongoose.model("Recipe", RecipeSchema);
+export const RecipeModel = mongoose.model("Recipe", RecipeSchema);
