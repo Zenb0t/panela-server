@@ -19,6 +19,7 @@ export const validateRecipe: RequestHandler = async (req, res, next) => {
   logger.info(`Validating recipe ${req.body.title}`);
   try {
     ZodRecipeSchema.parse(req.body);
+    logger.info(`Recipe ${req.body.title} validated`);
     next();
   } catch (err: any) {
     handleError(err, req, res, next);
