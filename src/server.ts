@@ -1,9 +1,9 @@
 import express from 'express';
 import { auth } from 'express-oauth2-jwt-bearer';
 import sanitizedConfig from './config';
-import recipeRouter from './routes/api/recipes';
+import recipeRouter from './recipes/routes';
 import initDB from './database';
-import ingredientRouter from './routes/api/ingredients';
+// import ingredientRouter from './routes/api/ingredients';
 import userRouter from './users/routes';
 // import { User, UserModel } from './models/user';
 // import { UserManager } from './routes/api/user-controller';
@@ -24,4 +24,4 @@ initDB(sanitizedConfig.URI_MONGODB);
 app.use('/api', userRouter);
 
 userRouter.use('/u/', recipeRouter);
-userRouter.use('/u/', ingredientRouter);
+// userRouter.use('/u/', ingredientRouter);
