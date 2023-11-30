@@ -54,7 +54,7 @@ export const getAllRecipesByUserId = async (userId: string) => {
  */
 export const getRecipeById = async (id: string) => {
   try {
-    const recipe = await RecipeModel.findOne({ id: id });
+    const recipe = await RecipeModel.findOne({ _id: id });
     if (!recipe) {
       throw new Error("Recipe not found");
     }

@@ -46,6 +46,5 @@ describe("createNewUser Middleware", () => {
 
     expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
   });
-
-  // Additional test cases can be added here
+  
 });

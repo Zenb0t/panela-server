@@ -23,7 +23,7 @@ export interface IngredientItem {
 export const IngredientItemSchema = z.object({
   ingredient: ZodIngredientSchema,
   quantity: z.number().min(1, "Quantity must be a positive number"),
-  unit: z.string().min(1, "Unit is required"),
+  measuringUnit: z.string().min(1, "Measuring unit is required"),
 });
 
 export const ZodRecipeSchema = z.object({

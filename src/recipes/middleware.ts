@@ -22,8 +22,8 @@ export const validateRecipe: RequestHandler = async (req, res, next) => {
     logger.info(`Recipe ${req.body.title} validated`);
     next();
   } catch (err: any) {
-    handleError(err, req, res, next);
-  }
+      handleError(err, req, res, next);
+    }
 };
 
 export const createNewRecipe: RequestHandler = async (req, res, next) => {
