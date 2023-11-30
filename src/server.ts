@@ -3,10 +3,9 @@ import { auth } from 'express-oauth2-jwt-bearer';
 import sanitizedConfig from './config';
 import recipeRouter from './recipes/routes';
 import initDB from './database';
-// import ingredientRouter from './routes/api/ingredients';
+import ingredientRouter from './ingredients/routes';
 import userRouter from './users/routes';
 // import { User, UserModel } from './models/user';
-// import { UserManager } from './routes/api/user-controller';
 import globalMiddleware from './middleware';
 import logger from './utils/logger';
 
@@ -21,7 +20,7 @@ app.listen(sanitizedConfig.PORT, () => {
 initDB(sanitizedConfig.URI_MONGODB);
 
 // app.use('/api', auth(config), userRouter);
-app.use('/api', userRouter);
+app.use('/api', userRouter); // TODO: add auth back in
 
 userRouter.use('/u/', recipeRouter);
 // userRouter.use('/u/', ingredientRouter);
