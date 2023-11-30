@@ -5,6 +5,8 @@ import { ErrorMessages as e } from "../../consts";
 
 jest.mock("../model");
 
+const mockUser = { _id: '123', email: 'test@example.com' };
+
 describe('createUser Function', () => {
   it('successfully creates a user', async () => {
     const mockUserData = { email: 'test@example.com', name: 'Test User' };
@@ -27,12 +29,11 @@ describe('createUser Function', () => {
 
 describe('getUserById Function', () => {
   it('retrieves a user by id', async () => {
-    const mockUser = { id: '123', email: 'test@example.com' };
     (UserModel.findOne as jest.Mock).mockResolvedValue(mockUser);
 
     const result = await getUserById('123');
 
-    expect(UserModel.findOne).toHaveBeenCalledWith({ id: '123' });
+    expect(UserModel.findOne).toHaveBeenCalledWith({ _id: '123' });
     expect(result).toEqual(mockUser);
   });
 
@@ -45,7 +46,6 @@ describe('getUserById Function', () => {
 
 describe('getUserByEmail Function', () => {
   it('retrieves a user by email', async () => {
-    const mockUser = { id: '123', email: 'test@example.com' };
     (UserModel.findOne as jest.Mock).mockResolvedValue(mockUser);
 
     const result = await getUserByEmail('test@example.com');
@@ -69,7 +69,7 @@ describe("updateUserProfile Function", () => {
 
   it("should successfully update a user", async () => {
     const mockUser: User = {
-      id: "123",
+      _id: "123",
       email: "test@example.com",
       name: "Test User",
       email_verified: false,
@@ -77,7 +77,7 @@ describe("updateUserProfile Function", () => {
     };
     (UserModel.findOneAndUpdate as jest.Mock).mockResolvedValue(mockUser);
     const updatedUserData: User = {
-      id: "123",
+      _id: "123",
       email: "test@example.com",
       name: "Test User",
       email_verified: false,
@@ -88,7 +88,7 @@ describe("updateUserProfile Function", () => {
     const result = await updateUserProfile("123", updatedUserData);
 
     expect(UserModel.findOneAndUpdate).toHaveBeenCalledWith(
-      { id: "123" },
+      { _id: "123" },
       updatedUserData,
       { new: true }
     );
@@ -101,7 +101,7 @@ describe("updateUserProfile Function", () => {
     await expect(
       updateUserProfile("nonexistent-id", {
           name: "New Name",
-          id: "456",
+          _id: "456",
           email: "test@example.com",
           email_verified: false,
           role: "user"
@@ -116,7 +116,7 @@ describe("updateUserProfile Function", () => {
     await expect(
       updateUserProfile("123", {
           name: "New Name",
-          id: "",
+          _id: "",
           email: "",
           email_verified: false,
           role: ""
@@ -132,7 +132,7 @@ describe('deleteUser Function', () => {
 
     const result = await deleteUser('123');
 
-    expect(UserModel.deleteOne).toHaveBeenCalledWith({ id: '123' });
+    expect(UserModel.deleteOne).toHaveBeenCalledWith({ _id: '123' });
     expect(result).toEqual(deleteResponse);
   });
 

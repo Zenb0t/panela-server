@@ -10,8 +10,6 @@ import { ErrorMessages as e } from "../consts";
 export const createUser = async (userData: User) => {
   try {
     const user = new UserModel(userData);
-    user.id = user._id;
-
     // Save the user to the database
     const savedUser = await user.save();
 
@@ -30,7 +28,7 @@ export const createUser = async (userData: User) => {
  */
 export const getUserById = async (id: string) => {
   try {
-    const user = await UserModel.findOne({ id: id });
+    const user = await UserModel.findOne({ _id: id });
     if (!user) {
       throw new Error(e.USER_NOT_FOUND_ERROR);
     }
@@ -67,7 +65,7 @@ export const getUserByEmail = async (email: string) => {
  */
 export const updateUserProfile = async (id: string, userData: User) => {
   try {
-    const user = await UserModel.findOneAndUpdate({ id: id }, userData, {
+    const user = await UserModel.findOneAndUpdate({ _id: id }, userData, {
       new: true,
     });
     if (!user) {
@@ -87,7 +85,7 @@ export const updateUserProfile = async (id: string, userData: User) => {
  */
 export const deleteUser = async (id: string) => {
   try {
-    const result = await UserModel.deleteOne({ id: id });
+    const result = await UserModel.deleteOne({ _id: id });
     if (result.deletedCount === 0) {
       throw new Error(e.USER_NOT_FOUND_ERROR);
     }

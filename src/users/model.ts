@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 export interface User {
-    id: string;
+    _id: string;
     name: string;
     email: string;
     email_verified: boolean;
@@ -39,13 +39,6 @@ const UserSchema = new mongoose.Schema<User>({
         type: Boolean,
         default: false,
         trim: true
-    },
-    id: {
-        type: String,
-        default: mongoose.Types.ObjectId.toString(),
-        trim: true,
-        unique: true,
-        required: true,
     },
     role: {
         type: String,
