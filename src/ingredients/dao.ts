@@ -10,7 +10,6 @@ import { IngredientModel } from "./model";
 export const createIngredient = async (ingredientData: Ingredient) => {
     try {
         const ingredient = new IngredientModel(ingredientData);
-        ingredient.id = ingredient._id;
         const savedIngredient = await ingredient.save();
         return savedIngredient;
     }

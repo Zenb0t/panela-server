@@ -7,7 +7,6 @@ const recipeRouter = Router({ mergeParams: true });
 const create: RequestHandler = async (req, res) => {
   try {
     const recipe = new Recipe(req.body);
-    recipe.id = recipe._id;
     if (!req.query.userId)
       return res
         .status(400)

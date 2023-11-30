@@ -1,7 +1,7 @@
 import { RequestHandler } from "express";
 import logger from "../utils/logger";
 import { handleError } from "../utils/errorHandler";
-import { getAllIngredients } from "./dao";
+import { getAllIngredients, getIngredientById } from "./dao";
 
 
 export const createNewIngredient: RequestHandler = async (req, res, next) => {

@@ -2,7 +2,7 @@ import { Ingredient, ZodIngredientSchema } from "./ingredient";
 import { z } from "zod";
 
 export interface Recipe {
-  id: string;
+  _id: string;
   title: string;
   description: string;
   totalTimeInMinutes: number;

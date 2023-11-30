@@ -21,11 +21,6 @@ export const IngredientSchema = new mongoose.Schema<Ingredient>(
             required: true,
             trim: true
         },
-        id: {
-            type: String,
-            default: mongoose.Types.ObjectId.toString(),
-            trim: true
-        }
     });
 
 export const IngredientModel = mongoose.model<Ingredient>("Ingredient", IngredientSchema);

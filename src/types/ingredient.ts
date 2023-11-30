@@ -1,6 +1,6 @@
 import { z } from 'zod';
 export interface Ingredient {
-    id: string;
+    _id: string;
     name: string;
     measuringUnit: MeasuringUnit; 
     amount: number; // Quantity of the ingredient

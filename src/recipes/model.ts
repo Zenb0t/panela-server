@@ -8,7 +8,7 @@ const IngredientItemSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-  unit: {
+  measuringUnit: {
     type: String,
     required: true,
   },

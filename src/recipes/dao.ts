@@ -10,7 +10,6 @@ import { Recipe } from "../types/recipe";
 export const createRecipe = async (recipeData: Recipe) => {
   try {
     const recipe = new RecipeModel(recipeData);
-    recipe.id = recipe._id;
     const savedRecipe = await recipe.save();
     return savedRecipe;
   } catch (err) {
@@ -74,7 +73,7 @@ export const getRecipeById = async (id: string) => {
  */
 export const updateRecipe = async (id: string, recipeData: Recipe) => {
   try {
-    const recipe = await RecipeModel.findOneAndUpdate({ id: id }, recipeData, {
+    const recipe = await RecipeModel.findOneAndUpdate({ _id: id }, recipeData, {
       new: true,
     });
     if (!recipe) {
@@ -94,7 +93,7 @@ export const updateRecipe = async (id: string, recipeData: Recipe) => {
  */
 export const deleteRecipe = async (id: string) => {
   try {
-    const result = await RecipeModel.deleteOne({ id: id });
+    const result = await RecipeModel.deleteOne({ _id: id });
     if (result.deletedCount === 0) {
       throw new Error("Recipe not found");
     }
