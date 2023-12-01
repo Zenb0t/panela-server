@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
-import { validateUser } from "../middleware";
+import { validateUserData } from "../middleware";
 import { ErrorMessages as e } from "../../consts";
+import { Role } from "../../types/user";
 
 describe("validateUser Middleware", () => {
   // Mocking Express' response and next function
@@ -15,12 +16,12 @@ describe("validateUser Middleware", () => {
 
   it("should call next() for valid user data", async () => {
     const req = {
-      body: { email: "test@example.com", name: "Test User", role: "user" },
+      body: { email: "test@example.com", name: "Test User", role: Role.USER },
     } as Request;
 
     const res = mockResponse();
 
-    await validateUser(req, res, mockNext);
+    await validateUserData(req, res, mockNext);
 
     expect(mockNext).toHaveBeenCalled();
   });
@@ -32,11 +33,11 @@ describe("validateUser Middleware", () => {
 
     const res = mockResponse();
 
-    await validateUser(req, res, mockNext);
+    await validateUserData(req, res, mockNext);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith({
-      message: e.INCOMPLETE_USER_DATA_ERROR,
+      message: e.EMAIL_FORMAT_ERROR,
     });
   });
 
@@ -44,7 +45,7 @@ describe("validateUser Middleware", () => {
     const req = { body: {} } as Request;
     const res = mockResponse();
 
-    await validateUser(req, res, mockNext);
+    await validateUserData(req, res, mockNext);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith({
@@ -59,7 +60,7 @@ describe("validateUser Middleware", () => {
 
     const res = mockResponse();
 
-    await validateUser(req, res, mockNext);
+    await validateUserData(req, res, mockNext);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith({
@@ -78,7 +79,7 @@ describe("validateUser Middleware", () => {
 
     const res = mockResponse();
 
-    await validateUser(req, res, mockNext);
+    await validateUserData(req, res, mockNext);
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith({

@@ -1,5 +1,6 @@
-import { User, UserModel } from "./model";
+import { UserModel } from "./model";
 import { ErrorMessages as e } from "../consts";
+import { User } from "../types/user";
 
 /**
  * Creates a new user in the database.

@@ -3,7 +3,12 @@ import logger from "./logger";
 import { ZodError } from "zod";
 
 /***
- * A simple error handler middleware that returns a 500 status code and the error message.
+ * A simple error handler middleware that logs the error and sends a response
+ * @param err - The error object
+ * @param req - The Express request object
+ * @param res - The Express response object
+ * @param next - The Express next function
+ * @returns void
  */
 export const handleError = (
   err: Error,
@@ -13,13 +18,18 @@ export const handleError = (
 ) => {
   if (err) {
     // Log the error once at the start
-    logger.error(err);
+    logger.error(`An ${err.name} occured: ${err.message}`);
+    logger.error(err.stack);
 
-    // Use a switch statement to handle different types of errors
+    //Switch statement to handle different types of errors
     switch (true) {
       case err instanceof ZodError:
         const zodError = err as ZodError;
-        const message = zodError.issues.map((issue) => issue.message).join(", ");
+        // Get the error message from the ZodError object
+        // add the issue.path and issue.message to the message
+        const message = zodError.issues.map((issue) => {
+          return `${issue.path}: ${issue.message}`;
+        }).join() ;
         return res.status(400).send({ message });
 
       case err instanceof Error:

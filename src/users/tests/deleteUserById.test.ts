@@ -36,7 +36,8 @@ describe("deleteUserById Middleware", () => {
   });
 
   it("should return 404 if user to delete is not found", async () => {
-    (deleteUser as jest.Mock).mockResolvedValue(null);
+    const deletionResult = { acknowledged: true, deletedCount: 0 };
+    (deleteUser as jest.Mock).mockResolvedValue(deletionResult);
     const req = {
       params: { id: "non-existent-id" },
     } as unknown as Request;
@@ -44,6 +45,7 @@ describe("deleteUserById Middleware", () => {
 
     await deleteUserById(req, res, mockNext);
 
+    expect(deleteUser).toHaveBeenCalledWith(req.params.id);
     expect(res.status).toHaveBeenCalledWith(404);
     expect(res.send).toHaveBeenCalledWith({
       message: e.USER_NOT_DELETED_ERROR,

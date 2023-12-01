@@ -1,6 +1,6 @@
 import { createUser, deleteUser, getUserByEmail, getUserById, updateUserProfile } from "../dao"; 
 import { UserModel } from "../model"; 
-import { User } from "../model"; 
+import { Role, User } from "../../types/user";
 import { ErrorMessages as e } from "../../consts";
 
 jest.mock("../model");
@@ -73,7 +73,7 @@ describe("updateUserProfile Function", () => {
       email: "test@example.com",
       name: "Test User",
       email_verified: false,
-      role: "user",
+      role: Role.USER,
     };
     (UserModel.findOneAndUpdate as jest.Mock).mockResolvedValue(mockUser);
     const updatedUserData: User = {
@@ -81,7 +81,7 @@ describe("updateUserProfile Function", () => {
       email: "test@example.com",
       name: "Test User",
       email_verified: false,
-      role: "user",
+      role: Role.USER,
       phone_number: "1234567890",
     };
 
@@ -104,7 +104,7 @@ describe("updateUserProfile Function", () => {
           _id: "456",
           email: "test@example.com",
           email_verified: false,
-          role: "user"
+          role: Role.USER,
       })
     ).rejects.toThrow(e.USER_NOT_FOUND_ERROR);
   });
@@ -119,7 +119,7 @@ describe("updateUserProfile Function", () => {
           _id: "",
           email: "",
           email_verified: false,
-          role: ""
+          role: Role.USER,
       })
     ).rejects.toThrow(mockError);
   });

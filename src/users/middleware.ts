@@ -10,35 +10,30 @@ import {
 import { handleError } from "../utils/errorHandler";
 import { ErrorMessages as e } from "../consts";
 import logger from "../utils/logger";
+import { Role, ZodUserSchema } from "../types/user";
+import { isRoleValid } from "../utils/validation";
+import { ZodError } from "zod";
 
 /***
  * Validate the user data sent in the request body
  */
-export const validateUser: RequestHandler = async (req, res, next) => {
-  const { email, name, role } = req.body;
-  logger.info(`Validating user ${email}`);
-
-  // TODO: Extract all validation logic to a separate functions
-  // Check if the user format is correct
-  if (!email || !name) {
-    res.status(400).send({
-      message: e.INCOMPLETE_USER_DATA_ERROR,
-    });
-    return;
+export const validateUserData: RequestHandler = async (req, res, next) => {
+  const { role, user } = req.body;
+  if (!role) {
+    req.body.role = Role.USER;
   }
-  // Validate the email format
-  const emailRegex = /\S+@\S+\.\S+/;
-  if (!emailRegex.test(email)) {
-    res.status(400).send({ message: e.EMAIL_FORMAT_ERROR });
-    return;
+  logger.info(`Validating user data'`);
+  try {
+    ZodUserSchema.parse(req.body);
+    isRoleValid(role);
+    if (user && user.role !== role) {
+      return res.status(400).send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
+    }
+    logger.info(`User data validated`);
+    next();
+  } catch (err: any) {
+    handleError(err, req, res, next);
   }
-  // Check if the 'role' field is being updated to an unauthorized value
-  if (role && role !== "user") {
-    return res.status(400).send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
-  }
-
-  // If everything is OK, continue
-  next();
 };
 
 /***
@@ -83,7 +78,7 @@ export const checkUserExists: RequestHandler = async (req, res, next) => {
     if (!user) {
       return res.status(404).send({ message: e.USER_NOT_FOUND_ERROR });
     }
-    req.body.user = user; // Attach the user to the request object
+    req.body.user = user;
     next();
   } catch (err: any) {
     handleError(err, req, res, next);
@@ -96,7 +91,7 @@ export const checkUserExists: RequestHandler = async (req, res, next) => {
 export const createNewUser: RequestHandler = async (req, res, next) => {
   logger.info(`Creating new user ${req.body.email}`);
   try {
-    const user = await createUser(req.body);
+    const user = await createUser(req.body.user);
     logger.info(`User ${req.body.email} created`);
     logger.debug(user);
     res.status(201).send(user);
@@ -161,11 +156,11 @@ export const updateUserById: RequestHandler = async (req, res, next) => {
 export const deleteUserById: RequestHandler = async (req, res, next) => {
   logger.info(`Deleting user ${req.params.id}`);
   try {
-    const user = await deleteUser(req.params.id);
-    if (!user) {
+    const result = await deleteUser(req.params.id);
+    if (result.deletedCount === 0) {
       return res.status(404).send({ message: e.USER_NOT_DELETED_ERROR });
     }
-    res.status(200).send(user);
+    res.status(200).send(result);
   } catch (err: any) {
     handleError(err, req, res, next);
   }

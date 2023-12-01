@@ -1,14 +1,5 @@
 import mongoose from 'mongoose';
-
-export interface User {
-    _id: string;
-    name: string;
-    email: string;
-    email_verified: boolean;
-    phone_number?: string;
-    phone_number_verified?: boolean;
-    role: string;
-}
+import { Role, User } from '../types/user';
 
 const UserSchema = new mongoose.Schema<User>({
     name: {
@@ -32,8 +23,7 @@ const UserSchema = new mongoose.Schema<User>({
         type: String,
         trim: true,
         index: true,
-        // unique: true,
-        //TODO: uncomment unique
+        unique: true,
     },
     phone_number_verified: {
         type: Boolean,
@@ -42,7 +32,7 @@ const UserSchema = new mongoose.Schema<User>({
     },
     role: {
         type: String,
-        default: "user",
+        default: Role.USER,
         trim: true
     },
 });
