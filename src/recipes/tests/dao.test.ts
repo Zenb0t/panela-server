@@ -13,7 +13,7 @@ import { DatabaseError } from "../../utils/errors";
 
 jest.mock("../model");
 
-describe.only("Recipe DAO", () => {
+describe("Recipe DAO", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
