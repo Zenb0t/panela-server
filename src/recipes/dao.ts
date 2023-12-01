@@ -1,6 +1,7 @@
 import { RecipeModel } from "./model";
 import { Recipe } from "../types/recipe";
 import { ErrorMessages as e } from "../consts";
+import { DatabaseError } from "../utils/errors";
 
 /***
  * Creates a new recipe

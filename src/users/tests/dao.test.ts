@@ -6,10 +6,10 @@ import { ErrorMessages as e } from "../../consts";
 jest.mock("../model");
 
 const mockUser = { _id: '123', email: 'test@example.com' };
+const mockUserData = { email: 'test@example.com', name: 'Test User' };
 
 describe('createUser Function', () => {
   it('successfully creates a user', async () => {
-    const mockUserData = { email: 'test@example.com', name: 'Test User' };
     (UserModel.prototype.save as jest.Mock).mockResolvedValue(mockUserData);
 
     const result = await createUser(mockUserData as User);
@@ -19,7 +19,6 @@ describe('createUser Function', () => {
   });
 
   it('throws an error when user creation fails', async () => {
-    const mockUserData = { email: 'test@example.com', name: 'Test User' };
     const mockError = new Error('Save failed');
     (UserModel.prototype.save as jest.Mock).mockRejectedValue(mockError);
 
@@ -40,7 +39,7 @@ describe('getUserById Function', () => {
   it('throws an error when user not found', async () => {
     (UserModel.findOne as jest.Mock).mockResolvedValue(null);
 
-    await expect(getUserById('nonexistent-id')).rejects.toThrow(new Error(e.USER_NOT_FOUND_ERROR));
+    await expect(getUserById('nonexistent-id')).rejects.toThrow(e.USER_NOT_FOUND_ERROR);
   });
 });
 
@@ -57,7 +56,7 @@ describe('getUserByEmail Function', () => {
   it('throws an error when user not found', async () => {
     (UserModel.findOne as jest.Mock).mockResolvedValue(null);
 
-    await expect(getUserByEmail('nonexistent-id')).rejects.toThrow(new Error(e.USER_NOT_FOUND_ERROR));
+    await expect(getUserByEmail('nonexistent-id')).rejects.toThrow(e.USER_NOT_FOUND_ERROR);
   });
 });
 
@@ -139,6 +138,6 @@ describe('deleteUser Function', () => {
   it('throws an error when user deletion fails', async () => {
     (UserModel.deleteOne as jest.Mock).mockResolvedValue({ acknowledged: true, deletedCount: 0 });
 
-    await expect(deleteUser('nonexistent-id')).rejects.toThrow(new Error(e.USER_NOT_FOUND_ERROR));
+    await expect(deleteUser('nonexistent-id')).rejects.toThrow(e.USER_NOT_FOUND_ERROR);
   });
 });

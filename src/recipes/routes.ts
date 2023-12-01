@@ -1,4 +1,4 @@
-import { Router, RequestHandler } from "express";
+import { Router } from "express";
 import { createNewRecipe, deleteRecipeById, serializeAllRecipes, serializeAllRecipesByUser, serializeRecipeById, updateRecipeById, validadeRecipeId, validateRecipe } from "./middleware";
 
 const recipeRouter = Router({ mergeParams: true });
