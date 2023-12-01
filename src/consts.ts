@@ -16,7 +16,7 @@ export enum ErrorMessages {
     EMAIL_NOT_FOUND_ERROR = "Email not found",
     EMAIL_FORMAT_ERROR = "email: Invalid email address",
     ROLE_CHANGE_NOT_ALLOWED_ERROR = "Changing role not allowed",
-    INCOMPLETE_USER_DATA_ERROR = "User data is incomplete. Email and name are required.",
+    INCOMPLETE_USER_DATA_ERROR = "User data is incomplete. Review and try again.",
     PARAM_EMAIL_OR_ID_REQUIRED_ERROR = "Parameter email or id is required",
     USER_ALREADY_EXISTS_ERROR = "User already exists",
     // Recipe

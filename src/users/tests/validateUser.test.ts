@@ -14,12 +14,13 @@ describe("validateUser Middleware", () => {
 
   const mockNext: NextFunction = jest.fn();
 
-  it.only("should call next() for valid user data", async () => {
-    const userData = {
-      email: "email@example.com",
-      name: "Test User",
-      role: Role.USER,
-    };
+  const userData = {
+    email: "email@example.com",
+    name: "Test User",
+    role: Role.USER,
+  };
+
+  it("should call next() for valid user data", async () => {
     const req = {
       body: userData,
     } as Request;
@@ -42,7 +43,8 @@ describe("validateUser Middleware", () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith({
-      message: e.EMAIL_FORMAT_ERROR,
+      message: e.INCOMPLETE_USER_DATA_ERROR,
+      error: expect.any(Object), // Expecting some error object from Zod
     });
   });
 
@@ -55,6 +57,7 @@ describe("validateUser Middleware", () => {
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith({
       message: e.INCOMPLETE_USER_DATA_ERROR,
+      error: expect.any(Object), // Expecting some error object from Zod
     });
   });
 
@@ -69,7 +72,28 @@ describe("validateUser Middleware", () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith({
-      message: e.EMAIL_FORMAT_ERROR,
+      message: e.INCOMPLETE_USER_DATA_ERROR,
+      error: expect.any(Object), // Expecting some error object from Zod
+    });
+  });
+
+  it("should return 401 for unauthorized role change", async () => {
+    const req = {
+      body: {
+        email: "test@example.com",
+        name: "Test User",
+        role: Role.ADMIN,
+        user: userData,
+      },
+    } as Request;
+
+    const res = mockResponse();
+
+    await validateUserData(req, res, mockNext);
+
+    expect(res.status).toHaveBeenCalledWith(401);
+    expect(res.send).toHaveBeenCalledWith({
+      message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR,
     });
   });
 
@@ -78,7 +102,7 @@ describe("validateUser Middleware", () => {
       body: {
         email: "test@example.com",
         name: "Test User",
-        role: "escalateToAdminMwhahahaha",
+        role: "escalated-role",
       },
     } as Request;
 
@@ -88,7 +112,7 @@ describe("validateUser Middleware", () => {
 
     expect(res.status).toHaveBeenCalledWith(400);
     expect(res.send).toHaveBeenCalledWith({
-      message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR,
+      message: e.ROLE_INVALID_ERROR,
     });
   });
 });

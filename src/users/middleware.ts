@@ -11,7 +11,7 @@ import { handleError } from "../utils/errorHandler";
 import { ErrorMessages as e } from "../consts";
 import logger from "../utils/logger";
 import { Role, ZodUserSchema } from "../types/user";
-import { isRoleValid } from "../utils/validation";
+import { validateRole } from "../utils/validation";
 import { ZodError } from "zod";
 
 /***
@@ -27,11 +27,11 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
     const result = ZodUserSchema.safeParse(req.body);
     if (!result.success) {
       const error = result.error as ZodError;
-      return res.status(400).send({ message: error.message });
+      return res.status(400).send({ message: e.INCOMPLETE_USER_DATA_ERROR, error: error });
     }
-    // isRoleValid(role);
+    validateRole(role);
     if (user && user.role !== role) {
-      return res.status(400).send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
+      return res.status(401).send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
     }
     logger.info(`User data validated`);
     next();

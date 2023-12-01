@@ -1,6 +1,7 @@
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 import logger from "./logger";
 import { ZodError } from "zod";
+import { ValidationError } from "./errors";
 
 /***
  * A simple error handler middleware that logs the error and sends a response
@@ -31,6 +32,10 @@ export const handleError = (
           return `${issue.path}: ${issue.message}`;
         }).join() ;
         return res.status(400).send({ message });
+
+        case err instanceof ValidationError:
+
+        return res.status(400).send({ message: err.message });
 
       case err instanceof Error:
         return res.status(500).send({ message: err.message });
