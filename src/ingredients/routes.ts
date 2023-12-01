@@ -1,11 +1,18 @@
 import { Router } from "express";
+import {
+  createNewIngredient,
+  deleteIngredientById,
+  serializeAllIngredients,
+  serializeIngredientById,
+  updateIngredientById,
+} from "./middleware";
 
-const ingredientRouter = Router({ mergeParams: true});
+const ingredientRouter = Router({ mergeParams: true });
 
-ingredientRouter.post("/ingredients", createIngredient);
-ingredientRouter.get("/ingredients", getAll);
-ingredientRouter.get("/ingredients/:id", getOne);
-ingredientRouter.put("/ingredients/:id", update);
-ingredientRouter.delete("/ingredients/:id", deleteOne);
+ingredientRouter.post("/ingredients", createNewIngredient);
+ingredientRouter.get("/ingredients", serializeAllIngredients);
+ingredientRouter.get("/ingredients/:id", serializeIngredientById);
+ingredientRouter.put("/ingredients/:id", updateIngredientById);
+ingredientRouter.delete("/ingredients/:id", deleteIngredientById);
 
 export default ingredientRouter;

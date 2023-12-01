@@ -8,15 +8,14 @@ import { IngredientModel } from "./model";
  * @throws {Error} Throws an error if the ingredient cannot be saved.
  */
 export const createIngredient = async (ingredientData: Ingredient) => {
-    try {
-        const ingredient = new IngredientModel(ingredientData);
-        const savedIngredient = await ingredient.save();
-        return savedIngredient;
-    }
-    catch (err) {
-        throw err;
-    }
-}
+  try {
+    const ingredient = new IngredientModel(ingredientData);
+    const savedIngredient = await ingredient.save();
+    return savedIngredient;
+  } catch (err) {
+    throw err;
+  }
+};
 
 /***
  * Get all ingredients
@@ -24,33 +23,73 @@ export const createIngredient = async (ingredientData: Ingredient) => {
  * @throws {Error} Throws an error if the ingredients cannot be found.
  */
 export const getAllIngredients = async () => {
-    try {
-        const ingredients = await IngredientModel.find();
-        return ingredients;
-    }
-    catch (err) {
-        throw err;
-    }
-}
+  try {
+    const ingredients = await IngredientModel.find();
+    return ingredients;
+  } catch (err) {
+    throw err;
+  }
+};
 
 /***
  * Get ingredient by id
  * @param {string} id - The id of the ingredient to get.
  * @returns {Promise<Object>} The ingredient data.
  * @throws {Error} Throws an error if the ingredient cannot be found.
- * 
-    */
+ *
+ */
 export const getIngredientById = async (id: string) => {
-    try {
-        const ingredient = await IngredientModel.findOne({ id: id });
-        if (!ingredient) {
-            throw new Error("Ingredient not found");
-        }
-        return ingredient;
+  try {
+    const ingredient = await IngredientModel.findOne({ id: id });
+    if (!ingredient) {
+      throw new Error("Ingredient not found");
     }
-    catch (err) {
-        throw err;
-    }
+    return ingredient;
+  } catch (err) {
+    throw err;
+  }
 };
 
+/***
+ * Update ingredient by id
+ * @param {string} id - The id of the ingredient to update.
+ * @param {Ingredient} ingredientData - Data for updating an ingredient.
+ * @returns {Promise<Object>} The updated ingredient data.
+ * @throws {Error} Throws an error if the ingredient cannot be updated.
+ */
+export const updateIngredient = async (
+  id: string,
+  ingredientData: Ingredient
+) => {
+  try {
+    const ingredient = await IngredientModel.findOneAndUpdate(
+      { id: id },
+      ingredientData,
+      { new: true }
+    );
+    if (!ingredient) {
+      throw new Error("Ingredient not found");
+    }
+    return ingredient;
+  } catch (err) {
+    throw err;
+  }
+};
 
+/***
+ * Delete ingredient by id
+ * @param {string} id - The id of the ingredient to delete.
+ * @returns {Promise<Object>} The deleted ingredient data.
+ * @throws {Error} Throws an error if the ingredient cannot be deleted.
+ */
+export const deleteIngredient = async (id: string) => {
+  try {
+    const ingredient = await IngredientModel.deleteOne({ id: id });
+    if (!ingredient) {
+      throw new Error("Ingredient not found");
+    }
+    return ingredient;
+  } catch (err) {
+    throw err;
+  }
+};
