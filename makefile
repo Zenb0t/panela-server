@@ -6,3 +6,6 @@ up-prod:
 
 down:
 	docker-compose down
+
+build:
+	docker-compose build

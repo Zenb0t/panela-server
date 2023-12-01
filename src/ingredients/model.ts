@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Ingredient } from 'src/types/ingredient';
+import { Ingredient } from '../types/ingredient';
 
 export const IngredientSchema = new mongoose.Schema<Ingredient>(
     {
