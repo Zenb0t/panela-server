@@ -14,9 +14,14 @@ describe("validateUser Middleware", () => {
 
   const mockNext: NextFunction = jest.fn();
 
-  it("should call next() for valid user data", async () => {
+  it.only("should call next() for valid user data", async () => {
+    const userData = {
+      email: "email@example.com",
+      name: "Test User",
+      role: Role.USER,
+    };
     const req = {
-      body: { email: "test@example.com", name: "Test User", role: Role.USER },
+      body: userData,
     } as Request;
 
     const res = mockResponse();

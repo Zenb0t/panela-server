@@ -14,7 +14,8 @@ export const isRoleValid = (role: string) => {
   if (!role) {
     throw new Error(e.ROLE_NOT_PROVIDED_ERROR);
   }
-  if (!(role in Role)) {
+  const roleValues = Object.values(Role);
+  if (!roleValues.includes(role as Role)) {
     throw new Error(e.ROLE_INVALID_ERROR);
   }
   return role;

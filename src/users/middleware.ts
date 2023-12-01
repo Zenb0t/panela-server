@@ -24,8 +24,12 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
   }
   logger.info(`Validating user data'`);
   try {
-    ZodUserSchema.parse(req.body);
-    isRoleValid(role);
+    const result = ZodUserSchema.safeParse(req.body);
+    if (!result.success) {
+      const error = result.error as ZodError;
+      return res.status(400).send({ message: error.message });
+    }
+    // isRoleValid(role);
     if (user && user.role !== role) {
       return res.status(400).send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
     }
