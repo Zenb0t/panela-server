@@ -1,5 +1,6 @@
 import { RecipeModel } from "./model";
 import { Recipe } from "../types/recipe";
+import { ErrorMessages as e } from "../consts";
 
 /***
  * Creates a new recipe
@@ -56,7 +57,7 @@ export const getRecipeById = async (id: string) => {
   try {
     const recipe = await RecipeModel.findOne({ _id: id });
     if (!recipe) {
-      throw new Error("Recipe not found");
+      throw new Error(e.RECIPE_NOT_FOUND_ERROR);
     }
     return recipe;
   } catch (err) {
@@ -77,7 +78,7 @@ export const updateRecipe = async (id: string, recipeData: Recipe) => {
       new: true,
     });
     if (!recipe) {
-      throw new Error("Recipe not found");
+      throw new Error(e.RECIPE_NOT_FOUND_ERROR);
     }
     return recipe;
   } catch (err) {
@@ -95,7 +96,7 @@ export const deleteRecipe = async (id: string) => {
   try {
     const result = await RecipeModel.deleteOne({ _id: id });
     if (result.deletedCount === 0) {
-      throw new Error("Recipe not found");
+      throw new Error(e.RECIPE_NOT_FOUND_ERROR);
     }
     return result;
   } catch (err) {

@@ -1,6 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { validateRecipe } from "../middleware"; // Adjust the import path as necessary
-import { ZodRecipeSchema } from "../../types/recipe";
+import { validateRecipe } from "../middleware";
 import { dummyRecipe } from "./fixtures";
 
 describe("validateRecipe Middleware", () => {

@@ -3,6 +3,11 @@ export const USER_VALID_FIELDS = ["name", "email", "phone_number"];
 // Error messages
 
 export enum ErrorMessages {
+    // General
+    ID_NOT_PROVIDED_ERROR = "Id not provided",
+    ID_INVALID_ERROR = "Id is invalid",
+    ROLE_NOT_PROVIDED_ERROR = "Role not provided",
+    ROLE_INVALID_ERROR = "Role is invalid",
     // User
     USER_NOT_FOUND_ERROR = "User not found",
     USER_NOT_CREATED_ERROR = "User not created",

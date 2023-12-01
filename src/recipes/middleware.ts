@@ -11,6 +11,7 @@ import {
 } from "./dao";
 import { ErrorMessages as e } from "../consts";
 import { ZodRecipeSchema } from "../types/recipe";
+import { validateId } from "../utils/validation";
 
 /***
  * Validate the recipe data sent in the request body
@@ -22,8 +23,19 @@ export const validateRecipe: RequestHandler = async (req, res, next) => {
     logger.info(`Recipe ${req.body.title} validated`);
     next();
   } catch (err: any) {
-      handleError(err, req, res, next);
-    }
+    handleError(err, req, res, next);
+  }
+};
+
+export const validadeRecipeId: RequestHandler = async (req, res, next) => {
+  logger.info(`Validating recipe ${req.params.id}`);
+  try {
+    validateId(req.params.id);
+    logger.info(`Recipe ${req.params.id} validated`);
+    next();
+  } catch (err: any) {
+    handleError(err, req, res, next);
+  }
 };
 
 export const createNewRecipe: RequestHandler = async (req, res, next) => {
@@ -70,6 +82,9 @@ export const serializeRecipeById: RequestHandler = async (req, res, next) => {
   logger.info(`Serializing recipe ${req.params.id}`);
   try {
     const recipe = await getRecipeById(req.params.id);
+    if (!recipe) {
+      return res.status(404).send({ message: e.RECIPE_NOT_FOUND_ERROR });
+    }
     logger.info(`Recipe serialized`);
     logger.debug(recipe);
     res.status(200).send(recipe);
@@ -94,11 +109,11 @@ export const updateRecipeById: RequestHandler = async (req, res, next) => {
 export const deleteRecipeById: RequestHandler = async (req, res, next) => {
   logger.info(`Deleting recipe ${req.params.id}`);
   try {
-    const recipe = await deleteRecipe(req.params.id);
-    if (!recipe) {
-      return res.status(404).send({ message: e.RECIPE_NOT_FOUND_ERROR });
+    const result = await deleteRecipe(req.params.id);
+    if (result.deletedCount === 0) {
+      return res.status(404).send({ message: e.RECIPE_NOT_DELETED_ERROR });
     }
-    res.status(200).send(recipe);
+    res.status(200).send(result);
   } catch (err: any) {
     handleError(err, req, res, next);
   }
