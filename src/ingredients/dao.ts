@@ -84,11 +84,11 @@ export const updateIngredient = async (
  */
 export const deleteIngredient = async (id: string) => {
   try {
-    const ingredient = await IngredientModel.deleteOne({ id: id });
-    if (!ingredient) {
+    const result = await IngredientModel.deleteOne({ id: id });
+    if (result.deletedCount === 0) {
       throw new Error("Ingredient not found");
     }
-    return ingredient;
+    return result;
   } catch (err) {
     throw err;
   }

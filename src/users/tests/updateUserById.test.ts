@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { updateUserProfile } from '../dao';
-import { updateUserById } from '../middleware';
+import { updateUserById } from '../controller';
 import { handleError } from '../../utils/errorHandler';
 import { ErrorMessages as e } from "../../consts";
 
