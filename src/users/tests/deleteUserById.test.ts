@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { deleteUser } from "../dao";
-import { deleteUserById } from "../middleware";
+import { deleteUserById } from "../controller";
 import { handleError } from "../../utils/errorHandler";
 import { ErrorMessages as e } from "../../consts";
 

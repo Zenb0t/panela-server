@@ -1,5 +1,6 @@
 import { Router } from "express";
-import { validateUserData, checkUserExists, createNewUser, checkUserDoesNotExist, serializeUserByEmail, serializeUserById, updateUserById, deleteUserById } from "./middleware";
+import { validateUserData, checkUserExists,  checkUserDoesNotExist, } from "./middleware";
+import { createNewUser, serializeUserByEmail, serializeUserById, updateUserById, deleteUserById } from "./controller";
 const userRouter = Router({ mergeParams: true });
 
 userRouter.post("/u", validateUserData, checkUserDoesNotExist, createNewUser);

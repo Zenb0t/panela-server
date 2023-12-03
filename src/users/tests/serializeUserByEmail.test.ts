@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { getUserByEmail } from "../dao";
-import { serializeUserByEmail } from "../middleware";
+import { serializeUserByEmail } from "../controller";
 import { handleError } from "../../utils/errorHandler";
 import { ErrorMessages as e } from "../../consts";
 

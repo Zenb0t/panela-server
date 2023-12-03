@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { serializeRecipeById } from '../middleware';
+import { serializeRecipeById } from '../controller';
 import { getRecipeById } from '../dao';
 import { handleError } from "../../utils/errorHandler";
 import { dummyRecipe } from './fixtures';

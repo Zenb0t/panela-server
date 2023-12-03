@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { getUserById } from "../dao";
-import { serializeUserById } from "../middleware";
+import { serializeUserById } from "../controller";
 import { handleError } from "../../utils/errorHandler";
 import { ErrorMessages as e } from "../../consts";
 

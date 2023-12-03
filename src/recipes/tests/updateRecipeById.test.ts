@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { updateRecipeById } from "../middleware";
+import { updateRecipeById } from "../controller";
 import { updateRecipe } from "../dao";
 import { handleError } from "../../utils/errorHandler";
 import { ErrorMessages as e } from "../../consts";

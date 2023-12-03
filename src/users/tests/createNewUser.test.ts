@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { createUser } from "../dao"; 
-import { createNewUser } from "../middleware";
+import { createNewUser } from "../controller";
 import { handleError } from "../../utils/errorHandler";
 
 jest.mock("../dao");

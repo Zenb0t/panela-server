@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { serializeAllRecipesByUser } from '../middleware';
+import { serializeAllRecipesByUser } from '../controller';
 import { getAllRecipesByUserId } from '../dao';
 import { handleError } from "../../utils/errorHandler";
 import { dummyRecipeList } from './fixtures';
