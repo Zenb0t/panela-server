@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { validadeRecipeId, validateRecipe } from "./middleware";
 import {
 	createNewRecipe,
 	deleteRecipeById,
@@ -6,9 +7,7 @@ import {
 	serializeAllRecipesByUser,
 	serializeRecipeById,
 	updateRecipeById,
-	validadeRecipeId,
-	validateRecipe,
-} from "./middleware";
+} from "./controller";
 
 const recipeRouter = Router({ mergeParams: true });
 

@@ -28,7 +28,9 @@ describe("createUser Function", () => {
 		const mockError = new Error("Save failed");
 		(UserModel.prototype.save as jest.Mock).mockRejectedValue(mockError);
 
-		await expect(createUser(mockUserData as User)).rejects.toThrow(mockError);
+		await expect(createUser(mockUserData as User)).rejects.toThrow(
+			mockError
+		);
 	});
 });
 
@@ -46,7 +48,7 @@ describe("getUserById Function", () => {
 		(UserModel.findOne as jest.Mock).mockResolvedValue(null);
 
 		await expect(getUserById("nonexistent-id")).rejects.toThrow(
-			e.USER_NOT_FOUND_ERROR,
+			e.USER_NOT_FOUND_ERROR
 		);
 	});
 });
@@ -67,7 +69,7 @@ describe("getUserByEmail Function", () => {
 		(UserModel.findOne as jest.Mock).mockResolvedValue(null);
 
 		await expect(getUserByEmail("nonexistent-id")).rejects.toThrow(
-			e.USER_NOT_FOUND_ERROR,
+			e.USER_NOT_FOUND_ERROR
 		);
 	});
 });
@@ -100,7 +102,7 @@ describe("updateUserProfile Function", () => {
 		expect(UserModel.findOneAndUpdate).toHaveBeenCalledWith(
 			{ _id: "123" },
 			updatedUserData,
-			{ new: true },
+			{ new: true }
 		);
 		expect(result).toEqual(mockUser);
 	});
@@ -115,7 +117,7 @@ describe("updateUserProfile Function", () => {
 				email: "test@example.com",
 				email_verified: false,
 				role: Role.USER,
-			}),
+			})
 		).rejects.toThrow(e.USER_NOT_FOUND_ERROR);
 	});
 
@@ -130,7 +132,7 @@ describe("updateUserProfile Function", () => {
 				email: "",
 				email_verified: false,
 				role: Role.USER,
-			}),
+			})
 		).rejects.toThrow(mockError);
 	});
 });
@@ -153,7 +155,7 @@ describe("deleteUser Function", () => {
 		});
 
 		await expect(deleteUser("nonexistent-id")).rejects.toThrow(
-			e.USER_NOT_FOUND_ERROR,
+			e.USER_NOT_FOUND_ERROR
 		);
 	});
 });

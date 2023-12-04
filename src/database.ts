@@ -9,7 +9,7 @@ async function initDB(uri: string) {
 		},
 		(err) => {
 			logger.info("Error connecting to MongoDB: ", err);
-		},
+		}
 	);
 }
 

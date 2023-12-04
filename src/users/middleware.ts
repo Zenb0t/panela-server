@@ -26,7 +26,9 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
 		}
 		validateRole(role);
 		if (user && user.role !== role) {
-			return res.status(401).send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
+			return res
+				.status(401)
+				.send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
 		}
 		logger.info("User data validated");
 		next();
@@ -44,7 +46,9 @@ export const checkUserDoesNotExist: RequestHandler = async (req, res, next) => {
 	try {
 		const user = await UserModel.findOne({ email: req.body.email });
 		if (user) {
-			return res.status(400).send({ message: e.USER_ALREADY_EXISTS_ERROR });
+			return res
+				.status(400)
+				.send({ message: e.USER_ALREADY_EXISTS_ERROR });
 		}
 		next();
 	} catch (err: any) {
@@ -70,7 +74,6 @@ export const checkUserExists: RequestHandler = async (req, res, next) => {
 			.send({ message: e.PARAM_EMAIL_OR_ID_REQUIRED_ERROR });
 	}
 	try {
-		// Check for id first, then email
 		const filterParam = id ? { id: id } : { email: email };
 
 		const user = await UserModel.findOne(filterParam);

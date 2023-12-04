@@ -1,13 +1,6 @@
 import { RequestHandler } from "express";
 import logger from "../utils/logger";
 import { handleError } from "../utils/errorHandler";
-import {
-	createIngredient,
-	deleteIngredient,
-	getAllIngredients,
-	getIngredientById,
-	updateIngredient,
-} from "./dao";
 import { ZodIngredientSchema } from "../types/ingredient";
 
 export const validateIngredient: RequestHandler = async (req, res, next) => {

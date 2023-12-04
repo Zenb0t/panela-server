@@ -35,7 +35,7 @@ describe("updateIngredientById Middleware", () => {
 
 		expect(updateIngredient).toHaveBeenCalledWith(
 			ingredientId,
-			updatedIngredientData,
+			updatedIngredientData
 		);
 		expect(res.status).toHaveBeenCalledWith(200);
 		expect(res.send).toHaveBeenCalledWith(dummyIngredient);

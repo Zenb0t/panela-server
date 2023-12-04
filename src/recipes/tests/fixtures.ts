@@ -2,7 +2,8 @@ import { MeasuringUnit } from "../../types/ingredient";
 
 export const dummyRecipe = {
 	title: "Chocolate Chip Cookies",
-	description: "Delicious chocolate chip cookies with a soft and chewy center.",
+	description:
+		"Delicious chocolate chip cookies with a soft and chewy center.",
 	totalTimeInMinutes: 45,
 	cost: 10.0,
 	ingredients: [

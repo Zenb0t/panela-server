@@ -24,7 +24,7 @@ export const createNewIngredient: RequestHandler = async (req, res, next) => {
 export const serializeAllIngredients: RequestHandler = async (
 	req,
 	res,
-	next,
+	next
 ) => {
 	logger.info("Serializing all ingredients");
 	try {
@@ -40,7 +40,7 @@ export const serializeAllIngredients: RequestHandler = async (
 export const serializeIngredientById: RequestHandler = async (
 	req,
 	res,
-	next,
+	next
 ) => {
 	logger.info(`Serializing ingredient ${req.params.id}`);
 	try {

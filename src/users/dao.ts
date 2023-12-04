@@ -1,6 +1,7 @@
 import { UserModel } from "./model";
 import { ErrorMessages as e } from "../consts";
 import { User } from "../types/user";
+import { DatabaseError } from "../utils/errors";
 
 /**
  * Creates a new user in the database.
@@ -17,7 +18,7 @@ export const createUser = async (userData: User) => {
 		// Return the saved user data
 		return savedUser;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };
 
@@ -35,7 +36,7 @@ export const getUserById = async (id: string) => {
 		}
 		return user;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };
 
@@ -53,7 +54,7 @@ export const getUserByEmail = async (email: string) => {
 		}
 		return user;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };
 
@@ -74,7 +75,7 @@ export const updateUserProfile = async (id: string, userData: User) => {
 		}
 		return user;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };
 
@@ -92,6 +93,6 @@ export const deleteUser = async (id: string) => {
 		}
 		return result;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };

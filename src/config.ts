@@ -2,27 +2,27 @@ import dotenv from "dotenv";
 dotenv.config();
 
 interface ENV {
-  PORT: string | undefined;
-  AUTH0_CLIENT_ID: string | undefined;
-  AUTH0_DOMAIN: string | undefined;
-  AUTH0_CLIENT_SECRET: string | undefined;
-  URI_MONGODB: string | undefined;
-  SESSION_SECRET: string | undefined;
-  AUTH0_CALLBACK_URL: string | undefined;
-  MONGO_PSWD: string | undefined;
-  AUDIENCE: string | undefined;
+	PORT: string | undefined;
+	AUTH0_CLIENT_ID: string | undefined;
+	AUTH0_DOMAIN: string | undefined;
+	AUTH0_CLIENT_SECRET: string | undefined;
+	URI_MONGODB: string | undefined;
+	SESSION_SECRET: string | undefined;
+	AUTH0_CALLBACK_URL: string | undefined;
+	MONGO_PSWD: string | undefined;
+	AUDIENCE: string | undefined;
 }
 
 interface Config {
-  PORT: string;
-  AUTH0_CLIENT_ID: string;
-  AUTH0_DOMAIN: string;
-  AUTH0_CLIENT_SECRET: string;
-  URI_MONGODB: string;
-  SESSION_SECRET: string;
-  AUTH0_CALLBACK_URL: string;
-  MONGO_PSWD: string;
-  AUDIENCE: string;
+	PORT: string;
+	AUTH0_CLIENT_ID: string;
+	AUTH0_DOMAIN: string;
+	AUTH0_CLIENT_SECRET: string;
+	URI_MONGODB: string;
+	SESSION_SECRET: string;
+	AUTH0_CALLBACK_URL: string;
+	MONGO_PSWD: string;
+	AUDIENCE: string;
 }
 
 const getConfig = (): ENV => {
@@ -43,7 +43,7 @@ const getSanitzedConfig = (config: ENV): Config => {
 	for (const [key, value] of Object.entries(config)) {
 		if (value === undefined) {
 			throw new Error(
-				`Missing key ${key} in config.env, please verify your config.env file or .env file`,
+				`Missing key ${key} in config.env, please verify your config.env file or .env file`
 			);
 		}
 	}

@@ -51,7 +51,9 @@ describe("updateUserById Middleware", () => {
 		await updateUserById(req, res, mockNext);
 
 		expect(res.status).toHaveBeenCalledWith(404);
-		expect(res.send).toHaveBeenCalledWith({ message: e.USER_NOT_FOUND_ERROR });
+		expect(res.send).toHaveBeenCalledWith({
+			message: e.USER_NOT_FOUND_ERROR,
+		});
 	});
 
 	it("should handle errors", async () => {

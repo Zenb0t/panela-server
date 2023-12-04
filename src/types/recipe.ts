@@ -2,22 +2,22 @@ import { Ingredient, ZodIngredientSchema } from "./ingredient";
 import { z } from "zod";
 
 export interface Recipe {
-  _id?: string;
-  title: string;
-  description: string;
-  totalTimeInMinutes: number;
-  cost?: number;
-  ingredients: IngredientItem[];
-  instructions: string[];
-  imageUrl: string;
-  ownerId: string;
-  sourceUrl?: string;
+	_id?: string;
+	title: string;
+	description: string;
+	totalTimeInMinutes: number;
+	cost?: number;
+	ingredients: IngredientItem[];
+	instructions: string[];
+	imageUrl: string;
+	ownerId: string;
+	sourceUrl?: string;
 }
 
 export interface IngredientItem {
-  ingredient: Ingredient;
-  quantity: number;
-  measuringUnit: string;
+	ingredient: Ingredient;
+	quantity: number;
+	measuringUnit: string;
 }
 
 export const IngredientItemSchema = z.object({
@@ -29,7 +29,9 @@ export const IngredientItemSchema = z.object({
 export const ZodRecipeSchema = z.object({
 	title: z.string().min(1, "Title is required"),
 	description: z.string().min(1, "Description is required"),
-	totalTimeInMinutes: z.number().min(1, "Total time must be a positive number"),
+	totalTimeInMinutes: z
+		.number()
+		.min(1, "Total time must be a positive number"),
 	cost: z.number().optional(),
 	ingredients: z.array(IngredientItemSchema),
 	instructions: z.array(z.string()),

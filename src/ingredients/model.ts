@@ -24,5 +24,5 @@ export const IngredientSchema = new mongoose.Schema<Ingredient>({
 
 export const IngredientModel = mongoose.model<Ingredient>(
 	"Ingredient",
-	IngredientSchema,
+	IngredientSchema
 );

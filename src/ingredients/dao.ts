@@ -60,13 +60,13 @@ export const getIngredientById = async (id: string) => {
  */
 export const updateIngredient = async (
 	id: string,
-	ingredientData: Ingredient,
+	ingredientData: Ingredient
 ) => {
 	try {
 		const ingredient = await IngredientModel.findOneAndUpdate(
 			{ id: id },
 			ingredientData,
-			{ new: true },
+			{ new: true }
 		);
 		if (!ingredient) {
 			throw new Error("Ingredient not found");

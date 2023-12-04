@@ -16,8 +16,8 @@ const logConfiguration = {
 			format: winston.format.combine(
 				winston.format.timestamp({ format: "MMM-DD-YYYY HH:mm:ss" }),
 				winston.format.printf(
-					(info) => `${info.timestamp} ${info.level}: ${info.message}`,
-				),
+					(info) => `${info.timestamp} ${info.level}: ${info.message}`
+				)
 			),
 		}),
 		new winston.transports.File({
@@ -25,7 +25,7 @@ const logConfiguration = {
 			filename: path.join(logsDir, "errors.log"),
 			format: winston.format.combine(
 				winston.format.timestamp({ format: "MMM-DD-YYYY HH:mm:ss" }),
-				winston.format.json(),
+				winston.format.json()
 			),
 		}),
 	],

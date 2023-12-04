@@ -16,7 +16,7 @@ import { RequestHandler } from "express-serve-static-core";
 export const createNewUser: RequestHandler = async (req, res, next) => {
 	logger.info(`Creating new user ${req.body.email}`);
 	try {
-		const user = await createUser(req.body.user);
+		const user = await createUser(req.body);
 		logger.info(`User ${req.body.email} created`);
 		logger.debug(user);
 		res.status(201).send(user);

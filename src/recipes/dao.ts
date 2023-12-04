@@ -15,7 +15,7 @@ export const createRecipe = async (recipeData: Recipe) => {
 		const savedRecipe = await recipe.save();
 		return savedRecipe;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };
 
@@ -29,7 +29,7 @@ export const getAllRecipes = async () => {
 		const recipes = await RecipeModel.find();
 		return recipes;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };
 
@@ -44,7 +44,7 @@ export const getAllRecipesByUserId = async (userId: string) => {
 		const recipes = await RecipeModel.find({ ownerId: userId });
 		return recipes;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };
 
@@ -62,7 +62,7 @@ export const getRecipeById = async (id: string) => {
 		}
 		return recipe;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };
 
@@ -75,15 +75,19 @@ export const getRecipeById = async (id: string) => {
  */
 export const updateRecipe = async (id: string, recipeData: Recipe) => {
 	try {
-		const recipe = await RecipeModel.findOneAndUpdate({ _id: id }, recipeData, {
-			new: true,
-		});
+		const recipe = await RecipeModel.findOneAndUpdate(
+			{ _id: id },
+			recipeData,
+			{
+				new: true,
+			}
+		);
 		if (!recipe) {
 			throw new Error(e.RECIPE_NOT_FOUND_ERROR);
 		}
 		return recipe;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };
 
@@ -101,6 +105,6 @@ export const deleteRecipe = async (id: string) => {
 		}
 		return result;
 	} catch (err) {
-		throw err;
+		throw err as DatabaseError;
 	}
 };

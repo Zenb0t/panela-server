@@ -38,7 +38,7 @@ export const serializeAllRecipes: RequestHandler = async (req, res, next) => {
 export const serializeAllRecipesByUser: RequestHandler = async (
 	req,
 	res,
-	next,
+	next
 ) => {
 	logger.info(`Serializing all recipes for user ${req.params.userId}`);
 	try {
@@ -84,7 +84,9 @@ export const deleteRecipeById: RequestHandler = async (req, res, next) => {
 	try {
 		const result = await deleteRecipe(req.params.id);
 		if (result.deletedCount === 0) {
-			return res.status(404).send({ message: e.RECIPE_NOT_DELETED_ERROR });
+			return res
+				.status(404)
+				.send({ message: e.RECIPE_NOT_DELETED_ERROR });
 		}
 		res.status(200).send(result);
 	} catch (err: any) {

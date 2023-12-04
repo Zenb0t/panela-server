@@ -14,7 +14,7 @@ app.use(globalMiddleware);
 
 app.listen(sanitizedConfig.PORT, () => {
 	logger.info(
-		`⚡️[server]: Server is running at localhost:${sanitizedConfig.PORT}`,
+		`⚡️[server]: Server is running at localhost:${sanitizedConfig.PORT}`
 	);
 });
 

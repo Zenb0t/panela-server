@@ -1,10 +1,10 @@
 import { z } from "zod";
 export interface Ingredient {
-  _id?: string;
-  name: string;
-  measuringUnit: MeasuringUnit;
-  amount: number; // Quantity of the ingredient
-  costPerUnit?: number; // Cost per unit of measurement
+	_id?: string;
+	name: string;
+	measuringUnit: MeasuringUnit;
+	amount: number; // Quantity of the ingredient
+	costPerUnit?: number; // Cost per unit of measurement
 }
 
 export const ZodIngredientSchema = z.object({
@@ -15,10 +15,10 @@ export const ZodIngredientSchema = z.object({
 });
 
 export enum MeasuringUnit {
-  GRAM = "gram",
-  OUNCE = "ounce",
-  CUP = "cup",
-  TABLESPOON = "tablespoon",
-  TEASPOON = "teaspoon",
-  PIECE = "piece",
+	GRAM = "gram",
+	OUNCE = "ounce",
+	CUP = "cup",
+	TABLESPOON = "tablespoon",
+	TEASPOON = "teaspoon",
+	PIECE = "piece",
 }

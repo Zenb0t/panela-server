@@ -48,7 +48,9 @@ describe("checkUserExists Middleware", () => {
 		await checkUserExists(req, res, mockNext);
 
 		expect(res.status).toHaveBeenCalledWith(404);
-		expect(res.send).toHaveBeenCalledWith({ message: e.USER_NOT_FOUND_ERROR });
+		expect(res.send).toHaveBeenCalledWith({
+			message: e.USER_NOT_FOUND_ERROR,
+		});
 	});
 
 	it("should return 400 if no email or id provided", async () => {

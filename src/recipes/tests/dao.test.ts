@@ -20,14 +20,18 @@ describe("Recipe DAO", () => {
 
 	describe("createRecipe", () => {
 		it("should create a recipe and return the recipe data", async () => {
-			(RecipeModel.prototype.save as jest.Mock).mockResolvedValue(dummyRecipe);
+			(RecipeModel.prototype.save as jest.Mock).mockResolvedValue(
+				dummyRecipe
+			);
 			const recipe = await createRecipe(dummyRecipe);
 			expect(recipe).toEqual(dummyRecipe);
 		});
 
 		it("should throw an error if saving the recipe fails", async () => {
 			const mockError = new DatabaseError("Database save error");
-			(RecipeModel.prototype.save as jest.Mock).mockRejectedValue(mockError);
+			(RecipeModel.prototype.save as jest.Mock).mockRejectedValue(
+				mockError
+			);
 			await expect(createRecipe(dummyRecipe)).rejects.toThrow(mockError);
 		});
 	});
@@ -56,7 +60,9 @@ describe("Recipe DAO", () => {
 		it("should throw a DatabaseError if fetching recipes by user id fails", async () => {
 			const mockError = new DatabaseError("Database find error");
 			(RecipeModel.find as jest.Mock).mockRejectedValue(mockError);
-			await expect(getAllRecipesByUserId("user123")).rejects.toThrow(mockError);
+			await expect(getAllRecipesByUserId("user123")).rejects.toThrow(
+				mockError
+			);
 		});
 	});
 
@@ -70,7 +76,7 @@ describe("Recipe DAO", () => {
 		it("should throw an error if recipe not found", async () => {
 			(RecipeModel.findOne as jest.Mock).mockResolvedValue(null);
 			await expect(getRecipeById("nonexistent-id")).rejects.toThrow(
-				new Error(e.RECIPE_NOT_FOUND_ERROR),
+				new Error(e.RECIPE_NOT_FOUND_ERROR)
 			);
 		});
 
@@ -84,7 +90,7 @@ describe("Recipe DAO", () => {
 	describe("updateRecipe", () => {
 		it("should update a recipe and return the updated data", async () => {
 			(RecipeModel.findOneAndUpdate as jest.Mock).mockResolvedValue(
-				dummyRecipe,
+				dummyRecipe
 			);
 			const updatedRecipe = await updateRecipe("1", dummyRecipe);
 			expect(updatedRecipe).toEqual(dummyRecipe);
@@ -92,15 +98,19 @@ describe("Recipe DAO", () => {
 
 		it("should throw an error if recipe not found", async () => {
 			(RecipeModel.findOneAndUpdate as jest.Mock).mockResolvedValue(null);
-			await expect(updateRecipe("nonexistent-id", dummyRecipe)).rejects.toThrow(
-				new Error(e.RECIPE_NOT_FOUND_ERROR),
-			);
+			await expect(
+				updateRecipe("nonexistent-id", dummyRecipe)
+			).rejects.toThrow(new Error(e.RECIPE_NOT_FOUND_ERROR));
 		});
 
 		it("should throw a DatabaseError if updating the recipe fails", async () => {
 			const mockError = new DatabaseError("Database update error");
-			(RecipeModel.findOneAndUpdate as jest.Mock).mockRejectedValue(mockError);
-			await expect(updateRecipe("1", dummyRecipe)).rejects.toThrow(mockError);
+			(RecipeModel.findOneAndUpdate as jest.Mock).mockRejectedValue(
+				mockError
+			);
+			await expect(updateRecipe("1", dummyRecipe)).rejects.toThrow(
+				mockError
+			);
 		});
 	});
 
@@ -120,7 +130,7 @@ describe("Recipe DAO", () => {
 				deletedCount: 0,
 			});
 			await expect(deleteRecipe("nonexistent-id")).rejects.toThrow(
-				new Error(e.RECIPE_NOT_FOUND_ERROR),
+				new Error(e.RECIPE_NOT_FOUND_ERROR)
 			);
 		});
 
