@@ -15,7 +15,7 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
   if (!role) {
     req.body.role = Role.USER;
   }
-  logger.info(`Validating user data'`);
+  logger.info("Validating user data'");
   try {
     const result = ZodUserSchema.safeParse(req.body);
     if (!result.success) {
@@ -28,7 +28,7 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
     if (user && user.role !== role) {
       return res.status(401).send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
     }
-    logger.info(`User data validated`);
+    logger.info("User data validated");
     next();
   } catch (err: any) {
     handleError(err, req, res, next);
@@ -71,7 +71,7 @@ export const checkUserExists: RequestHandler = async (req, res, next) => {
   }
   try {
     // Check for id first, then email
-    let filterParam = id ? { id: id } : { email: email };
+    const filterParam = id ? { id: id } : { email: email };
 
     const user = await UserModel.findOne(filterParam);
     if (!user) {

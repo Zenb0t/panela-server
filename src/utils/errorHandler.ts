@@ -24,26 +24,26 @@ export const handleError = (
 
     //Switch statement to handle different types of errors
     switch (true) {
-      case err instanceof ZodError:
-        const zodError = err as ZodError;
-        // Get the error message from the ZodError object
-        // add the issue.path and issue.message to the message
-        const message = zodError.issues
-          .map((issue) => {
-            return `${issue.path}: ${issue.message}`;
-          })
-          .join();
-        return res.status(400).send({ message });
+    case err instanceof ZodError:
+      const zodError = err as ZodError;
+      // Get the error message from the ZodError object
+      // add the issue.path and issue.message to the message
+      const message = zodError.issues
+        .map((issue) => {
+          return `${issue.path}: ${issue.message}`;
+        })
+        .join();
+      return res.status(400).send({ message });
 
-      case err instanceof ValidationError:
-        return res.status(400).send({ message: err.message });
+    case err instanceof ValidationError:
+      return res.status(400).send({ message: err.message });
 
-      case err instanceof Error:
-        return res.status(500).send({ message: err.message });
+    case err instanceof Error:
+      return res.status(500).send({ message: err.message });
 
-      default:
-        // Catch-all for any other types of errors
-        return res.status(500).send({ message: "Internal server error" });
+    default:
+      // Catch-all for any other types of errors
+      return res.status(500).send({ message: "Internal server error" });
     }
   }
 

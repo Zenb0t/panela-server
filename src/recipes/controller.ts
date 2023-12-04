@@ -24,10 +24,10 @@ export const createNewRecipe: RequestHandler = async (req, res, next) => {
 };
 
 export const serializeAllRecipes: RequestHandler = async (req, res, next) => {
-  logger.info(`Serializing all recipes`);
+  logger.info("Serializing all recipes");
   try {
     const recipes = await getAllRecipes();
-    logger.info(`Recipes serialized`);
+    logger.info("Recipes serialized");
     logger.debug(recipes);
     res.status(200).send(recipes);
   } catch (err: any) {
@@ -43,7 +43,7 @@ export const serializeAllRecipesByUser: RequestHandler = async (
   logger.info(`Serializing all recipes for user ${req.params.userId}`);
   try {
     const recipes = await getAllRecipesByUserId(req.params.userId);
-    logger.info(`Recipes serialized`);
+    logger.info("Recipes serialized");
     logger.debug(recipes);
     res.status(200).send(recipes);
   } catch (err: any) {
@@ -58,7 +58,7 @@ export const serializeRecipeById: RequestHandler = async (req, res, next) => {
     if (!recipe) {
       return res.status(404).send({ message: e.RECIPE_NOT_FOUND_ERROR });
     }
-    logger.info(`Recipe serialized`);
+    logger.info("Recipe serialized");
     logger.debug(recipe);
     res.status(200).send(recipe);
   } catch (err: any) {

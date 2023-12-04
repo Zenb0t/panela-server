@@ -26,10 +26,10 @@ export const serializeAllIngredients: RequestHandler = async (
   res,
   next,
 ) => {
-  logger.info(`Serializing all ingredients`);
+  logger.info("Serializing all ingredients");
   try {
     const ingredients = await getAllIngredients();
-    logger.info(`Ingredients serialized`);
+    logger.info("Ingredients serialized");
     logger.debug(ingredients);
     res.status(200).send(ingredients);
   } catch (err: any) {
@@ -45,7 +45,7 @@ export const serializeIngredientById: RequestHandler = async (
   logger.info(`Serializing ingredient ${req.params.id}`);
   try {
     const ingredient = await getIngredientById(req.params.id);
-    logger.info(`Ingredient serialized`);
+    logger.info("Ingredient serialized");
     logger.debug(ingredient);
     res.status(200).send(ingredient);
   } catch (err: any) {
@@ -57,7 +57,7 @@ export const updateIngredientById: RequestHandler = async (req, res, next) => {
   logger.info(`Updating ingredient ${req.params.id}`);
   try {
     const ingredient = await updateIngredient(req.params.id, req.body);
-    logger.info(`Ingredient updated`);
+    logger.info("Ingredient updated");
     logger.debug(ingredient);
     res.status(200).send(ingredient);
   } catch (err: any) {
@@ -69,7 +69,7 @@ export const deleteIngredientById: RequestHandler = async (req, res, next) => {
   logger.info(`Deleting ingredient ${req.params.id}`);
   try {
     const ingredient = await deleteIngredient(req.params.id);
-    logger.info(`Ingredient deleted`);
+    logger.info("Ingredient deleted");
     logger.debug(ingredient);
     res.status(200).send(ingredient);
   } catch (err: any) {

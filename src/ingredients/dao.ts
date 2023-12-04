@@ -1,4 +1,5 @@
 import { Ingredient } from "../types/ingredient";
+import { DatabaseError } from "../utils/errors";
 import { IngredientModel } from "./model";
 
 /**
@@ -13,7 +14,7 @@ export const createIngredient = async (ingredientData: Ingredient) => {
     const savedIngredient = await ingredient.save();
     return savedIngredient;
   } catch (err) {
-    throw err;
+    throw err as DatabaseError;
   }
 };
 
@@ -27,7 +28,7 @@ export const getAllIngredients = async () => {
     const ingredients = await IngredientModel.find();
     return ingredients;
   } catch (err) {
-    throw err;
+    throw err as DatabaseError;
   }
 };
 
@@ -46,7 +47,7 @@ export const getIngredientById = async (id: string) => {
     }
     return ingredient;
   } catch (err) {
-    throw err;
+    throw err as DatabaseError;
   }
 };
 
@@ -72,7 +73,7 @@ export const updateIngredient = async (
     }
     return ingredient;
   } catch (err) {
-    throw err;
+    throw err as DatabaseError;
   }
 };
 
@@ -90,6 +91,6 @@ export const deleteIngredient = async (id: string) => {
     }
     return result;
   } catch (err) {
-    throw err;
+    throw err as DatabaseError;
   }
 };
