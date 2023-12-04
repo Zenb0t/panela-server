@@ -11,6 +11,7 @@
     "dev": "nodemon src/server.ts",
     "lint": "eslint src/**/*.ts",
     "format": "prettier --write src/**/*.ts",
+    "fix": "eslint --fix src/**/*.ts && prettier --write src/**/*.ts",
     "docker:build": "docker build -t panela-backend .",
     "docker:run": "docker run -p 5000:5000 panela-backend",
     "start:dev": "NODE_ENV=development nodemon src/server.ts",

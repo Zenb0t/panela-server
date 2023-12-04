@@ -1,13 +1,13 @@
 import { Router } from "express";
 import {
-  createNewRecipe,
-  deleteRecipeById,
-  serializeAllRecipes,
-  serializeAllRecipesByUser,
-  serializeRecipeById,
-  updateRecipeById,
-  validadeRecipeId,
-  validateRecipe,
+	createNewRecipe,
+	deleteRecipeById,
+	serializeAllRecipes,
+	serializeAllRecipesByUser,
+	serializeRecipeById,
+	updateRecipeById,
+	validadeRecipeId,
+	validateRecipe,
 } from "./middleware";
 
 const recipeRouter = Router({ mergeParams: true });

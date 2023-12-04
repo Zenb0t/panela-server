@@ -9,55 +9,55 @@ jest.mock("../dao");
 jest.mock("../../utils/errorHandler");
 
 describe("serializeRecipeById Middleware", () => {
-  const mockResponse = (): Response => {
-    const res = {} as Response;
-    res.status = jest.fn().mockReturnValue(res);
-    res.send = jest.fn().mockReturnValue(res);
-    return res;
-  };
+	const mockResponse = (): Response => {
+		const res = {} as Response;
+		res.status = jest.fn().mockReturnValue(res);
+		res.send = jest.fn().mockReturnValue(res);
+		return res;
+	};
 
-  const mockNext: NextFunction = jest.fn();
+	const mockNext: NextFunction = jest.fn();
 
-  it("should retrieve a recipe by ID and send a 200 response", async () => {
-    const dummyRecipeId = "recipe123";
-    (getRecipeById as jest.Mock).mockResolvedValue(dummyRecipe);
+	it("should retrieve a recipe by ID and send a 200 response", async () => {
+		const dummyRecipeId = "recipe123";
+		(getRecipeById as jest.Mock).mockResolvedValue(dummyRecipe);
 
-    const req = { params: { id: dummyRecipeId } } as unknown as Request;
-    const res = mockResponse();
+		const req = { params: { id: dummyRecipeId } } as unknown as Request;
+		const res = mockResponse();
 
-    await serializeRecipeById(req, res, mockNext);
+		await serializeRecipeById(req, res, mockNext);
 
-    expect(getRecipeById).toHaveBeenCalledWith(dummyRecipeId);
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.send).toHaveBeenCalledWith(dummyRecipe);
-  });
+		expect(getRecipeById).toHaveBeenCalledWith(dummyRecipeId);
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.send).toHaveBeenCalledWith(dummyRecipe);
+	});
 
-  it("should return 404 when the recipe ID does not exist", async () => {
-    const dummyRecipeId = "nonexistent-recipe-id";
-    (getRecipeById as jest.Mock).mockResolvedValue(null);
+	it("should return 404 when the recipe ID does not exist", async () => {
+		const dummyRecipeId = "nonexistent-recipe-id";
+		(getRecipeById as jest.Mock).mockResolvedValue(null);
 
-    const req = { params: { id: dummyRecipeId } } as unknown as Request;
-    const res = mockResponse();
+		const req = { params: { id: dummyRecipeId } } as unknown as Request;
+		const res = mockResponse();
 
-    await serializeRecipeById(req, res, mockNext);
+		await serializeRecipeById(req, res, mockNext);
 
-    expect(getRecipeById).toHaveBeenCalledWith(dummyRecipeId);
-    expect(res.status).toHaveBeenCalledWith(404);
-    expect(res.send).toHaveBeenCalledWith({
-      message: e.RECIPE_NOT_FOUND_ERROR,
-    });
-  });
+		expect(getRecipeById).toHaveBeenCalledWith(dummyRecipeId);
+		expect(res.status).toHaveBeenCalledWith(404);
+		expect(res.send).toHaveBeenCalledWith({
+			message: e.RECIPE_NOT_FOUND_ERROR,
+		});
+	});
 
-  it("should call handleError on failure to retrieve the recipe", async () => {
-    const dummyRecipeId = "recipe123";
-    const mockError = new Error("Retrieval failed");
-    (getRecipeById as jest.Mock).mockRejectedValue(mockError);
+	it("should call handleError on failure to retrieve the recipe", async () => {
+		const dummyRecipeId = "recipe123";
+		const mockError = new Error("Retrieval failed");
+		(getRecipeById as jest.Mock).mockRejectedValue(mockError);
 
-    const req = { params: { id: dummyRecipeId } } as unknown as Request;
-    const res = mockResponse();
+		const req = { params: { id: dummyRecipeId } } as unknown as Request;
+		const res = mockResponse();
 
-    await serializeRecipeById(req, res, mockNext);
+		await serializeRecipeById(req, res, mockNext);
 
-    expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
-  });
+		expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
+	});
 });

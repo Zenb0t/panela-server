@@ -1,10 +1,10 @@
 import { Router } from "express";
 import {
-  createNewIngredient,
-  deleteIngredientById,
-  serializeAllIngredients,
-  serializeIngredientById,
-  updateIngredientById,
+	createNewIngredient,
+	deleteIngredientById,
+	serializeAllIngredients,
+	serializeIngredientById,
+	updateIngredientById,
 } from "./middleware";
 
 const ingredientRouter = Router({ mergeParams: true });

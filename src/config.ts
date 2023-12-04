@@ -26,28 +26,28 @@ interface Config {
 }
 
 const getConfig = (): ENV => {
-  return {
-    PORT: process.env.PORT,
-    AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
-    AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
-    AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
-    URI_MONGODB: process.env.URI_MONGODB,
-    SESSION_SECRET: process.env.SESSION_SECRET,
-    AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL,
-    MONGO_PSWD: process.env.MONGO_PSWD,
-    AUDIENCE: process.env.AUDIENCE,
-  };
+	return {
+		PORT: process.env.PORT,
+		AUTH0_CLIENT_ID: process.env.AUTH0_CLIENT_ID,
+		AUTH0_DOMAIN: process.env.AUTH0_DOMAIN,
+		AUTH0_CLIENT_SECRET: process.env.AUTH0_CLIENT_SECRET,
+		URI_MONGODB: process.env.URI_MONGODB,
+		SESSION_SECRET: process.env.SESSION_SECRET,
+		AUTH0_CALLBACK_URL: process.env.AUTH0_CALLBACK_URL,
+		MONGO_PSWD: process.env.MONGO_PSWD,
+		AUDIENCE: process.env.AUDIENCE,
+	};
 };
 
 const getSanitzedConfig = (config: ENV): Config => {
-  for (const [key, value] of Object.entries(config)) {
-    if (value === undefined) {
-      throw new Error(
-        `Missing key ${key} in config.env, please verify your config.env file or .env file`,
-      );
-    }
-  }
-  return config as Config;
+	for (const [key, value] of Object.entries(config)) {
+		if (value === undefined) {
+			throw new Error(
+				`Missing key ${key} in config.env, please verify your config.env file or .env file`,
+			);
+		}
+	}
+	return config as Config;
 };
 
 const config = getConfig();

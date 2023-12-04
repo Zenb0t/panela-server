@@ -1,15 +1,15 @@
 import { Router } from "express";
 import {
-  validateUserData,
-  checkUserExists,
-  checkUserDoesNotExist,
+	validateUserData,
+	checkUserExists,
+	checkUserDoesNotExist,
 } from "./middleware";
 import {
-  createNewUser,
-  serializeUserByEmail,
-  serializeUserById,
-  updateUserById,
-  deleteUserById,
+	createNewUser,
+	serializeUserByEmail,
+	serializeUserById,
+	updateUserById,
+	deleteUserById,
 } from "./controller";
 const userRouter = Router({ mergeParams: true });
 

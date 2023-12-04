@@ -8,37 +8,37 @@ jest.mock("../dao");
 jest.mock("../../utils/errorHandler");
 
 describe("serializeAllRecipes Middleware", () => {
-  const mockResponse = (): Response => {
-    const res = {} as Response;
-    res.status = jest.fn().mockReturnValue(res);
-    res.send = jest.fn().mockReturnValue(res);
-    return res;
-  };
+	const mockResponse = (): Response => {
+		const res = {} as Response;
+		res.status = jest.fn().mockReturnValue(res);
+		res.send = jest.fn().mockReturnValue(res);
+		return res;
+	};
 
-  const mockNext: NextFunction = jest.fn();
+	const mockNext: NextFunction = jest.fn();
 
-  it("should retrieve all recipes and send a 200 response", async () => {
-    (getAllRecipes as jest.Mock).mockResolvedValue(dummyRecipeList);
+	it("should retrieve all recipes and send a 200 response", async () => {
+		(getAllRecipes as jest.Mock).mockResolvedValue(dummyRecipeList);
 
-    const req = {} as Request;
-    const res = mockResponse();
+		const req = {} as Request;
+		const res = mockResponse();
 
-    await serializeAllRecipes(req, res, mockNext);
+		await serializeAllRecipes(req, res, mockNext);
 
-    expect(getAllRecipes).toHaveBeenCalled();
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.send).toHaveBeenCalledWith(dummyRecipeList);
-  });
+		expect(getAllRecipes).toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.send).toHaveBeenCalledWith(dummyRecipeList);
+	});
 
-  it("should call handleError on failure to retrieve recipes", async () => {
-    const mockError = new Error("Retrieval failed");
-    (getAllRecipes as jest.Mock).mockRejectedValue(mockError);
+	it("should call handleError on failure to retrieve recipes", async () => {
+		const mockError = new Error("Retrieval failed");
+		(getAllRecipes as jest.Mock).mockRejectedValue(mockError);
 
-    const req = {} as Request;
-    const res = mockResponse();
+		const req = {} as Request;
+		const res = mockResponse();
 
-    await serializeAllRecipes(req, res, mockNext);
+		await serializeAllRecipes(req, res, mockNext);
 
-    expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
-  });
+		expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
+	});
 });

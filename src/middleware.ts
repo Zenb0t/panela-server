@@ -5,16 +5,16 @@ import sanitizedConfig from "./config";
 import { handleError } from "./utils/errorHandler";
 
 export const authMiddleware = auth({
-  issuerBaseURL: sanitizedConfig.AUTH0_DOMAIN,
-  audience: sanitizedConfig.AUDIENCE,
+	issuerBaseURL: sanitizedConfig.AUTH0_DOMAIN,
+	audience: sanitizedConfig.AUDIENCE,
 });
 
 export const validateUser: RequestHandler = (req, res, next) => {
-  if (!req.query.userId)
-    return res
-      .status(400)
-      .send({ message: "Query parameter userId is required" });
-  next();
+	if (!req.query.userId)
+		return res
+			.status(400)
+			.send({ message: "Query parameter userId is required" });
+	next();
 };
 
 /**

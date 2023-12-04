@@ -9,16 +9,16 @@ import { User } from "../types/user";
  * @throws {Error} Throws an error if the user cannot be saved.
  */
 export const createUser = async (userData: User) => {
-  try {
-    const user = new UserModel(userData);
-    // Save the user to the database
-    const savedUser = await user.save();
+	try {
+		const user = new UserModel(userData);
+		// Save the user to the database
+		const savedUser = await user.save();
 
-    // Return the saved user data
-    return savedUser;
-  } catch (err) {
-    throw err;
-  }
+		// Return the saved user data
+		return savedUser;
+	} catch (err) {
+		throw err;
+	}
 };
 
 /**
@@ -28,15 +28,15 @@ export const createUser = async (userData: User) => {
  * @throws {Error} Throws an error if the user cannot be found.
  */
 export const getUserById = async (id: string) => {
-  try {
-    const user = await UserModel.findOne({ _id: id });
-    if (!user) {
-      throw new Error(e.USER_NOT_FOUND_ERROR);
-    }
-    return user;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const user = await UserModel.findOne({ _id: id });
+		if (!user) {
+			throw new Error(e.USER_NOT_FOUND_ERROR);
+		}
+		return user;
+	} catch (err) {
+		throw err;
+	}
 };
 
 /**
@@ -46,15 +46,15 @@ export const getUserById = async (id: string) => {
  * @throws {Error} Throws an error if the user cannot be found.
  */
 export const getUserByEmail = async (email: string) => {
-  try {
-    const user = await UserModel.findOne({ email: email });
-    if (!user) {
-      throw new Error(e.USER_NOT_FOUND_ERROR);
-    }
-    return user;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const user = await UserModel.findOne({ email: email });
+		if (!user) {
+			throw new Error(e.USER_NOT_FOUND_ERROR);
+		}
+		return user;
+	} catch (err) {
+		throw err;
+	}
 };
 
 /***
@@ -65,17 +65,17 @@ export const getUserByEmail = async (email: string) => {
  * @throws {Error} Throws an error if the user cannot be updated.
  */
 export const updateUserProfile = async (id: string, userData: User) => {
-  try {
-    const user = await UserModel.findOneAndUpdate({ _id: id }, userData, {
-      new: true,
-    });
-    if (!user) {
-      throw new Error(e.USER_NOT_FOUND_ERROR);
-    }
-    return user;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const user = await UserModel.findOneAndUpdate({ _id: id }, userData, {
+			new: true,
+		});
+		if (!user) {
+			throw new Error(e.USER_NOT_FOUND_ERROR);
+		}
+		return user;
+	} catch (err) {
+		throw err;
+	}
 };
 
 /**
@@ -85,13 +85,13 @@ export const updateUserProfile = async (id: string, userData: User) => {
  * @throws {Error} Throws an error if the user cannot be deleted.
  */
 export const deleteUser = async (id: string) => {
-  try {
-    const result = await UserModel.deleteOne({ _id: id });
-    if (result.deletedCount === 0) {
-      throw new Error(e.USER_NOT_FOUND_ERROR);
-    }
-    return result;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const result = await UserModel.deleteOne({ _id: id });
+		if (result.deletedCount === 0) {
+			throw new Error(e.USER_NOT_FOUND_ERROR);
+		}
+		return result;
+	} catch (err) {
+		throw err;
+	}
 };

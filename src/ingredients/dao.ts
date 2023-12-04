@@ -9,13 +9,13 @@ import { IngredientModel } from "./model";
  * @throws {Error} Throws an error if the ingredient cannot be saved.
  */
 export const createIngredient = async (ingredientData: Ingredient) => {
-  try {
-    const ingredient = new IngredientModel(ingredientData);
-    const savedIngredient = await ingredient.save();
-    return savedIngredient;
-  } catch (err) {
-    throw err as DatabaseError;
-  }
+	try {
+		const ingredient = new IngredientModel(ingredientData);
+		const savedIngredient = await ingredient.save();
+		return savedIngredient;
+	} catch (err) {
+		throw err as DatabaseError;
+	}
 };
 
 /***
@@ -24,12 +24,12 @@ export const createIngredient = async (ingredientData: Ingredient) => {
  * @throws {Error} Throws an error if the ingredients cannot be found.
  */
 export const getAllIngredients = async () => {
-  try {
-    const ingredients = await IngredientModel.find();
-    return ingredients;
-  } catch (err) {
-    throw err as DatabaseError;
-  }
+	try {
+		const ingredients = await IngredientModel.find();
+		return ingredients;
+	} catch (err) {
+		throw err as DatabaseError;
+	}
 };
 
 /***
@@ -40,15 +40,15 @@ export const getAllIngredients = async () => {
  *
  */
 export const getIngredientById = async (id: string) => {
-  try {
-    const ingredient = await IngredientModel.findOne({ id: id });
-    if (!ingredient) {
-      throw new Error("Ingredient not found");
-    }
-    return ingredient;
-  } catch (err) {
-    throw err as DatabaseError;
-  }
+	try {
+		const ingredient = await IngredientModel.findOne({ id: id });
+		if (!ingredient) {
+			throw new Error("Ingredient not found");
+		}
+		return ingredient;
+	} catch (err) {
+		throw err as DatabaseError;
+	}
 };
 
 /***
@@ -59,22 +59,22 @@ export const getIngredientById = async (id: string) => {
  * @throws {Error} Throws an error if the ingredient cannot be updated.
  */
 export const updateIngredient = async (
-  id: string,
-  ingredientData: Ingredient,
+	id: string,
+	ingredientData: Ingredient,
 ) => {
-  try {
-    const ingredient = await IngredientModel.findOneAndUpdate(
-      { id: id },
-      ingredientData,
-      { new: true },
-    );
-    if (!ingredient) {
-      throw new Error("Ingredient not found");
-    }
-    return ingredient;
-  } catch (err) {
-    throw err as DatabaseError;
-  }
+	try {
+		const ingredient = await IngredientModel.findOneAndUpdate(
+			{ id: id },
+			ingredientData,
+			{ new: true },
+		);
+		if (!ingredient) {
+			throw new Error("Ingredient not found");
+		}
+		return ingredient;
+	} catch (err) {
+		throw err as DatabaseError;
+	}
 };
 
 /***
@@ -84,13 +84,13 @@ export const updateIngredient = async (
  * @throws {Error} Throws an error if the ingredient cannot be deleted.
  */
 export const deleteIngredient = async (id: string) => {
-  try {
-    const result = await IngredientModel.deleteOne({ id: id });
-    if (result.deletedCount === 0) {
-      throw new Error("Ingredient not found");
-    }
-    return result;
-  } catch (err) {
-    throw err as DatabaseError;
-  }
+	try {
+		const result = await IngredientModel.deleteOne({ id: id });
+		if (result.deletedCount === 0) {
+			throw new Error("Ingredient not found");
+		}
+		return result;
+	} catch (err) {
+		throw err as DatabaseError;
+	}
 };

@@ -13,9 +13,9 @@ const app = express();
 app.use(globalMiddleware);
 
 app.listen(sanitizedConfig.PORT, () => {
-  logger.info(
-    `⚡️[server]: Server is running at localhost:${sanitizedConfig.PORT}`,
-  );
+	logger.info(
+		`⚡️[server]: Server is running at localhost:${sanitizedConfig.PORT}`,
+	);
 });
 
 //initialize database

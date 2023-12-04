@@ -10,13 +10,13 @@ import { DatabaseError } from "../utils/errors";
  * @throws {Error} Throws an error if the recipe cannot be saved.
  */
 export const createRecipe = async (recipeData: Recipe) => {
-  try {
-    const recipe = new RecipeModel(recipeData);
-    const savedRecipe = await recipe.save();
-    return savedRecipe;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const recipe = new RecipeModel(recipeData);
+		const savedRecipe = await recipe.save();
+		return savedRecipe;
+	} catch (err) {
+		throw err;
+	}
 };
 
 /***
@@ -25,12 +25,12 @@ export const createRecipe = async (recipeData: Recipe) => {
  * @throws {Error} Throws an error if the recipes cannot be found.
  */
 export const getAllRecipes = async () => {
-  try {
-    const recipes = await RecipeModel.find();
-    return recipes;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const recipes = await RecipeModel.find();
+		return recipes;
+	} catch (err) {
+		throw err;
+	}
 };
 
 /***
@@ -40,12 +40,12 @@ export const getAllRecipes = async () => {
  * @throws {Error} Throws an error if the recipes cannot be found.
  */
 export const getAllRecipesByUserId = async (userId: string) => {
-  try {
-    const recipes = await RecipeModel.find({ ownerId: userId });
-    return recipes;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const recipes = await RecipeModel.find({ ownerId: userId });
+		return recipes;
+	} catch (err) {
+		throw err;
+	}
 };
 
 /***
@@ -55,15 +55,15 @@ export const getAllRecipesByUserId = async (userId: string) => {
  * @throws {Error} Throws an error if the recipe cannot be found.
  */
 export const getRecipeById = async (id: string) => {
-  try {
-    const recipe = await RecipeModel.findOne({ _id: id });
-    if (!recipe) {
-      throw new Error(e.RECIPE_NOT_FOUND_ERROR);
-    }
-    return recipe;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const recipe = await RecipeModel.findOne({ _id: id });
+		if (!recipe) {
+			throw new Error(e.RECIPE_NOT_FOUND_ERROR);
+		}
+		return recipe;
+	} catch (err) {
+		throw err;
+	}
 };
 
 /***
@@ -74,17 +74,17 @@ export const getRecipeById = async (id: string) => {
  * @throws {Error} Throws an error if the recipe cannot be updated.
  */
 export const updateRecipe = async (id: string, recipeData: Recipe) => {
-  try {
-    const recipe = await RecipeModel.findOneAndUpdate({ _id: id }, recipeData, {
-      new: true,
-    });
-    if (!recipe) {
-      throw new Error(e.RECIPE_NOT_FOUND_ERROR);
-    }
-    return recipe;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const recipe = await RecipeModel.findOneAndUpdate({ _id: id }, recipeData, {
+			new: true,
+		});
+		if (!recipe) {
+			throw new Error(e.RECIPE_NOT_FOUND_ERROR);
+		}
+		return recipe;
+	} catch (err) {
+		throw err;
+	}
 };
 
 /***
@@ -94,13 +94,13 @@ export const updateRecipe = async (id: string, recipeData: Recipe) => {
  * @throws {Error} Throws an error if the recipe cannot be deleted.
  */
 export const deleteRecipe = async (id: string) => {
-  try {
-    const result = await RecipeModel.deleteOne({ _id: id });
-    if (result.deletedCount === 0) {
-      throw new Error(e.RECIPE_NOT_FOUND_ERROR);
-    }
-    return result;
-  } catch (err) {
-    throw err;
-  }
+	try {
+		const result = await RecipeModel.deleteOne({ _id: id });
+		if (result.deletedCount === 0) {
+			throw new Error(e.RECIPE_NOT_FOUND_ERROR);
+		}
+		return result;
+	} catch (err) {
+		throw err;
+	}
 };

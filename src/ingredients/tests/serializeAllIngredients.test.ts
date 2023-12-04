@@ -8,38 +8,38 @@ jest.mock("../dao");
 jest.mock("../../utils/errorHandler");
 
 describe("serializeAllIngredients Middleware", () => {
-  const mockResponse = (): Response => {
-    const res = {} as Response;
-    res.status = jest.fn().mockReturnValue(res);
-    res.send = jest.fn().mockReturnValue(res);
-    return res;
-  };
+	const mockResponse = (): Response => {
+		const res = {} as Response;
+		res.status = jest.fn().mockReturnValue(res);
+		res.send = jest.fn().mockReturnValue(res);
+		return res;
+	};
 
-  const mockNext: NextFunction = jest.fn();
-  const mockRequest = {} as Request; // Assuming no specific request parameters are needed
+	const mockNext: NextFunction = jest.fn();
+	const mockRequest = {} as Request; // Assuming no specific request parameters are needed
 
-  it("should retrieve all ingredients and send a 200 response", async () => {
-    (getAllIngredients as jest.Mock).mockResolvedValue(dummyIngredients);
+	it("should retrieve all ingredients and send a 200 response", async () => {
+		(getAllIngredients as jest.Mock).mockResolvedValue(dummyIngredients);
 
-    const req = mockRequest;
-    const res = mockResponse();
+		const req = mockRequest;
+		const res = mockResponse();
 
-    await serializeAllIngredients(req, res, mockNext);
+		await serializeAllIngredients(req, res, mockNext);
 
-    expect(getAllIngredients).toHaveBeenCalled();
-    expect(res.status).toHaveBeenCalledWith(200);
-    expect(res.send).toHaveBeenCalledWith(dummyIngredients);
-  });
+		expect(getAllIngredients).toHaveBeenCalled();
+		expect(res.status).toHaveBeenCalledWith(200);
+		expect(res.send).toHaveBeenCalledWith(dummyIngredients);
+	});
 
-  it("should call handleError on failure to retrieve ingredients", async () => {
-    const mockError = new Error("Fetch failed");
-    (getAllIngredients as jest.Mock).mockRejectedValue(mockError);
+	it("should call handleError on failure to retrieve ingredients", async () => {
+		const mockError = new Error("Fetch failed");
+		(getAllIngredients as jest.Mock).mockRejectedValue(mockError);
 
-    const req = mockRequest;
-    const res = mockResponse();
+		const req = mockRequest;
+		const res = mockResponse();
 
-    await serializeAllIngredients(req, res, mockNext);
+		await serializeAllIngredients(req, res, mockNext);
 
-    expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
-  });
+		expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
+	});
 });

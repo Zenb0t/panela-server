@@ -8,58 +8,58 @@ jest.mock("../../utils/errorHandler");
 jest.mock("../model");
 
 describe("checkUserDoesNotExist Middleware", () => {
-  const mockResponse = (): Response => {
-    const res = {} as Response;
-    res.status = jest.fn().mockReturnValue(res);
-    res.send = jest.fn().mockReturnValue(res);
-    return res;
-  };
+	const mockResponse = (): Response => {
+		const res = {} as Response;
+		res.status = jest.fn().mockReturnValue(res);
+		res.send = jest.fn().mockReturnValue(res);
+		return res;
+	};
 
-  const mockNext: NextFunction = jest.fn();
+	const mockNext: NextFunction = jest.fn();
 
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
+	beforeEach(() => {
+		jest.clearAllMocks();
+	});
 
-  it("should call next() if user does not exist", async () => {
-    (UserModel.findOne as jest.Mock).mockResolvedValue(null);
-    const req = {
-      body: { email: "new@example.com" },
-    } as Request;
-    const res = mockResponse();
+	it("should call next() if user does not exist", async () => {
+		(UserModel.findOne as jest.Mock).mockResolvedValue(null);
+		const req = {
+			body: { email: "new@example.com" },
+		} as Request;
+		const res = mockResponse();
 
-    await checkUserDoesNotExist(req, res, mockNext);
+		await checkUserDoesNotExist(req, res, mockNext);
 
-    expect(mockNext).toHaveBeenCalled();
-  });
+		expect(mockNext).toHaveBeenCalled();
+	});
 
-  it("should return 400 if user already exists", async () => {
-    (UserModel.findOne as jest.Mock).mockResolvedValue({
-      email: "existing@example.com",
-    });
-    const req = {
-      body: { email: "existing@example.com" },
-    } as Request;
-    const res = mockResponse();
+	it("should return 400 if user already exists", async () => {
+		(UserModel.findOne as jest.Mock).mockResolvedValue({
+			email: "existing@example.com",
+		});
+		const req = {
+			body: { email: "existing@example.com" },
+		} as Request;
+		const res = mockResponse();
 
-    await checkUserDoesNotExist(req, res, mockNext);
+		await checkUserDoesNotExist(req, res, mockNext);
 
-    expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.send).toHaveBeenCalledWith({
-      message: e.USER_ALREADY_EXISTS_ERROR,
-    });
-  });
+		expect(res.status).toHaveBeenCalledWith(400);
+		expect(res.send).toHaveBeenCalledWith({
+			message: e.USER_ALREADY_EXISTS_ERROR,
+		});
+	});
 
-  it("should handle errors", async () => {
-    const mockError = new Error("Database error");
-    (UserModel.findOne as jest.Mock).mockRejectedValue(mockError);
-    const req = {
-      body: { email: "error@example.com" },
-    } as Request;
-    const res = mockResponse();
+	it("should handle errors", async () => {
+		const mockError = new Error("Database error");
+		(UserModel.findOne as jest.Mock).mockRejectedValue(mockError);
+		const req = {
+			body: { email: "error@example.com" },
+		} as Request;
+		const res = mockResponse();
 
-    await checkUserDoesNotExist(req, res, mockNext);
+		await checkUserDoesNotExist(req, res, mockNext);
 
-    expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
-  });
+		expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
+	});
 });
