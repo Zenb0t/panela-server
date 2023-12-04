@@ -11,10 +11,12 @@ import { ZodError } from "zod";
  * Validate the user data sent in the request body
  */
 export const validateUserData: RequestHandler = async (req, res, next) => {
-	const { role, user } = req.body;
-	if (!role) {
+	if (!req.body.role) {
+		console.log("No role provided, defaulting to USER");
 		req.body.role = Role.USER;
 	}
+	const { user, role } = req.body;	
+
 	logger.info("Validating user data'");
 	try {
 		const result = ZodUserSchema.safeParse(req.body);

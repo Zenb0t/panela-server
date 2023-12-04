@@ -5,11 +5,12 @@ import {
 	serializeAllIngredients,
 	serializeIngredientById,
 	updateIngredientById,
-} from "./middleware";
+} from "./controller";
+import { validateIngredient } from "./middleware";
 
 const ingredientRouter = Router({ mergeParams: true });
 
-ingredientRouter.post("/ingredients", createNewIngredient);
+ingredientRouter.post("/ingredients", validateIngredient, createNewIngredient);
 ingredientRouter.get("/ingredients", serializeAllIngredients);
 ingredientRouter.get("/ingredients/:id", serializeIngredientById);
 ingredientRouter.put("/ingredients/:id", updateIngredientById);

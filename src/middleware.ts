@@ -9,14 +9,6 @@ export const authMiddleware = auth({
 	audience: sanitizedConfig.AUDIENCE,
 });
 
-export const validateUser: RequestHandler = (req, res, next) => {
-	if (!req.query.userId)
-		return res
-			.status(400)
-			.send({ message: "Query parameter userId is required" });
-	next();
-};
-
 /**
  * Express Router for global middleware configurations.
  * Handles JSON parsing, urlencoded parsing, and CORS.
