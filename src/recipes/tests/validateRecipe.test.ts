@@ -37,7 +37,7 @@ describe("validateRecipe Middleware", () => {
     expect(res.send).toHaveBeenCalledWith(
       expect.objectContaining({
         message: expect.any(String), // Expect Zod's error message string
-      })
+      }),
     );
   });
 });

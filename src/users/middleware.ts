@@ -20,7 +20,9 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
     const result = ZodUserSchema.safeParse(req.body);
     if (!result.success) {
       const error = result.error as ZodError;
-      return res.status(400).send({ message: e.INCOMPLETE_USER_DATA_ERROR, error: error });
+      return res
+        .status(400)
+        .send({ message: e.INCOMPLETE_USER_DATA_ERROR, error: error });
     }
     validateRole(role);
     if (user && user.role !== role) {

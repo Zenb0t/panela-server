@@ -28,9 +28,9 @@ describe("deleteUserById Middleware", () => {
       params: { id: "123" },
     } as unknown as Request;
     const res = mockResponse();
-  
+
     await deleteUserById(req, res, mockNext);
-  
+
     expect(res.status).toHaveBeenCalledWith(200);
     expect(res.send).toHaveBeenCalledWith(deleteResponse);
   });

@@ -70,7 +70,7 @@ describe("Recipe DAO", () => {
     it("should throw an error if recipe not found", async () => {
       (RecipeModel.findOne as jest.Mock).mockResolvedValue(null);
       await expect(getRecipeById("nonexistent-id")).rejects.toThrow(
-        new Error(e.RECIPE_NOT_FOUND_ERROR)
+        new Error(e.RECIPE_NOT_FOUND_ERROR),
       );
     });
 
@@ -84,7 +84,7 @@ describe("Recipe DAO", () => {
   describe("updateRecipe", () => {
     it("should update a recipe and return the updated data", async () => {
       (RecipeModel.findOneAndUpdate as jest.Mock).mockResolvedValue(
-        dummyRecipe
+        dummyRecipe,
       );
       const updatedRecipe = await updateRecipe("1", dummyRecipe);
       expect(updatedRecipe).toEqual(dummyRecipe);
@@ -93,7 +93,7 @@ describe("Recipe DAO", () => {
     it("should throw an error if recipe not found", async () => {
       (RecipeModel.findOneAndUpdate as jest.Mock).mockResolvedValue(null);
       await expect(updateRecipe("nonexistent-id", dummyRecipe)).rejects.toThrow(
-        new Error(e.RECIPE_NOT_FOUND_ERROR)
+        new Error(e.RECIPE_NOT_FOUND_ERROR),
       );
     });
 
@@ -120,7 +120,7 @@ describe("Recipe DAO", () => {
         deletedCount: 0,
       });
       await expect(deleteRecipe("nonexistent-id")).rejects.toThrow(
-        new Error(e.RECIPE_NOT_FOUND_ERROR)
+        new Error(e.RECIPE_NOT_FOUND_ERROR),
       );
     });
 

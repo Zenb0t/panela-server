@@ -22,10 +22,12 @@ describe("checkUserExists Middleware", () => {
   });
 
   it("should call next() if user exists", async () => {
-    (UserModel.findOne as jest.Mock).mockResolvedValue({ email: "existing@example.com" });
+    (UserModel.findOne as jest.Mock).mockResolvedValue({
+      email: "existing@example.com",
+    });
     const req = {
       params: { email: "existing@email.com" },
-        body: {}
+      body: {},
     } as unknown as Request;
     const res = mockResponse();
 
@@ -39,7 +41,7 @@ describe("checkUserExists Middleware", () => {
     (UserModel.findOne as jest.Mock).mockResolvedValue(null);
     const req = {
       params: { email: "nonexistent@example.com" },
-      body: {}
+      body: {},
     } as unknown as Request;
     const res = mockResponse();
 
@@ -56,7 +58,9 @@ describe("checkUserExists Middleware", () => {
     await checkUserExists(req, res, mockNext);
 
     expect(res.status).toHaveBeenCalledWith(400);
-    expect(res.send).toHaveBeenCalledWith({ message: e.PARAM_EMAIL_OR_ID_REQUIRED_ERROR });
+    expect(res.send).toHaveBeenCalledWith({
+      message: e.PARAM_EMAIL_OR_ID_REQUIRED_ERROR,
+    });
   });
 
   it("should handle errors", async () => {
@@ -64,7 +68,7 @@ describe("checkUserExists Middleware", () => {
     (UserModel.findOne as jest.Mock).mockRejectedValue(mockError);
     const req = {
       params: { email: "error@example.com" },
-      body: {}
+      body: {},
     } as unknown as Request;
     const res = mockResponse();
 

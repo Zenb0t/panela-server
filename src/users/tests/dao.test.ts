@@ -1,15 +1,21 @@
-import { createUser, deleteUser, getUserByEmail, getUserById, updateUserProfile } from "../dao"; 
-import { UserModel } from "../model"; 
+import {
+  createUser,
+  deleteUser,
+  getUserByEmail,
+  getUserById,
+  updateUserProfile,
+} from "../dao";
+import { UserModel } from "../model";
 import { Role, User } from "../../types/user";
 import { ErrorMessages as e } from "../../consts";
 
 jest.mock("../model");
 
-const mockUser = { _id: '123', email: 'test@example.com' };
-const mockUserData = { email: 'test@example.com', name: 'Test User' };
+const mockUser = { _id: "123", email: "test@example.com" };
+const mockUserData = { email: "test@example.com", name: "Test User" };
 
-describe('createUser Function', () => {
-  it('successfully creates a user', async () => {
+describe("createUser Function", () => {
+  it("successfully creates a user", async () => {
     (UserModel.prototype.save as jest.Mock).mockResolvedValue(mockUserData);
 
     const result = await createUser(mockUserData as User);
@@ -18,48 +24,53 @@ describe('createUser Function', () => {
     expect(result).toEqual(mockUserData);
   });
 
-  it('throws an error when user creation fails', async () => {
-    const mockError = new Error('Save failed');
+  it("throws an error when user creation fails", async () => {
+    const mockError = new Error("Save failed");
     (UserModel.prototype.save as jest.Mock).mockRejectedValue(mockError);
 
     await expect(createUser(mockUserData as User)).rejects.toThrow(mockError);
   });
 });
 
-describe('getUserById Function', () => {
-  it('retrieves a user by id', async () => {
+describe("getUserById Function", () => {
+  it("retrieves a user by id", async () => {
     (UserModel.findOne as jest.Mock).mockResolvedValue(mockUser);
 
-    const result = await getUserById('123');
+    const result = await getUserById("123");
 
-    expect(UserModel.findOne).toHaveBeenCalledWith({ _id: '123' });
+    expect(UserModel.findOne).toHaveBeenCalledWith({ _id: "123" });
     expect(result).toEqual(mockUser);
   });
 
-  it('throws an error when user not found', async () => {
+  it("throws an error when user not found", async () => {
     (UserModel.findOne as jest.Mock).mockResolvedValue(null);
 
-    await expect(getUserById('nonexistent-id')).rejects.toThrow(e.USER_NOT_FOUND_ERROR);
+    await expect(getUserById("nonexistent-id")).rejects.toThrow(
+      e.USER_NOT_FOUND_ERROR,
+    );
   });
 });
 
-describe('getUserByEmail Function', () => {
-  it('retrieves a user by email', async () => {
+describe("getUserByEmail Function", () => {
+  it("retrieves a user by email", async () => {
     (UserModel.findOne as jest.Mock).mockResolvedValue(mockUser);
 
-    const result = await getUserByEmail('test@example.com');
+    const result = await getUserByEmail("test@example.com");
 
-    expect(UserModel.findOne).toHaveBeenCalledWith({ email: 'test@example.com' });
+    expect(UserModel.findOne).toHaveBeenCalledWith({
+      email: "test@example.com",
+    });
     expect(result).toEqual(mockUser);
   });
 
-  it('throws an error when user not found', async () => {
+  it("throws an error when user not found", async () => {
     (UserModel.findOne as jest.Mock).mockResolvedValue(null);
 
-    await expect(getUserByEmail('nonexistent-id')).rejects.toThrow(e.USER_NOT_FOUND_ERROR);
+    await expect(getUserByEmail("nonexistent-id")).rejects.toThrow(
+      e.USER_NOT_FOUND_ERROR,
+    );
   });
 });
-
 
 describe("updateUserProfile Function", () => {
   beforeEach(() => {
@@ -89,7 +100,7 @@ describe("updateUserProfile Function", () => {
     expect(UserModel.findOneAndUpdate).toHaveBeenCalledWith(
       { _id: "123" },
       updatedUserData,
-      { new: true }
+      { new: true },
     );
     expect(result).toEqual(mockUser);
   });
@@ -99,12 +110,12 @@ describe("updateUserProfile Function", () => {
 
     await expect(
       updateUserProfile("nonexistent-id", {
-          name: "New Name",
-          _id: "456",
-          email: "test@example.com",
-          email_verified: false,
-          role: Role.USER,
-      })
+        name: "New Name",
+        _id: "456",
+        email: "test@example.com",
+        email_verified: false,
+        role: Role.USER,
+      }),
     ).rejects.toThrow(e.USER_NOT_FOUND_ERROR);
   });
 
@@ -114,30 +125,35 @@ describe("updateUserProfile Function", () => {
 
     await expect(
       updateUserProfile("123", {
-          name: "New Name",
-          _id: "",
-          email: "",
-          email_verified: false,
-          role: Role.USER,
-      })
+        name: "New Name",
+        _id: "",
+        email: "",
+        email_verified: false,
+        role: Role.USER,
+      }),
     ).rejects.toThrow(mockError);
   });
 });
 
-describe('deleteUser Function', () => {
-  it('successfully deletes a user', async () => {
+describe("deleteUser Function", () => {
+  it("successfully deletes a user", async () => {
     const deleteResponse = { acknowledged: true, deletedCount: 1 };
     (UserModel.deleteOne as jest.Mock).mockResolvedValue(deleteResponse);
 
-    const result = await deleteUser('123');
+    const result = await deleteUser("123");
 
-    expect(UserModel.deleteOne).toHaveBeenCalledWith({ _id: '123' });
+    expect(UserModel.deleteOne).toHaveBeenCalledWith({ _id: "123" });
     expect(result).toEqual(deleteResponse);
   });
 
-  it('throws an error when user deletion fails', async () => {
-    (UserModel.deleteOne as jest.Mock).mockResolvedValue({ acknowledged: true, deletedCount: 0 });
+  it("throws an error when user deletion fails", async () => {
+    (UserModel.deleteOne as jest.Mock).mockResolvedValue({
+      acknowledged: true,
+      deletedCount: 0,
+    });
 
-    await expect(deleteUser('nonexistent-id')).rejects.toThrow(e.USER_NOT_FOUND_ERROR);
+    await expect(deleteUser("nonexistent-id")).rejects.toThrow(
+      e.USER_NOT_FOUND_ERROR,
+    );
   });
 });

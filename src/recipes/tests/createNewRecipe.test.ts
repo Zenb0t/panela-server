@@ -1,13 +1,13 @@
-import { Request, Response, NextFunction } from 'express';
-import { createNewRecipe } from '../controller';
-import { createRecipe } from '../dao';
-import { dummyRecipe } from './fixtures';
+import { Request, Response, NextFunction } from "express";
+import { createNewRecipe } from "../controller";
+import { createRecipe } from "../dao";
+import { dummyRecipe } from "./fixtures";
 import { handleError } from "../../utils/errorHandler";
 
 jest.mock("../dao");
 jest.mock("../../utils/errorHandler");
 
-describe('createNewRecipe Middleware', () => {
+describe("createNewRecipe Middleware", () => {
   const mockResponse = (): Response => {
     const res = {} as Response;
     res.status = jest.fn().mockReturnValue(res);
@@ -17,7 +17,7 @@ describe('createNewRecipe Middleware', () => {
 
   const mockNext: NextFunction = jest.fn();
 
-  it('should create a new recipe and send a 201 response', async () => {
+  it("should create a new recipe and send a 201 response", async () => {
     (createRecipe as jest.Mock).mockResolvedValue(dummyRecipe);
 
     const req = { body: dummyRecipe } as Request;
@@ -30,8 +30,8 @@ describe('createNewRecipe Middleware', () => {
     expect(res.send).toHaveBeenCalledWith(dummyRecipe);
   });
 
-  it('should call handleError on recipe creation failure', async () => {
-    const mockError = new Error('Creation failed');
+  it("should call handleError on recipe creation failure", async () => {
+    const mockError = new Error("Creation failed");
     (createRecipe as jest.Mock).mockRejectedValue(mockError);
     const invalidRecipe = { ...dummyRecipe, title: undefined };
 
@@ -41,7 +41,5 @@ describe('createNewRecipe Middleware', () => {
     await createNewRecipe(req, res, mockNext);
 
     expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
-
   });
-
 });

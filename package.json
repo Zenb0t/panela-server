@@ -6,8 +6,18 @@
   "scripts": {
     "start": "NODE_PATH=./build node build/server.js",
     "test": "jest",
+    "test:watch": "jest --watch",
     "build": "tsc -p .",
-    "dev": "nodemon src/server.ts"
+    "dev": "nodemon src/server.ts",
+    "lint": "eslint src/**/*.ts",
+    "format": "prettier --write src/**/*.ts",
+    "docker:build": "docker build -t panela-backend .",
+    "docker:run": "docker run -p 5000:5000 panela-backend",
+    "start:dev": "NODE_ENV=development nodemon src/server.ts",
+    "start:prod": "NODE_ENV=production node build/server.js",
+    "lint-and-test": "npm run lint && npm run test",
+    "clean": "rm -rf build/",
+    "prebuild": "npm run clean && npm run lint-and-test"
   },
   "author": "Felipe Ribeiro",
   "license": "ISC",

@@ -70,5 +70,4 @@ describe("updateRecipeById Middleware", () => {
 
     expect(handleError).toHaveBeenCalledWith(mockError, req, res, mockNext);
   });
-
 });

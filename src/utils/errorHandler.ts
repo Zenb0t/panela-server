@@ -15,7 +15,7 @@ export const handleError = (
   err: Error,
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (err) {
     // Log the error once at the start
@@ -28,13 +28,14 @@ export const handleError = (
         const zodError = err as ZodError;
         // Get the error message from the ZodError object
         // add the issue.path and issue.message to the message
-        const message = zodError.issues.map((issue) => {
-          return `${issue.path}: ${issue.message}`;
-        }).join() ;
+        const message = zodError.issues
+          .map((issue) => {
+            return `${issue.path}: ${issue.message}`;
+          })
+          .join();
         return res.status(400).send({ message });
 
-        case err instanceof ValidationError:
-
+      case err instanceof ValidationError:
         return res.status(400).send({ message: err.message });
 
       case err instanceof Error:

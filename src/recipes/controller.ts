@@ -38,7 +38,7 @@ export const serializeAllRecipes: RequestHandler = async (req, res, next) => {
 export const serializeAllRecipesByUser: RequestHandler = async (
   req,
   res,
-  next
+  next,
 ) => {
   logger.info(`Serializing all recipes for user ${req.params.userId}`);
   try {
