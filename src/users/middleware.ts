@@ -76,7 +76,7 @@ export const checkUserExists: RequestHandler = async (req, res, next) => {
 			.send({ message: e.PARAM_EMAIL_OR_ID_REQUIRED_ERROR });
 	}
 	try {
-		const filterParam = id ? { id: id } : { email: email };
+		const filterParam = id ? { _id: id } : { email: email };
 
 		const user = await UserModel.findOne(filterParam);
 		if (!user) {

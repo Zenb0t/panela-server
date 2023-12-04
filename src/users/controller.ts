@@ -29,7 +29,7 @@ export const createNewUser: RequestHandler = async (req, res, next) => {
  * Get a user by id
  */
 export const serializeUserById: RequestHandler = async (req, res, next) => {
-	logger.info(`Serializing user ${req.params}`);
+	logger.info(`Serializing user ${req.params.id}`);
 	try {
 		const user = await getUserById(req.params.id);
 		if (!user) {
