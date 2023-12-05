@@ -15,12 +15,15 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
 		console.log("No role provided, defaulting to USER");
 		req.body.role = Role.USER;
 	}
-	const { user, role } = req.body;	
+	const { user, role } = req.body;
+	user.role = role;
 
 	logger.info("Validating user data'");
 	try {
-		const result = ZodUserSchema.safeParse(req.body);
+		const result = ZodUserSchema.safeParse(user);
+		console.log(req.body.user);
 		if (!result.success) {
+			console.log(result.error);
 			const error = result.error as ZodError;
 			return res
 				.status(400)
@@ -35,22 +38,22 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
 		logger.info("User data validated");
 		next();
 	} catch (err: any) {
+		console.error(err);
 		handleError(err, req, res, next);
 	}
 };
 
 /***
  * Check if the user does not exist in the database.
- * If the user exists, return an error.
+ * If the user exists, return the user.
  */
 export const checkUserDoesNotExist: RequestHandler = async (req, res, next) => {
-	logger.info(`Checking if user ${req.body.email} exists`);
+	const { email } = req.body.user;
+	logger.info(`Checking if user ${email} exists`);
 	try {
-		const user = await UserModel.findOne({ email: req.body.email });
+		const user = await UserModel.findOne({ email: email });
 		if (user) {
-			return res
-				.status(400)
-				.send({ message: e.USER_ALREADY_EXISTS_ERROR });
+			return res.status(200).send(user);
 		}
 		next();
 	} catch (err: any) {

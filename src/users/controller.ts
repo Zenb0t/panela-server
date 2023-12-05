@@ -14,10 +14,11 @@ import { RequestHandler } from "express-serve-static-core";
  * Create a new user in the database
  */
 export const createNewUser: RequestHandler = async (req, res, next) => {
-	logger.info(`Creating new user ${req.body.email}`);
+	const { email } = req.body.user;
+	logger.info(`Creating new user ${email}`);
 	try {
-		const user = await createUser(req.body);
-		logger.info(`User ${req.body.email} created`);
+		const user = await createUser(req.body.user);
+		logger.info(`User ${email} created`);
 		logger.debug(user);
 		res.status(201).send(user);
 	} catch (err: any) {
