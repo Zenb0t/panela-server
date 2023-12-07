@@ -38,5 +38,5 @@ export const ZodRecipeSchema = z.object({
 	instructions: z.array(z.string()),
 	imageUrl: z.string().url().optional(),
 	ownerId: z.string().min(1, "Owner ID is required"),
-	sourceUrl: z.string().url().optional(),
+	sourceUrl: z.string().min(0).url().optional(),
 });
