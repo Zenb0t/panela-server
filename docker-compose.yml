@@ -1,7 +1,7 @@
-version: '3.7'
+version: "3.7"
 
 services:
-  ts-node-docker:
+  panela-backend:
     build:
       context: .
       dockerfile: Dockerfile
@@ -9,9 +9,18 @@ services:
     volumes:
       - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
-    container_name: ts-node-docker
+    container_name: panela-server
     expose:
-      - '8000'
+      - "8000"
     ports:
-      - '8000:8000'
+      - "8000:8000"
     command: npm run dev
+    environment:
+      - URI_MONGODB=mongodb://mongodb:27017/yourDatabase
+  mongodb:
+    image: mongo:latest
+    container_name: panela-mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./data:/data/db

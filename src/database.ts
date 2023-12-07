@@ -1,17 +1,16 @@
 import mongoose from "mongoose";
-import sanitizedConfig from "./config";
+import logger from "./utils/logger";
 
 async function initDB(uri: string) {
-    console.log("Connecting to MongoDB...");
-    mongoose.connect(uri).then(
-        () => {
-            console.log("Connected to MongoDB");
-        },
-        err => {
-            console.log("Error connecting to MongoDB: ", err);
-        }
-    );
+	logger.info("Connecting to MongoDB...");
+	mongoose.connect(uri).then(
+		() => {
+			logger.info("Connected to MongoDB");
+		},
+		(err) => {
+			logger.info("Error connecting to MongoDB: ", err);
+		}
+	);
 }
-
 
 export default initDB;
