@@ -16,6 +16,9 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
 		req.body.role = Role.USER;
 	}
 	const { user, role } = req.body;
+	if (!user) {
+		return res.status(400).send({ message: e.USER_DATA_REQUIRED_ERROR });
+	}
 	user.role = role;
 
 	logger.info("Validating user data'");

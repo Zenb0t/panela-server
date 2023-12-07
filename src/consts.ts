@@ -14,6 +14,7 @@ export enum ErrorMessages {
 	USER_NOT_UPDATED_ERROR = "User not updated",
 	USER_NOT_DELETED_ERROR = "User not deleted",
 	EMAIL_NOT_FOUND_ERROR = "Email not found",
+	USER_DATA_REQUIRED_ERROR = "User data is required",
 	EMAIL_FORMAT_ERROR = "email: Invalid email address",
 	ROLE_CHANGE_NOT_ALLOWED_ERROR = "Changing role not allowed",
 	INCOMPLETE_USER_DATA_ERROR = "User data is incomplete. Review and try again.",

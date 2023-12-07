@@ -48,6 +48,9 @@ const RecipeSchema = new mongoose.Schema<Recipe>({
 	sourceUrl: {
 		type: String,
 	},
+	servings: {
+		type: Number,
+	},
 });
 
 export const RecipeModel = mongoose.model("Recipe", RecipeSchema);

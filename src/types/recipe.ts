@@ -12,6 +12,7 @@ export interface Recipe {
 	imageUrl: string;
 	ownerId: string;
 	sourceUrl?: string;
+	servings?: number;
 }
 
 export interface IngredientItem {
