@@ -11,7 +11,7 @@ export const ZodIngredientSchema = z.object({
 	name: z.string().min(1, "Name is required"),
 	measuringUnit: z.string().min(1, "Measuring unit is required"),
 	amount: z.number().min(1, "Amount must be a positive number"),
-	costPerUnit: z.number().optional(),
+	costPerUnit: z.number().optional().default(0),
 });
 
 export enum MeasuringUnit {
