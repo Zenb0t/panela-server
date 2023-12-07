@@ -28,9 +28,14 @@ services:
   mongodb:
     image: mongo:latest
     container_name: panela-mongo
-    ports:
-      - "27017:27017"
     volumes:
       - mongo_data:/data/db
+    networks:
+      - internal-network
+
+networks:
+  internal-network:
+    driver: bridge
+
 volumes:
   mongo_data:
