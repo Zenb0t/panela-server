@@ -28,6 +28,9 @@ services:
     networks:
       - internal-network
   mongodb:
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
     image: mongo:latest
     container_name: panela-mongo
     volumes:
