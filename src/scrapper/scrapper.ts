@@ -1,15 +1,14 @@
-import fetch from 'node-fetch';
-import { JSDOM } from 'jsdom';
-import jsonld from 'jsonld';
+import axios from "axios";
+import { JSDOM } from "jsdom";
+import jsonld from "jsonld";
 
 async function fetchHtml(url: string | null): Promise<string> {
     if (!url) {
-        return '';
+        return "";
     }
 
-    const response = await fetch(url);
-    const result = await response.text();
-    return result;
+    const response = await axios.get(url);
+    return response.data;
 }
 
 /***
@@ -20,15 +19,18 @@ async function fetchHtml(url: string | null): Promise<string> {
  * @example
  * scrapeRecipe('https://example-recipe-website.com');
  */
-async function scrapeRecipe(url: string) {
+export async function scrapeRecipe(url: string) {
     const html = await fetchHtml(url);
     const dom = new JSDOM(html);
     const document = dom.window.document;
     // Parsing logic goes here
+    scanForjsonLD(document);
 }
 
 async function scanForjsonLD(document: Document) {
-    const jsonLDs = document.querySelectorAll('script[type="application/ld+json"]');
+    const jsonLDs = document.querySelectorAll(
+        "script[type=\"application/ld+json\"]"
+    );
     for (const script of jsonLDs) {
         try {
             if (!script.textContent) {
@@ -39,7 +41,7 @@ async function scanForjsonLD(document: Document) {
             console.log(compactedData);
             // Additional processing can be done here
         } catch (error) {
-            console.error('Error parsing JSON-LD:', error);
+            console.error("Error parsing JSON-LD:", error);
         }
     }
 }

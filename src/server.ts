@@ -23,7 +23,7 @@ initDB(sanitizedConfig.URI_MONGODB);
 
 app.use("/api", authMiddleware, userRouter);
 // app.use("/api", userRouter); // TODO: add auth back in
-
+app.use("/s/", scrapperRouter);
 userRouter.use("/u/", recipeRouter);
 userRouter.use("/u/", ingredientRouter);
-userRouter.use("/u/", scrapperRouter);
+// userRouter.use("/u/", scrapperRouter);
