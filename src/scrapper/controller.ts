@@ -14,6 +14,6 @@ import { scrapeRecipe } from "./scrapper";
 export const scrapeURL: RequestHandler = async (req, res, next) => {
 	// get url from query params
 	const url = req.query.url;
-	scrapeRecipe(url as string);
-	res.status(200).send({ message: "Scraping... " + url });
+	const data = await scrapeRecipe(url as string);
+	res.status(200).send({ message: "Scraping... " + url, data });
 };
