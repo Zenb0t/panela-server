@@ -1,15 +1,15 @@
-import fetch from 'node-fetch';
-import { JSDOM } from 'jsdom';
-import jsonld from 'jsonld';
+import fetch from "node-fetch";
+import { JSDOM } from "jsdom";
+import jsonld from "jsonld";
 
 async function fetchHtml(url: string | null): Promise<string> {
-    if (!url) {
-        return '';
-    }
+	if (!url) {
+		return "";
+	}
 
-    const response = await fetch(url);
-    const result = await response.text();
-    return result;
+	const response = await fetch(url);
+	const result = await response.text();
+	return result;
 }
 
 /***
@@ -21,25 +21,27 @@ async function fetchHtml(url: string | null): Promise<string> {
  * scrapeRecipe('https://example-recipe-website.com');
  */
 async function scrapeRecipe(url: string) {
-    const html = await fetchHtml(url);
-    const dom = new JSDOM(html);
-    const document = dom.window.document;
-    // Parsing logic goes here
+	const html = await fetchHtml(url);
+	const dom = new JSDOM(html);
+	const document = dom.window.document;
+	// Parsing logic goes here
 }
 
 async function scanForjsonLD(document: Document) {
-    const jsonLDs = document.querySelectorAll('script[type="application/ld+json"]');
-    for (const script of jsonLDs) {
-        try {
-            if (!script.textContent) {
-                continue;
-            }
-            const jsonData = JSON.parse(script.textContent);
-            const compactedData = await jsonld.compact(jsonData, {});
-            console.log(compactedData);
-            // Additional processing can be done here
-        } catch (error) {
-            console.error('Error parsing JSON-LD:', error);
-        }
-    }
+	const jsonLDs = document.querySelectorAll(
+		'script[type="application/ld+json"]'
+	);
+	for (const script of jsonLDs) {
+		try {
+			if (!script.textContent) {
+				continue;
+			}
+			const jsonData = JSON.parse(script.textContent);
+			const compactedData = await jsonld.compact(jsonData, {});
+			console.log(compactedData);
+			// Additional processing can be done here
+		} catch (error) {
+			console.error("Error parsing JSON-LD:", error);
+		}
+	}
 }
