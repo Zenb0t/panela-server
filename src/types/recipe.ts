@@ -13,6 +13,7 @@ export interface Recipe {
 	ownerId: string;
 	sourceUrl?: string;
 	servings?: number;
+	// Add more fields, to match the scrapping data
 }
 
 export interface IngredientItem {
