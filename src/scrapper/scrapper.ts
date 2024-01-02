@@ -323,6 +323,5 @@ function normalizeAmount(amount: string): number {
 		return Number(amount);
 	}
 
-	// If no pattern matches, return NaN or throw an error as appropriate
 	return NaN;
 }
