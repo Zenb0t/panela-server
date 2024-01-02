@@ -40,7 +40,10 @@ const context: jsonld.ContextDefinition = {
 	HowToStep: "http://schema.org/HowToStep",
 	itemListElement: "http://schema.org/itemListElement",
 	text: "http://schema.org/text",
-	datePublished: "http://schema.org/datePublished",
+	datePublished: {
+        "@id": "http://schema.org/datePublished",
+        "@type": "http://schema.org/Date",
+    },
 	prepTime: "http://schema.org/prepTime",
 	cookTime: "http://schema.org/cookTime",
 	totalTime: "http://schema.org/totalTime",
@@ -139,16 +142,16 @@ export async function extractRecipeData(data: jsonld.NodeObject): Promise<any> {
 	// There are 3 cases:
 	// 1. The data is a single object with the type "http://schema.org/Recipe"
 	// 2. The data is an array of objects with the type "http://schema.org/Recipe"
-	// 3. The data is an array of objects with the type "http://schema.org/Recipe" and other types
+	// 3. The data is an array of objects with a Graph array containing the type "http://schema.org/Recipe"
 
 	if (type === "http://schema.org/Recipe") {
-		console.debug("Type is a single object");
+		console.debug("Data is a single object");
 		recipe = data;
 	} else if (
 		Array.isArray(type) &&
 		type.includes("http://schema.org/Recipe")
 	) {
-		console.debug("Type is an array");
+		console.debug("Data is an array");
 		recipe = data;
 	} else if (data["@graph"] && Array.isArray(data["@graph"])) {
 		console.log("Graph is an array");
@@ -163,8 +166,6 @@ export async function extractRecipeData(data: jsonld.NodeObject): Promise<any> {
 		console.debug(data);
 		throw new Error("Invalid data format");
 	}
-
-	console.log(recipe);
 
 	const newRecipe = {
 		name: recipe.name,
@@ -191,22 +192,37 @@ export async function extractRecipeData(data: jsonld.NodeObject): Promise<any> {
 		url: recipe.url,
 	};
 
+	// Parse ingredients
+
 	if (newRecipe.recipeIngredient) {
-		console.log("Recipe ingredients found");
+		logger.debug("Recipe ingredients found");
 		const ingredients = newRecipe.recipeIngredient as string[];
 		newRecipe.recipeIngredient = ingredients.map((ingredient) => {
 			const parsedIngredient = parseIngredient(ingredient);
-			console.log(parsedIngredient);
+			logger.debug(parsedIngredient);
 			return parsedIngredient;
 		});
 	} else if (newRecipe.ingredients) {
 		// Some websites use the superseded property "ingredients" instead of "recipeIngredient"
-		console.log("Ingredients found");
+		logger.debug("Ingredients found");
 		const ingredients = newRecipe.ingredients as string[];
 		newRecipe.ingredients = ingredients.map((ingredient) => {
 			const parsedIngredient = parseIngredient(ingredient);
-			console.log(parsedIngredient);
+			logger.debug(parsedIngredient);
 			return parsedIngredient;
+		});
+	}
+
+	// Parse instructions
+
+	if (newRecipe.recipeInstructions) {
+		console.log("Recipe instructions found");
+		const instructions = newRecipe.recipeInstructions as any[];
+		newRecipe.recipeInstructions = instructions.map((instruction) => {
+            console.log(instruction);
+            instruction = instruction.text;
+            console.log(instruction);
+            return instruction;
 		});
 	}
 
@@ -226,9 +242,7 @@ function parseIngredient(ingredient: string): any {
 	const fuse = new Fuse(MEASURING_UNITS, options);
 
 	// Match amount
-	const amountPattern =
-		/(\d+(?:\.\d+)?\/\d+|\d+-\d+|\d+\.\d+|\d+\s*\d*\/\d*|\d+ x \d+|[¼½¾⅓⅔⅛⅜⅝⅞]|\d+)/;
-	const matchAmount = amountPattern.exec(ingredient);
+	const matchAmount = combinedPattern.exec(ingredient);
 	const amount = matchAmount ? matchAmount[1] : undefined;
 
 	// Match unit
@@ -243,7 +257,6 @@ function parseIngredient(ingredient: string): any {
 	if (!possibleUnit) {
 		// If no match, try to match the unit with the existing units using Fuse.js for fuzzy search
 		const unitMatch = fuse.search(ingredient);
-		console.log(unitMatch);
 		if (unitMatch.length > 0) {
 			possibleUnit = unitMatch[0].item;
 		} else {
@@ -253,7 +266,7 @@ function parseIngredient(ingredient: string): any {
 
 	// Match name
 	const name = ingredient
-		.replace(amountPattern, "")
+		.replace(combinedPattern, "")
 		.replace(possibleUnit ? possibleUnit : "", "")
 		.trim();
 
@@ -271,12 +284,12 @@ function parseIngredient(ingredient: string): any {
 	return ingredientData;
 }
 
-// /**
-//  * Normalizes the amount by converting it to a decimal number.
-//  *
-//  * @param amount - The amount to be normalized, which can be a whole number, fraction, mixed fraction, or range.
-//  * @returns The normalized amount as a decimal number.
-//  */
+/**
+ * Normalizes the amount by converting it to a decimal number.
+ *
+ * @param amount - The amount to be normalized, which can be a whole number, fraction, mixed fraction, or range.
+ * @returns The normalized amount as a decimal number.
+ */
 function normalizeAmount(amount: string): number {
 	// Convert unicode fractions to normal fractions
 	amount = amount.replace(unicodeFractionPattern, (match) => {
