@@ -3,7 +3,7 @@
 [![LinkedIn][linkedin-shield]][linkedin-url]
 # Panela's Backend
 
-This is the backend for the Panela project, where you can manage recipes and calculate their costs based on the ingredients.
+This is the backend for the Panela project, where you can manage recipes and (soon) calculate their costs based on the ingredients.
 
 ## About The Project
 
@@ -11,7 +11,7 @@ This is the backend for the Panela project, where you can manage recipes and cal
 
 Build using Node.js + Express, Mongoose and MongoDB. This project uses Auth0 to provide an authentication pipeline and exposes a RestFUL API designed from scratch. It's deployed to a droplet on DigitalOcean, along with a CD/CI pipeline.
 
-This project is a complete app, build from the ground up, from conception to design and implementation. Some challenges faced during implementation have been defining the data schemas and maintaing the database consistent when they change. Another obstacle was managing the users without using Auth0 endpoints, as I'm cheap and don't want to pay :smirk:. I'm using a Hashmap to keep track of users, to create a quick lookup table to reduce querying the db.
+This project is a complete app, built from the ground up, from concept to design and implementation. Some challenges faced during implementation have been defining the data schemas to be flexible enough and maintaining the database consistent when they change. Another obstacle was managing the users without using Auth0 endpoints, as I'm cheap and don't want to pay :smirk:. Lastly, I'm currently writing a web scrapper for recipes, which leverages JSON-LD data, but I also plan to implement an HTML tree transversing algorithm with some heuristics for websites that don't use JSON-LD or microdata.
 
 You can see a live demo at https://panela.app
 
