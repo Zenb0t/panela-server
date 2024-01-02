@@ -14,6 +14,13 @@ export const ZodIngredientSchema = z.object({
 	costPerUnit: z.number().optional().default(0),
 });
 
+export interface ParsedIngredient {
+	amount: number | undefined;
+	unit: string;
+	name: string;
+	source: string;
+}
+
 export enum MeasuringUnit {
 	GRAM = "g",
 	KILOGRAM = "kg",
@@ -87,4 +94,4 @@ export const MEASURING_UNITS_MAPPING = {
 	"half-dozens": MeasuringUnit.HALF_DOZEN,
 };
 
-export const MEASURING_UNITS = Object.keys(MeasuringUnit);
+export const MEASURING_UNITS = Object.keys(MEASURING_UNITS_MAPPING);
