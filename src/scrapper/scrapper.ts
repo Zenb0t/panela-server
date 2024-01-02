@@ -277,61 +277,6 @@ function parseIngredient(ingredient: string): any {
 //  * @param amount - The amount to be normalized, which can be a whole number, fraction, mixed fraction, or range.
 //  * @returns The normalized amount as a decimal number.
 //  */
-// function normalizeAmount(amount: string): number {
-// 	// Sometimes amounts may be written as fractions, e.g. 1/2, 1/4, 3/4, etc. or unicode fractions, e.g. ¼, ½, ¾, etc.
-// 	// Convert unicode fractions to fractions
-
-// 	// Convert fractions to decimals by evaluating the string
-// 	const fractionToDecimal = (fraction: string) => {
-// 		return eval(fraction);
-// 	};
-
-// 	// If the amount is a unicode fraction, convert it to a fraction
-// 	const unicodeFractions: { [key: string]: string } = {
-// 		"\u00BC": "1/4", // ¼
-// 		"\u00BD": "1/2", // ½
-// 		"\u00BE": "3/4", // ¾
-// 		"\u2153": "1/3", // ⅓
-// 		"\u2154": "2/3", // ⅔
-// 		"\u215B": "1/8", // ⅛
-// 		"\u215C": "3/8", // ⅜
-// 		"\u215D": "5/8", // ⅝
-// 		"\u215E": "7/8", // ⅞
-// 	};
-
-// 	if (unicodeFractions[amount]) {
-// 		amount = unicodeFractions[amount];
-// 	}
-
-// 	// If the amount is a mixed fraction, convert it to a decimal
-// 	if (amount.includes(" ")) {
-// 		const mixedFraction = amount.split(" ");
-// 		const wholeNumber = Number(mixedFraction[0]);
-// 		const fraction = mixedFraction[1];
-// 		const fractionDecimal = fractionToDecimal(fraction);
-// 		amount = (wholeNumber + fractionDecimal).toString();
-// 	}
-
-// 	// If the amount is a fraction, convert it to a decimal
-// 	if (amount.includes("/")) {
-// 		amount = fractionToDecimal(amount).toString();
-// 	}
-
-// 	// If the amount is a range, convert it to the average
-// 	if (amount.includes("-")) {
-// 		const range = amount.split("-");
-// 		const average = (Number(range[0]) + Number(range[1])) / 2;
-// 		amount = average.toString();
-// 	}
-
-// 	// If the amount is expressed as "number x number", evaluate it
-// 	if (amount.includes(" x ")) {
-// 		amount = eval(amount.replace(" x ", "*")).toString();
-// 	}
-
-// 	return Number(amount);
-// }
-
 function normalizeAmount(amount: string): number {
 	// Convert unicode fractions to normal fractions
 	amount = amount.replace(unicodeFractionPattern, (match) => {
