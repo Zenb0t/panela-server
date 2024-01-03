@@ -6,6 +6,8 @@ export interface Recipe {
 	title: string;
 	description: string;
 	totalTimeInMinutes: number;
+	prepTimeInMinutes?: number;
+	cookTimeInMinutes?: number;
 	cost?: number;
 	ingredients: IngredientItem[];
 	instructions: string[];
@@ -13,7 +15,27 @@ export interface Recipe {
 	ownerId: string;
 	sourceUrl?: string;
 	servings?: number;
-	// Add more fields, to match the scrapping data
+	author?: string;
+	recipeCuisine?: string;
+	recipeCategory?: string;
+	keywords?: string[];
+}
+
+export interface Meta {
+}
+
+export interface NutritionalInfo {
+	calories?: number;
+	fatContent?: number;
+	cholesterolContent?: number;
+	sodiumContent?: number;
+	carbohydrateContent?: number;
+	fiberContent?: number;
+	sugarContent?: number;
+	proteinContent?: number;
+	saturatedFatContent?: number;
+	transFatContent?: number;
+	unsaturatedFatContent?: number;
 }
 
 export interface IngredientItem {

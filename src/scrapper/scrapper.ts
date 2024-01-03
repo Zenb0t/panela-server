@@ -7,7 +7,6 @@ import Fuse from "fuse.js";
 import {
 	MEASURING_UNITS_MAPPING,
 	MEASURING_UNITS,
-	MeasuringUnit,
 	ParsedIngredient,
 } from "../types/ingredient";
 import {
@@ -21,6 +20,7 @@ import {
 	wholeNumberPattern,
 } from "../utils/patterns";
 import { fractionToDecimal, multiplyExpression } from "../utils/math";
+import { Duration } from "luxon";
 
 // TODO Extract this to a separate file
 const context: jsonld.ContextDefinition = {
@@ -41,9 +41,9 @@ const context: jsonld.ContextDefinition = {
 	itemListElement: "http://schema.org/itemListElement",
 	text: "http://schema.org/text",
 	datePublished: {
-        "@id": "http://schema.org/datePublished",
-        "@type": "http://schema.org/Date",
-    },
+		"@id": "http://schema.org/datePublished",
+		"@type": "http://schema.org/Date",
+	},
 	prepTime: "http://schema.org/prepTime",
 	cookTime: "http://schema.org/cookTime",
 	totalTime: "http://schema.org/totalTime",
@@ -126,6 +126,7 @@ async function scanForjsonLD(document: Document): Promise<Recipe | null> {
 			const jsonData = JSON.parse(script.textContent);
 			const compactedData = await jsonld.compact(jsonData, context);
 			const extractedData = await extractRecipeData(compactedData);
+			const parsedData = parseRecipeData(extractedData);
 			return extractedData;
 		} catch (error) {
 			console.error("Error parsing JSON-LD:", error);
@@ -217,16 +218,90 @@ export async function extractRecipeData(data: jsonld.NodeObject): Promise<any> {
 
 	if (newRecipe.recipeInstructions) {
 		console.log("Recipe instructions found");
-		const instructions = newRecipe.recipeInstructions as any[];
-		newRecipe.recipeInstructions = instructions.map((instruction) => {
-            console.log(instruction);
-            instruction = instruction.text;
-            console.log(instruction);
-            return instruction;
-		});
+		const instructions = newRecipe.recipeInstructions as any;
+		newRecipe.recipeInstructions = parseInstructions(instructions);
 	}
 
 	return newRecipe;
+}
+
+function parseRecipeData(data: any): Recipe {
+	const totalTime = Duration.fromISO(data.totalTime).as("minutes");
+	const prepTime = Duration.fromISO(data.prepTime).as("minutes");
+	const cookTime = Duration.fromISO(data.cookTime).as("minutes");
+
+	const recipe: Recipe = {
+		title: data.name,
+		description: data.description,
+		totalTimeInMinutes: totalTime,
+		prepTimeInMinutes: prepTime,
+		cookTimeInMinutes: cookTime,
+		ingredients: [],
+		instructions: [],
+		imageUrl: data.image,
+		ownerId: "",
+		sourceUrl: data.url,
+	};
+
+	if (data.recipeYield) {
+		recipe.servings = data.recipeYield;
+	}
+
+	if (data.author) {
+		recipe.author = data.author;
+	}
+
+	if (data.recipeIngredient) {
+		recipe.ingredients = data.recipeIngredient;
+	} else if (data.ingredients) {
+		recipe.ingredients = data.ingredients;
+	}
+
+	if (data.recipeInstructions) {
+		recipe.instructions = data.recipeInstructions;
+	}
+
+	return recipe;
+}
+
+function parseInstructions(instructions: any): string[] {
+	const parsedInstructions: string[] = [];
+
+    console.log("Parsing instructions");
+    console.log(instructions);
+	// Check if the instructions are of type "HowToSection"
+
+	if (instructions["@type"] === "HowToSection") {
+		// If the instructions are of type "HowToSection", they are an array of "HowToStep" objects
+		// So we iterate over them and extract the text
+		for (const step of instructions.itemListElement) {
+			parsedInstructions.push(step.text);
+		}
+	}
+
+    // Check if the instructions are an array of type "HowToStep"
+
+    if (Array.isArray(instructions) && instructions[0]["@type"] === "HowToStep") {
+        for (const step of instructions) {
+            parsedInstructions.push(step.text);
+        }
+    }
+
+    // Check if the instructions are an array of strings
+
+    if (Array.isArray(instructions) && typeof instructions[0] === "string") {
+        for (const step of instructions) {
+            parsedInstructions.push(step);
+        }
+    }
+
+    // Check if the instructions are a single string
+
+    if (typeof instructions === "string") {
+        parsedInstructions.push(instructions);
+    }
+
+    return parsedInstructions;
 }
 
 /**
