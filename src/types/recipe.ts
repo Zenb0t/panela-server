@@ -19,6 +19,13 @@ export interface Recipe {
 	recipeCuisine?: string;
 	recipeCategory?: string;
 	keywords?: string[];
+	aggregateRating?: AggregateRating;
+}
+
+export interface AggregateRating {
+	ratingValue: number;
+	ratingCount: number;
+	reviewCount: number;
 }
 
 export interface Meta {
