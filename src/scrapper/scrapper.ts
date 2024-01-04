@@ -1,26 +1,7 @@
 import axios, { AxiosError } from "axios";
 import { JSDOM } from "jsdom";
 import jsonld from "jsonld";
-import { Recipe } from "../types/recipe";
 import logger from "../utils/logger";
-import Fuse from "fuse.js";
-import {
-	MEASURING_UNITS_MAPPING,
-	MEASURING_UNITS,
-	ParsedIngredient,
-} from "../types/ingredient";
-import {
-	combinedPattern,
-	decimalPattern,
-	fractionPattern,
-	mixedFractionPattern,
-	multiplicationPattern,
-	rangePattern,
-	unicodeFractionPattern,
-	wholeNumberPattern,
-} from "../utils/patterns";
-import { fractionToDecimal, multiplyExpression } from "../utils/math";
-import { Duration } from "luxon";
 import { parseRecipeData } from "./parsers";
 
 // TODO Extract this to a separate file
@@ -32,13 +13,12 @@ const context: jsonld.ContextDefinition = {
 	recipeYield: "http://schema.org/recipeYield",
 	recipeIngredient: "http://schema.org/recipeIngredient",
 	ingredients: "http://schema.org/ingredients",
-	recipeInstructions: {
-		"@id": "http://schema.org/recipeInstructions",
-		"@type": "@id",
-	},
+	recipeInstructions: "http://schema.org/recipeInstructions",
 	HowToStep: "http://schema.org/HowToStep",
+	HowToSection: "http://schema.org/HowToSection",
 	itemListElement: "http://schema.org/itemListElement",
 	text: "http://schema.org/text",
+	ImageObject: "http://schema.org/ImageObject",
 	datePublished: {
 		"@id": "http://schema.org/datePublished",
 		"@type": "http://schema.org/Date",
@@ -80,7 +60,7 @@ const context: jsonld.ContextDefinition = {
 	url: "http://schema.org/url",
 };
 
-async function fetchHtml(url: string | null): Promise<string> {
+export async function fetchHtml(url: string | null): Promise<string> {
 	if (!url) {
 		return "";
 	}
@@ -122,7 +102,7 @@ export async function scrapeRecipe(url: string) {
 	}
 }
 
-async function scanForjsonLD(document: Document): Promise<any | null> {
+export async function scanForjsonLD(document: Document): Promise<any | null> {
 	const jsonLDs = document.querySelectorAll(
 		"script[type='application/ld+json']"
 	);
@@ -199,6 +179,11 @@ export function extractRecipeData(data: jsonld.NodeObject) {
 		image: recipe.image,
 		url: recipe.url,
 	};
+
+	// console.log("Extracted recipe data:");
+	// console.log(recipe);
+	// console.log("Result data:");
+	// console.log(newRecipe);
 
 	return newRecipe;
 }
