@@ -1,47 +1,47 @@
-import { extractRecipeData } from "../scrapper";
-import { json } from "./fixture";
 
-describe("extractRecipeData", () => {
-    it("should extract recipe data from JSON-LD object", () => {
-        const data = json;
 
-        const expectedRecipe = {
-            name: "Delicious Recipe",
-            description: "This is a delicious recipe",
-            recipeYield: "4 servings",
-            recipeIngredient: ["ingredient1", "ingredient2"],
-            recipeInstructions: "Step 1, Step 2, Step 3",
-            datePublished: "2022-01-01",
-            prepTime: "PT15M",
-            cookTime: "PT30M",
-            totalTime: "PT45M",
-            keywords: ["delicious", "recipe"],
-            recipeCategory: "Main Course",
-            recipeCuisine: "Italian",
-            suitableForDiet: "Vegetarian"
-        };
+import axios from "axios";
+import { fetchHtml } from "../scrapper";
 
-        const extractedRecipe = extractRecipeData(data);
-        expect(extractedRecipe).toEqual(expectedRecipe);
+jest.mock("axios");
+
+describe("fetchHtml", () => {
+    it("should fetch HTML from a valid URL", async () => {
+        const url = "https://example.com";
+        const expectedHtml = "<html><body>Example HTML</body></html>";
+
+        (axios.get as jest.Mock).mockResolvedValueOnce({ data: expectedHtml });
+
+        const html = await fetchHtml(url);
+        expect(html).toEqual(expectedHtml);
+        expect(axios.get).toHaveBeenCalledWith(url, {
+            headers: {
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+            },
+        });
     });
 
-    it("should throw an error if no recipe is found", () => {
-        const data = {
-            "@graph": [
-                {
-                    "@type": "http://schema.org/OtherType",
-                    "name": "Not a Recipe"
-                }
-            ]
-        };
-
-        expect(() => extractRecipeData(data)).toThrowError("No recipe found");
+    it("should return an empty string if URL is null", async () => {
+        const url = null;
+        const html = await fetchHtml(url);
+        expect(html).toEqual("");
+        expect(axios.get).not.toHaveBeenCalled();
     });
 
-    it("should throw an error if no data is found", () => {
-        const data = {};
+    it("should throw an error if there is an error fetching HTML", async () => {
+        const url = "https://example.com";
+        const error = new Error("Failed to fetch HTML");
 
-        expect(() => extractRecipeData(data)).toThrowError("No data found");
+        (axios.get as jest.Mock).mockRejectedValueOnce(error);
+
+        await expect(fetchHtml(url)).rejects.toThrowError(error);
+        expect(axios.get).toHaveBeenCalledWith(url, {
+            headers: {
+                "User-Agent":
+                    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3",
+            },
+        });
     });
 });
 
