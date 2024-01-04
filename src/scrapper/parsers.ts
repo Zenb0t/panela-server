@@ -18,6 +18,7 @@ import {
 	decimalPattern,
 	wholeNumberPattern,
 } from "../utils/patterns";
+import { JSDOM } from "jsdom";
 
 export function parseRecipeData(data: any): Recipe {
 	try {
@@ -31,28 +32,20 @@ export function parseRecipeData(data: any): Recipe {
 		// Parse ingredients
 
 		if (data.recipeIngredient) {
-			logger.debug("Recipe ingredients found");
+			logger.silly("Recipe ingredients found");
 			const ingredients = data.recipeIngredient as string[];
-			data.recipeIngredient = ingredients.map((ingredient) => {
-				const parsedIngredient = parseIngredient(ingredient);
-				logger.debug(parsedIngredient);
-				return parsedIngredient;
-			});
+			parseIngredients(ingredients);
 		} else if (data.ingredients) {
 			// Some websites use the superseded property "ingredients" instead of "recipeIngredient"
-			logger.debug("Ingredients (Legacy) found");
+			logger.silly("Ingredients (Legacy) found");
 			const ingredients = data.ingredients as string[];
-			data.ingredients = ingredients.map((ingredient) => {
-				const parsedIngredient = parseIngredient(ingredient);
-				logger.debug(parsedIngredient);
-				return parsedIngredient;
-			});
+			parseIngredients(ingredients);
 		}
 
 		// Parse instructions
 
 		if (data.recipeInstructions) {
-			logger.debug("Recipe instructions found");
+			logger.silly("Recipe instructions found");
 			const instructions = data.recipeInstructions as any;
 			data.recipeInstructions = parseInstructions(instructions);
 		}
@@ -60,7 +53,7 @@ export function parseRecipeData(data: any): Recipe {
 		// Parse images
 
 		if (data.image) {
-			logger.debug("Recipe image found");
+			logger.silly("Recipe image found");
 			data.image = parseImage(data.image);
 		}
 
@@ -68,6 +61,7 @@ export function parseRecipeData(data: any): Recipe {
 
 		if (data.url) {
 			logger.debug("Recipe source found");
+			data.url = data.url["@id"];
 		} else if (data.mainEntityOfPage) {
 			// Some websites use the property "mainEntityOfPage" instead of "url"
 			logger.debug("Recipe source (Legacy) found");
@@ -142,72 +136,161 @@ function parseTime(time: string): number {
 	return duration.as("minutes");
 }
 
-function parseImage(data: any | any[]): string | string[] {
-	// Check if it is of type "ImageObject"
-	if (data["@type"] === "ImageObject") {
-		logger.debug("Data image is an ImageObject");
-		data = data.url["@id"] as string;
-	}
-
-	if (Array.isArray(data)) {
-		logger.debug("Data image is an array");
-		data = data.map((img: any) => img["@id"] as string);
-	} else if (typeof data === "object") {
-		logger.debug("Data image is an object");
-		data = data.url["@id"] as string;
-	}
-	return data;
+enum ImageDataType {
+	ImageObjectArray,
+	ImageObject,
+	Array,
+	Object,
+	Unknown,
 }
 
-// TODO: Refactor this function to deal with https://www.thechunkychef.com/20-minute-greek-chicken-rice-bowl/ case
+function getImageDataType(data: any): ImageDataType {
+	if (Array.isArray(data) && data[0]["@type"] === "ImageObject") {
+		return ImageDataType.ImageObjectArray;
+	} else if (data["@type"] === "ImageObject") {
+		return ImageDataType.ImageObject;
+	} else if (Array.isArray(data)) {
+		return ImageDataType.Array;
+	} else if (typeof data === "object") {
+		return ImageDataType.Object;
+	}
+
+	return ImageDataType.Unknown;
+}
+
+function parseImage(data: any | any[]): string | string[] | undefined {
+	console.log("Parsing image");
+	console.log(data);
+
+	const dataType = getImageDataType(data);
+
+	switch (dataType) {
+		case ImageDataType.ImageObjectArray:
+			logger.silly("Data image is an array of ImageObject");
+			return data.map((img: any) => img.url["@id"] as string);
+		case ImageDataType.ImageObject:
+			logger.silly("Data image is an ImageObject");
+			return data.url["@id"] as string;
+		case ImageDataType.Array:
+			logger.silly("Data image is an array");
+			return data.map((img: any) => img["@id"] as string);
+		case ImageDataType.Object:
+			logger.silly("Data image is an object");
+			return data.url["@id"] as string;
+		default:
+			logger.silly("Unknown data type");
+			return undefined;
+	}
+}
+
+enum InstructionType {
+	HTML,
+	HowToSection,
+	HowToStepArray,
+	StringArray,
+	String,
+	Unknown,
+}
+
+function getInstructionType(instructions: any): InstructionType {
+	if (
+		typeof instructions === "string" &&
+		instructions.trim().startsWith("<")
+	) {
+		return InstructionType.HTML;
+	} else if (
+		Array.isArray(instructions) &&
+		instructions[0]["@type"] === "HowToSection"
+	) {
+		return InstructionType.HowToSection;
+	} else if (
+		Array.isArray(instructions) &&
+		instructions[0]["@type"] === "HowToStep"
+	) {
+		return InstructionType.HowToStepArray;
+	} else if (
+		Array.isArray(instructions) &&
+		typeof instructions[0] === "string"
+	) {
+		return InstructionType.StringArray;
+	} else if (typeof instructions === "string") {
+		return InstructionType.String;
+	}
+
+	return InstructionType.Unknown;
+}
+
 function parseInstructions(instructions: any): string[] {
 	const parsedInstructions: string[] = [];
 
 	logger.debug("Parsing instructions");
-	// Check if the instructions are of type "HowToSection"
 
-	console.log(instructions);
+	const type = getInstructionType(instructions);
 
-	if (instructions["@type"] === "HowToSection") {
-		// If the instructions are of type "HowToSection", they are an array of "HowToStep" objects or a single "HowToStep" object
-		// So we iterate over them and extract the text
-		for (const section of instructions) {
-			if (Array.isArray(section.itemListElement)) {
-				for (const step of section.itemListElement) {
-					parsedInstructions.push(step.text);
+	switch (type) {
+		case InstructionType.HTML:
+			parsedInstructions.push(...parseHtmlInstructions(instructions));
+			return parsedInstructions;
+		case InstructionType.HowToSection:
+			for (const section of instructions) {
+				if (Array.isArray(section.itemListElement)) {
+					for (const step of section.itemListElement) {
+						parsedInstructions.push(step.text);
+					}
+				} else {
+					parsedInstructions.push(section.itemListElement.text);
 				}
-			} else {
-				parsedInstructions.push(section.itemListElement.text);
 			}
-		}
-	}
-
-	// Check if the instructions are an array of type "HowToStep"
-
-	if (
-		Array.isArray(instructions) &&
-		instructions[0]["@type"] === "HowToStep"
-	) {
-		for (const step of instructions) {
-			parsedInstructions.push(step.text);
-		}
-	}
-
-	// Check if the instructions are an array of strings
-
-	if (Array.isArray(instructions) && typeof instructions[0] === "string") {
-		for (const step of instructions) {
-			parsedInstructions.push(step);
-		}
-	}
-
-	// Check if the instructions are a single string
-
-	if (typeof instructions === "string") {
-		parsedInstructions.push(instructions);
+			return parsedInstructions;
+		case InstructionType.HowToStepArray:
+			for (const step of instructions) {
+				parsedInstructions.push(step.text);
+			}
+			return parsedInstructions;
+		case InstructionType.StringArray:
+			for (const step of instructions) {
+				parsedInstructions.push(step);
+			}
+			return parsedInstructions;
+		case InstructionType.String:
+			parsedInstructions.push(instructions);
+			return parsedInstructions;
+		default:
+			logger.debug("Instructions are not in a known format");
 	}
 
 	return parsedInstructions;
+}
+
+function parseHtmlInstructions(htmlInstructions: string): string[] {
+	const dom = new JSDOM(htmlInstructions);
+
+	// Query all list items in the ordered list
+	let items = dom.window.document.querySelectorAll("ol > li");
+	// If it's not an ordered list, query all list items in the unordered list
+	if (items.length === 0) {
+		items = dom.window.document.querySelectorAll("ul > li");
+	}
+	if (items.length === 0) {
+		// If it's not a list, query all paragraphs
+		items = dom.window.document.querySelectorAll("p");
+	}
+
+	// Map each list item to its text content, trimming any excess whitespace and removing null and undefined values
+	const parsedHTML = Array.from(items)
+		.map((item) => item.textContent?.trim())
+		.filter((item): item is string => Boolean(item));
+
+	return parsedHTML;
+}
+
+function parseIngredients(ingredients: string[]): ParsedIngredient[] {
+	const parsedIngredients = ingredients.map((ingredient) => {
+		const parsedIngredient = parseIngredient(ingredient);
+		logger.silly(parsedIngredient);
+		return parsedIngredient as ParsedIngredient;
+	});
+	return parsedIngredients;
 }
 
 /**
