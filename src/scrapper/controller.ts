@@ -16,7 +16,7 @@ export const scrapeURL: RequestHandler = async (req, res) => {
 	const url = req.query.url;
 	try {
 		const data = await scrapeRecipe(url as string);
-		res.status(200).send({ message: "Scraping... " + url, data });
+		res.status(200).send(data);
 	} catch (error) {
 		if (error instanceof AxiosError) {
 			res.status(error.response?.status || 500).send({ message: "Axios error", code: error.code, status: error.status});
