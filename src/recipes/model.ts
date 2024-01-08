@@ -32,7 +32,7 @@ const RecipeSchema = new mongoose.Schema<Recipe>({
 	cost: {
 		type: Number,
 	},
-	ingredients: [IngredientItemSchema],
+	ingredients: [IngredientSchema],
 	instructions: {
 		type: [String],
 		required: true,
