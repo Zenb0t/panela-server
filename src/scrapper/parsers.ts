@@ -1,4 +1,5 @@
 import Fuse from "fuse.js";
+import he from "he";
 import { Duration } from "luxon";
 import {
 	MEASURING_UNITS,
@@ -34,12 +35,12 @@ export function parseRecipeData(data: any): Recipe {
 		if (data.recipeIngredient) {
 			logger.silly("Recipe ingredients found");
 			const ingredients = data.recipeIngredient as string[];
-			parseIngredients(ingredients);
+			data.recipeIngredient = parseIngredients(ingredients);
 		} else if (data.ingredients) {
 			// Some websites use the superseded property "ingredients" instead of "recipeIngredient"
 			logger.silly("Ingredients (Legacy) found");
 			const ingredients = data.ingredients as string[];
-			parseIngredients(ingredients);
+			data.recipeIngredient = parseIngredients(ingredients);
 		}
 
 		// Parse instructions
@@ -48,6 +49,17 @@ export function parseRecipeData(data: any): Recipe {
 			logger.silly("Recipe instructions found");
 			const instructions = data.recipeInstructions as any;
 			data.recipeInstructions = parseInstructions(instructions);
+		}
+
+		// Clean up instructions
+		// Clean up html parts like &nbsp; and &deg; and replace them with their unicode equivalent
+
+		if (data.recipeInstructions) {
+			logger.silly("Cleaning up instructions");
+			const instructions = data.recipeInstructions as string[];
+			data.recipeInstructions = instructions.map((instruction) =>
+				he.decode(instruction)
+			);
 		}
 
 		// Parse images
@@ -69,8 +81,8 @@ export function parseRecipeData(data: any): Recipe {
 		}
 
 		const recipe: Recipe = {
-			title: data.name,
-			description: data.description,
+			title: he.decode(data.name),
+			description: he.decode(data.description),
 			totalTimeInMinutes: totalTime,
 			prepTimeInMinutes: prepTime,
 			cookTimeInMinutes: cookTime,
@@ -122,6 +134,8 @@ export function parseRecipeData(data: any): Recipe {
 				reviewCount: data.aggregateRating.reviewCount,
 			};
 		}
+
+		console.log(recipe.ingredients);
 
 		return recipe;
 	} catch (error) {
@@ -287,7 +301,7 @@ function parseHtmlInstructions(htmlInstructions: string): string[] {
 function parseIngredients(ingredients: string[]): ParsedIngredient[] {
 	const parsedIngredients = ingredients.map((ingredient) => {
 		const parsedIngredient = parseIngredient(ingredient);
-		logger.silly(parsedIngredient);
+		logger.silly(JSON.stringify(parsedIngredient)); // Print the parsed ingredient as a string
 		return parsedIngredient as ParsedIngredient;
 	});
 	return parsedIngredients;
@@ -341,7 +355,7 @@ function parseIngredient(ingredient: string): any {
 	const ingredientData: ParsedIngredient = {
 		amount: normalizedAmount,
 		unit: possibleUnit.toLowerCase().trim(),
-		name: name,
+		name: he.decode(name),
 		source: ingredient,
 	};
 

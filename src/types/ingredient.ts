@@ -10,7 +10,7 @@ export interface Ingredient {
 export const ZodIngredientSchema = z.object({
 	name: z.string().min(1, "Name is required"),
 	measuringUnit: z.string().min(1, "Measuring unit is required"),
-	amount: z.number().min(1, "Amount must be a positive number"),
+	amount: z.number().min(0.01, "Amount must be greater than 0.01"),
 	costPerUnit: z.number().optional().default(0),
 });
 
