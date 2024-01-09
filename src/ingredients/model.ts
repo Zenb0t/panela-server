@@ -17,7 +17,7 @@ export const IngredientSchema = new mongoose.Schema<Ingredient>({
 	},
 	costPerUnit: {
 		type: Number,
-		required: true,
+		required: false,
 		trim: true,
 	},
 });

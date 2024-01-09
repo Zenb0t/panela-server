@@ -7,6 +7,7 @@ import userRouter from "./users/routes";
 // import { User, UserModel } from './models/user';
 import globalMiddleware, { authMiddleware } from "./middleware";
 import logger from "./utils/logger";
+import { scrapperRouter } from "./scrapper/routes";
 
 const app = express();
 app.use(globalMiddleware);
@@ -21,7 +22,6 @@ app.listen(sanitizedConfig.PORT, () => {
 initDB(sanitizedConfig.URI_MONGODB);
 
 app.use("/api", authMiddleware, userRouter);
-// app.use("/api", userRouter); // TODO: add auth back in
-
+userRouter.use("/s/", scrapperRouter);
 userRouter.use("/u/", recipeRouter);
 userRouter.use("/u/", ingredientRouter);
