@@ -21,7 +21,8 @@ app.listen(sanitizedConfig.PORT, () => {
 //initialize database
 initDB(sanitizedConfig.URI_MONGODB);
 
-app.use("/api", authMiddleware, userRouter);
+// app.use("/api", authMiddleware, userRouter);
+app.use("/api", userRouter);
 userRouter.use("/s/", scrapperRouter);
 userRouter.use("/u/", recipeRouter);
 userRouter.use("/u/", ingredientRouter);
