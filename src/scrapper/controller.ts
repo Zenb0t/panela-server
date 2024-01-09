@@ -19,7 +19,11 @@ export const scrapeURL: RequestHandler = async (req, res) => {
 		res.status(200).send(data);
 	} catch (error) {
 		if (error instanceof AxiosError) {
-			res.status(error.response?.status || 500).send({ message: "Axios error", code: error.code, status: error.status});
+			res.status(error.response?.status || 500).send({
+				message: "Axios error",
+				code: error.code,
+				status: error.status,
+			});
 		} else {
 			res.status(500).send({ message: "Generic error", error });
 		}

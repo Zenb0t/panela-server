@@ -28,8 +28,7 @@ export interface AggregateRating {
 	reviewCount: number;
 }
 
-export interface Meta {
-}
+export interface Meta {}
 
 export interface NutritionalInfo {
 	calories?: number;
