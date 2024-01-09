@@ -20,6 +20,6 @@ jobs:
         username: deploy
         key: ${{ secrets.SSH_PRIVATE_KEY }}
         script: |
-          cd /server
+          cd /var/www/panela/server
           git pull
           docker compose up --build -d
