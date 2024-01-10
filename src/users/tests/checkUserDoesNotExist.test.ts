@@ -24,7 +24,7 @@ describe("checkUserDoesNotExist Middleware", () => {
 	it("should call next() if user does not exist", async () => {
 		(UserModel.findOne as jest.Mock).mockResolvedValue(null);
 		const req = {
-			body: { email: "new@example.com" },
+			body: { user: { email: "new@example.com" } },
 		} as Request;
 		const res = mockResponse();
 
@@ -38,7 +38,7 @@ describe("checkUserDoesNotExist Middleware", () => {
 			email: "existing@example.com",
 		});
 		const req = {
-			body: { email: "existing@example.com" },
+			body: { user: { email: "existing@example.com" } },
 		} as Request;
 		const res = mockResponse();
 
@@ -54,7 +54,7 @@ describe("checkUserDoesNotExist Middleware", () => {
 		const mockError = new Error("Database error");
 		(UserModel.findOne as jest.Mock).mockRejectedValue(mockError);
 		const req = {
-			body: { email: "error@example.com" },
+			body: { user: { email: "error@example.com" } },
 		} as Request;
 		const res = mockResponse();
 

@@ -24,7 +24,7 @@ describe("createNewUser Middleware", () => {
 		const userData = { email: "new@example.com", name: "New User" };
 		(createUser as jest.Mock).mockResolvedValue(userData);
 		const req = {
-			body: userData,
+			body: { user: userData },
 		} as Request;
 		const res = mockResponse();
 
@@ -38,7 +38,7 @@ describe("createNewUser Middleware", () => {
 		const mockError = new Error("User creation failed");
 		(createUser as jest.Mock).mockRejectedValue(mockError);
 		const req = {
-			body: { email: "fail@example.com", name: "Fail User" },
+			body: { user: { email: "fail@example.com", name: "Fail User" } },
 		} as Request;
 		const res = mockResponse();
 

@@ -2,6 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { validateUserData } from "../middleware";
 import { ErrorMessages as e } from "../../consts";
 import { Role } from "../../types/user";
+import { ZodError } from "zod";
 
 describe("validateUser Middleware", () => {
 	// Mocking Express' response and next function
@@ -22,19 +23,21 @@ describe("validateUser Middleware", () => {
 
 	it("should call next() for valid user data", async () => {
 		const req = {
-			body: userData,
+			body: {
+				user: userData,
+				role: Role.USER, // assuming Role.USER is a valid role
+			},
 		} as Request;
 
 		const res = mockResponse();
 
 		await validateUserData(req, res, mockNext);
-
 		expect(mockNext).toHaveBeenCalled();
 	});
 
 	it("should return 400 for missing email", async () => {
 		const req = {
-			body: { name: "Test User", role: "user" },
+			body: { user: { name: "Test User", role: "user" } },
 		} as Request;
 
 		const res = mockResponse();
@@ -56,14 +59,13 @@ describe("validateUser Middleware", () => {
 
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.send).toHaveBeenCalledWith({
-			message: e.INCOMPLETE_USER_DATA_ERROR,
-			error: expect.any(Object), // Expecting some error object from Zod
+			message: e.USER_DATA_REQUIRED_ERROR,
 		});
 	});
 
 	it("should return 400 for invalid email", async () => {
 		const req = {
-			body: { email: "test", name: "Test User", role: "user" },
+			body: { user: { email: "test", name: "Test User", role: "user" } },
 		} as Request;
 
 		const res = mockResponse();
@@ -73,23 +75,22 @@ describe("validateUser Middleware", () => {
 		expect(res.status).toHaveBeenCalledWith(400);
 		expect(res.send).toHaveBeenCalledWith({
 			message: e.INCOMPLETE_USER_DATA_ERROR,
-			error: expect.any(Object), // Expecting some error object from Zod
+			error: expect.any(ZodError), // Expecting some error object from Zod
 		});
 	});
 
 	it("should return 401 for unauthorized role change", async () => {
 		const req = {
 			body: {
-				email: "test@example.com",
-				name: "Test User",
-				role: Role.ADMIN,
-				user: userData,
+				user: { ...userData, role: Role.ADMIN },
+				role: Role.USER,
 			},
 		} as Request;
 
 		const res = mockResponse();
-
-		await validateUserData(req, res, mockNext);
+		console.log(req.body);
+		const result = await validateUserData(req, res, mockNext);
+		console.log(result);
 
 		expect(res.status).toHaveBeenCalledWith(401);
 		expect(res.send).toHaveBeenCalledWith({
@@ -100,8 +101,11 @@ describe("validateUser Middleware", () => {
 	it("should return 400 for invalid role", async () => {
 		const req = {
 			body: {
-				email: "test@example.com",
-				name: "Test User",
+				user: {
+					email: "test@example.com",
+					name: "Test User",
+					role: Role.USER,
+				},
 				role: "escalated-role",
 			},
 		} as Request;

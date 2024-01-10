@@ -1,6 +1,7 @@
 import { MeasuringUnit } from "../../types/ingredient";
+import { Recipe } from "../../types/recipe";
 
-export const dummyRecipe = {
+export const dummyRecipe: Recipe = {
 	title: "Chocolate Chip Cookies",
 	description:
 		"Delicious chocolate chip cookies with a soft and chewy center.",
@@ -8,34 +9,19 @@ export const dummyRecipe = {
 	cost: 10.0,
 	ingredients: [
 		{
-			ingredient: {
-				name: "All-purpose flour",
-				measuringUnit: MeasuringUnit.CUP,
-				amount: 2.5,
-				costPerUnit: 0.5,
-			},
-			quantity: 2.5,
+			name: "All-purpose flour",
 			measuringUnit: MeasuringUnit.CUP,
+			amount: 2.5,
 		},
 		{
-			ingredient: {
-				name: "Baking soda",
-				measuringUnit: MeasuringUnit.TEASPOON,
-				amount: 1,
-				costPerUnit: 0.05,
-			},
-			quantity: 1,
+			name: "Baking soda",
 			measuringUnit: MeasuringUnit.TEASPOON,
+			amount: 1,
 		},
 		{
-			ingredient: {
-				name: "Salt",
-				measuringUnit: MeasuringUnit.TEASPOON,
-				amount: 1,
-				costPerUnit: 0.01,
-			},
-			quantity: 1,
+			name: "Salt",
 			measuringUnit: MeasuringUnit.TEASPOON,
+			amount: 1,
 		},
 	],
 	instructions: [

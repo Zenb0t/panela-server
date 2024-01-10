@@ -7,6 +7,8 @@ import { Role, ZodUserSchema } from "../types/user";
 import { validateRole } from "../utils/validation";
 import { ZodError } from "zod";
 
+// TODO: Improve Role validation and security before implementing admin role
+
 /***
  * Validate the user data sent in the request body
  */
@@ -19,7 +21,6 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
 	if (!user) {
 		return res.status(400).send({ message: e.USER_DATA_REQUIRED_ERROR });
 	}
-	user.role = role;
 
 	logger.info("Validating user data'");
 	try {
@@ -33,11 +34,12 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
 				.send({ message: e.INCOMPLETE_USER_DATA_ERROR, error: error });
 		}
 		validateRole(role);
-		if (user && user.role !== role) {
+		if (user.role && user.role !== role) {
 			return res
 				.status(401)
 				.send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
 		}
+		user.role = role;
 		logger.info("User data validated");
 		next();
 	} catch (err: any) {
@@ -56,7 +58,9 @@ export const checkUserDoesNotExist: RequestHandler = async (req, res, next) => {
 	try {
 		const user = await UserModel.findOne({ email: email });
 		if (user) {
-			return res.status(200).send(user);
+			return res
+				.status(400)
+				.send({ message: e.USER_ALREADY_EXISTS_ERROR });
 		}
 		next();
 	} catch (err: any) {

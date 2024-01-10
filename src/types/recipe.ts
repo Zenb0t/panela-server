@@ -9,7 +9,7 @@ export interface Recipe {
 	prepTimeInMinutes?: number;
 	cookTimeInMinutes?: number;
 	cost?: number;
-	ingredients: IngredientItem[];
+	ingredients: Ingredient[];
 	instructions: string[];
 	imageUrl: string;
 	ownerId: string;
@@ -42,12 +42,6 @@ export interface NutritionalInfo {
 	saturatedFatContent?: number;
 	transFatContent?: number;
 	unsaturatedFatContent?: number;
-}
-
-export interface IngredientItem {
-	ingredient: Ingredient;
-	quantity: number;
-	measuringUnit: string;
 }
 
 export const ZodRecipeSchema = z.object({
