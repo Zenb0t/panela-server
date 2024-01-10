@@ -22,4 +22,4 @@ jobs:
         script: |
           cd /var/www/panela/server
           git pull
-          docker compose up --build -d
+          docker compose -f docker-compose.yml -f docker-compose.prod.yml up
