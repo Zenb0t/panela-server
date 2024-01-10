@@ -1,7 +1,47 @@
-version: "3.7"
+version: "0.1"
 
 services:
-  ts-node-docker:
+  panela-backend:
+    environment: 
+      - PORT=${PORT}
+      - AUTH0_CLIENT_ID=${AUTH0_CLIENT_ID}
+      - AUTH0_DOMAIN=${AUTH0_DOMAIN}
+      - AUTH0_CLIENT_SECRET=${AUTH0_CLIENT_SECRET}
+      - URI_MONGODB=${URI_MONGODB}
+      - SESSION_SECRET=${SESSION_SECRET}
+      - AUTH0_CALLBACK_URL=${AUTH0_CALLBACK_URL}
+      - MONGO_PSWD=${MONGO_PSWD}
+      - AUDIENCE=${AUDIENCE}
+      - NODE_ENV=production
     build:
+      context: .
+      dockerfile: Dockerfile
       target: production
-    command: node build/index.js
+    volumes:
+      - ./src:/home/node/app/src
+      - ./nodemon.json:/home/node/app/nodemon.json
+    container_name: prod-panela-server
+    expose:
+      - "8000"
+    ports:
+      - "8000:8000"
+    command: npm run start:prod
+    networks:
+      - internal-network
+  mongodb:
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_INITDB_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_INITDB_ROOT_PASSWORD}
+    image: mongo:latest
+    container_name: panela-mongo
+    volumes:
+      - mongo_data:/data/db
+    networks:
+      - internal-network
+
+networks:
+  internal-network:
+    driver: bridge
+
+volumes:
+  mongo_data:
