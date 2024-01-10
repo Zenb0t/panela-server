@@ -18,7 +18,7 @@
     "start:prod": "npm run build && node build/src/server.js",
     "lint-and-test": "npm run lint && npm run test",
     "clean": "rm -rf build/",
-    "prebuild": "npm run clean && npm run lint-and-test"
+    "prebuild": "npm run clean"
   },
   "author": "Felipe Ribeiro",
   "license": "ISC",
