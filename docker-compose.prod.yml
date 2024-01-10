@@ -18,7 +18,6 @@ services:
       dockerfile: Dockerfile
       target: production
     volumes:
-      - ./src:/home/node/app/src
       - ./nodemon.json:/home/node/app/nodemon.json
     container_name: prod-panela-server
     expose:
