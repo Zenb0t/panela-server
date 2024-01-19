@@ -9,15 +9,40 @@ import { ZodError } from "zod";
 
 // TODO: Improve Role validation and security before implementing admin role
 
-/***
- * Validate the user data sent in the request body
+/**
+ * Middleware to set default role
  */
-export const validateUserData: RequestHandler = async (req, res, next) => {
+export const defaultRoleMiddleware: RequestHandler = (req, res, next) => {
 	if (!req.body.role) {
 		console.log("No role provided, defaulting to USER");
 		req.body.role = Role.USER;
 	}
+	next();
+};
+
+/**
+ * Validate the user role sent in the request body
+ */
+export const validateRoleMiddleware: RequestHandler = (req, res, next) => {
 	const { user, role } = req.body;
+	try {
+		validateRole(role);
+		if (user.role && user.role !== role) {
+			return res
+				.status(401)
+				.send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
+		}
+		user.role = role;
+		next();
+	} catch (err: any) {
+		handleError(err, req, res, next);
+	}
+};
+/***
+ * Validate the user data sent in the request body
+ */
+export const validateUserData: RequestHandler = async (req, res, next) => {
+	const { user } = req.body;
 	if (!user) {
 		return res.status(400).send({ message: e.USER_DATA_REQUIRED_ERROR });
 	}
@@ -33,13 +58,6 @@ export const validateUserData: RequestHandler = async (req, res, next) => {
 				.status(400)
 				.send({ message: e.INCOMPLETE_USER_DATA_ERROR, error: error });
 		}
-		validateRole(role);
-		if (user.role && user.role !== role) {
-			return res
-				.status(401)
-				.send({ message: e.ROLE_CHANGE_NOT_ALLOWED_ERROR });
-		}
-		user.role = role;
 		logger.info("User data validated");
 		next();
 	} catch (err: any) {

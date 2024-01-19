@@ -23,5 +23,5 @@ export const ZodUserSchema = z.object({
 	email_verified: z.boolean().optional(),
 	phone_number: z.string().min(1, "Phone number is required").optional(),
 	phone_number_verified: z.boolean().optional(),
-	role: z.string().min(1, "Role is required"),
+	role: z.string().min(1, "Role is required").optional(),
 });

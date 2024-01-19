@@ -3,6 +3,7 @@ import {
 	validateUserData,
 	checkUserExists,
 	checkUserDoesNotExist,
+	defaultRoleMiddleware,
 } from "./middleware";
 import {
 	createNewUser,
@@ -13,7 +14,7 @@ import {
 } from "./controller";
 const userRouter = Router({ mergeParams: true });
 
-userRouter.post("/u", validateUserData, checkUserDoesNotExist, createNewUser);
+userRouter.post("/u",validateUserData, checkUserDoesNotExist, defaultRoleMiddleware, createNewUser);
 userRouter.get("/u/email/:email", checkUserExists, serializeUserByEmail);
 userRouter.get("/u/id/:id", checkUserExists, serializeUserById);
 userRouter.put("/u/id/:id", checkUserExists, validateUserData, updateUserById);
