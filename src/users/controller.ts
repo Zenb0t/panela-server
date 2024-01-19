@@ -20,7 +20,7 @@ export const createNewUser: RequestHandler = async (req, res, next) => {
 		const user = await createUser(req.body.user);
 		logger.info(`User ${email} created`);
 		logger.debug(user);
-		res.status(201).send(user);
+		res.status(201).send({message: "User created", data: user});
 	} catch (err: any) {
 		handleError(err, req, res, next);
 	}

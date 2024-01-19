@@ -77,8 +77,8 @@ export const checkUserDoesNotExist: RequestHandler = async (req, res, next) => {
 		const user = await UserModel.findOne({ email: email });
 		if (user) {
 			return res
-				.status(400)
-				.send({ message: e.USER_ALREADY_EXISTS_ERROR });
+				.status(200)
+				.send({ message: e.USER_ALREADY_EXISTS_ERROR, data: user });
 		}
 		next();
 	} catch (err: any) {
